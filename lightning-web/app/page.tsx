@@ -21,9 +21,16 @@ export default function Home() {
     return (
       <div>
         <p>unauthenticated...</p>
-        <button onClick={() => { signIn('google', { redirect: false }) }}>
-          Sign in with Google
-        </button>
+        <div>
+          <button onClick={() => { signIn('google', { redirect: false }) }}>
+            Sign in with Google
+          </button>
+        </div>
+        <div>
+          <button onClick={() => { signIn('kakao', { redirect: false }) }}>
+            Sign in with Kakao
+          </button>
+        </div>
       </div>
     );
   }
