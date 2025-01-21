@@ -1,9 +1,10 @@
-import { NextAuthOptions } from "next-auth";
+import { NextAuthOptions, Session } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import KakaoProvider from "next-auth/providers/kakao";
 
 import { findMemberBySocial } from "@/repository/MemberRepository";
 import { SocialType } from "@/repository/dto/SocialType";
+import { JWT } from "next-auth/jwt";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -51,13 +52,13 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
 
-    async session({ session, token }) {
+    async session({ session, token }: { session: Session, token: JWT }) {
       if (token.memberId) {
-        session.memberId = token.memberId;
+        session.memberId = token.memberId as string;
       }
 
-      session.socialType = token.socialType;
-      session.socialId = token.socialId;
+      session.socialType = token.socialType as string;
+      session.socialId = token.socialId as string;
 
       return session;
     },

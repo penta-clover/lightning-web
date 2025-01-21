@@ -17,7 +17,7 @@ async function handler(req: Request) {
         }
 
         // check session has same social Type and Id
-        if (session.socialType !== socialType || session.socialId !== socialId) {
+        if (session!.socialType !== socialType || session!.socialId !== socialId) {
             return new Response(
                 JSON.stringify({ message: 'Session not matched' }),
                 { status: 400 }
