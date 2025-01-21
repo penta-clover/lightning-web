@@ -9,10 +9,10 @@
     "lint": "next lint",
     "seed": "ts-node --esm prisma/seed.js",
     "postinstall": "prisma generate"
-
   },
   "dependencies": {
     "@prisma/client": "^6.2.1",
+    "@vercel/speed-insights": "^1.1.0",
     "axios": "^1.7.9",
     "next": "15.1.5",
     "next-auth": "^4.24.11",
