@@ -1,9 +1,9 @@
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 
-export default function Page() {
+function Body() {
     const searchParams = useSearchParams();
     const router = useRouter();
 
@@ -88,5 +88,10 @@ export default function Page() {
             </button>
         </div>
     );
+}
 
+export default function Page() {
+    return <Suspense>
+        <Body />
+    </Suspense>;
 }

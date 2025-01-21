@@ -2,10 +2,10 @@
 
 import { useSession } from 'next-auth/react'
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import axios from "axios";
 
-export default function Page() {
+function Body() {
   const { status } = useSession();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -156,4 +156,10 @@ export default function Page() {
       </div>
     </div>
   );
+}
+
+export default function Page() {
+  return <Suspense>
+    <Body />
+  </Suspense>
 }
