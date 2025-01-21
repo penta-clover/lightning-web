@@ -14,12 +14,17 @@ export async function findMemberById(id: string) {
 
 
 export async function findMemberBySocial(socialType: 'LOCAL' | 'GOOGLE' | 'KAKAO' | 'APPLE', socialId: string) {
-  return await client.member.findFirst({
-    where: {
-      socialType: socialType,
-      socialId: socialId,
-    },
-  });
+  try {
+    return await client.member.findFirst({
+      where: {
+        socialType: socialType,
+        socialId: socialId,
+      },
+    });
+  } catch (error) {
+    console.error('Error finding member by social:', error);
+    return null;
+  }
 }
 
 
