@@ -6,7 +6,7 @@ import { useState } from "react";
 import axios from "axios";
 
 export default function Page() {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const searchParams = useSearchParams();
   const router = useRouter();
 
