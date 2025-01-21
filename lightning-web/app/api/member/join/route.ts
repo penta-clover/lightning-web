@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/auth-options';
 import { stringToSocialType } from '@/repository/dto/SocialType';
 
-export async function handler(req: Request) {
+async function handler(req: Request) {
     try {
         const session = await getServerSession(authOptions);
         const body = await req.json();
