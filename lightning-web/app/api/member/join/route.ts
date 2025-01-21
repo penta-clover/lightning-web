@@ -1,6 +1,6 @@
 import { join } from '@/repository/MemberRepository';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../../auth/[...nextauth]/route';
+import { authOptions } from '@/app/api/auth/[...nextauth]/auth-options';
 import { stringToSocialType } from '@/repository/dto/SocialType';
 
 export async function handler(req: Request) {
@@ -9,7 +9,7 @@ export async function handler(req: Request) {
         const body = await req.json();
         const { nickname, socialType, socialId, email, alarmAllowed } = body;
 
-        if (!nickname || !socialType || !socialId || !email || !alarmAllowed) {
+        if (!nickname || !socialType || !socialId || !email || (alarmAllowed === undefined)) {
             return new Response(
                 JSON.stringify({ message: 'invalid body' }),
                 { status: 400 }
