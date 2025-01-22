@@ -9,6 +9,7 @@ import {
   doc,
   onSnapshot,
   orderBy,
+  where,
 } from "firebase/firestore";
 import axios from "axios";
 
@@ -30,9 +31,10 @@ export default function Page() {
 
     // send chat message
     const response = await axios.post(
-      `/api/chat/room/${chatRoom.roomId}`,
+      `/api/chat/`,
       {
         content: inputMessage,
+        roomId: chatRoom.roomId,
       },
       {
         withCredentials: true,
@@ -65,7 +67,8 @@ export default function Page() {
     if (!chatRoom) return;
 
     const q = query(
-      collection(db, `chatrooms/${chatRoom.roomId}`, "chats"),
+      collection(db, "chatmessages"),
+      where("room_id", "==", chatRoom.roomId),
       orderBy("created_at", "desc")
     );
 
