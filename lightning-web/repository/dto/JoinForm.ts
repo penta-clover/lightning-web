@@ -7,5 +7,5 @@ export type JoinForm = {
     email: string;
     profileImageUrl: string;
     alarmAllowed: boolean;
-    role: 'ADMIN' | 'USER' | 'BLOCK_USER';
+    role: 'ADMIN' | 'USER';
 };

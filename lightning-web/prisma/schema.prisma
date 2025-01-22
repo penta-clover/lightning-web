@@ -18,13 +18,13 @@ model Member {
   lastLoginAt      DateTime       @default(now())      // TIMESTAMP
   alarmAllowed     Boolean        @default(false)      // BOOLEAN
   role             Role                         // Enum 타입
+  isBlocked        Boolean        @default(false)      // BOOLEAN
 
-  chatMessages     ChatMessage[]   // 관계: 보낸 메시지
+  // chatMessages     ChatMessage[]   // 관계: 보낸 메시지
   lightningsSent   Lightning[]    @relation("LightningsSent")   // 관계: 보낸 번개
   lightningsReceived Lightning[]  @relation("LightningsReceived") // 관계: 받은 번개
 }
 
-// Enum 타입 정의
 enum SocialType {
   // social_type_enum의 실제 값 추가
   LOCAL
@@ -36,35 +36,33 @@ enum SocialType {
 enum Role {
   ADMIN
   USER
-  BLOCK_USER
 }
 
-model ChatRoom {
-  id            String        @id @default(uuid()) // UUID 기본값
-  title         String        @db.VarChar(100)     // VARCHAR(100)
-  roomStatus    RoomStatus                  // Enum 타입
+// model ChatRoom {
+//   id            String        @id @default(uuid()) // UUID 기본값
+//   title         String        @db.VarChar(100)     // VARCHAR(100)
+//   roomStatus    RoomStatus                  // Enum 타입
 
-  chatMessages  ChatMessage[]  // 관계: ChatRoom은 여러 메시지를 가질 수 있음
-}
+//   chatMessages  ChatMessage[]  // 관계: ChatRoom은 여러 메시지를 가질 수 있음
+// }
 
-// Enum 타입 정의
 enum RoomStatus {
   RESERVED
   OPENED
   CLOSED
 }
 
-model ChatMessage {
-  id        String    @id @default(uuid()) // UUID 기본값
-  roomId    String    @db.VarChar(50)      // VARCHAR(50)
-  senderId  String    @db.VarChar(50)      // VARCHAR(50)
-  message   String    @db.Text            // TEXT
-  createdAt DateTime  @default(now())      // TIMESTAMP
+// model ChatMessage {
+//   id        String    @id @default(uuid()) // UUID 기본값
+//   roomId    String    @db.VarChar(50)      // VARCHAR(50)
+//   senderId  String    @db.VarChar(50)      // VARCHAR(50)
+//   message   String    @db.Text            // TEXT
+//   createdAt DateTime  @default(now())      // TIMESTAMP
 
-  sender   Member     @relation(fields: [senderId], references: [id]) // 관계: 보낸 메시지
-  chatRoom ChatRoom   @relation(fields: [roomId], references: [id]) // 관계: ChatRoom에 대한 메시지
-  lightnings Lightning[] // 관계: 번개에 대한 메시지
-}
+//   sender   Member     @relation(fields: [senderId], references: [id]) // 관계: 보낸 메시지
+//   chatRoom ChatRoom   @relation(fields: [roomId], references: [id]) // 관계: ChatRoom에 대한 메시지
+//   lightnings Lightning[] // 관계: 번개에 대한 메시지
+// }
 
 model Lightning {
   id          String     @id @default(uuid()) // UUID 기본값
@@ -75,5 +73,5 @@ model Lightning {
 
   sender     Member      @relation("LightningsSent", fields: [senderId], references: [id]) // 관계: 보낸 번개
   receiver   Member      @relation("LightningsReceived", fields: [receiverId], references: [id]) // 관계: 받은 번개
-  message    ChatMessage @relation(fields: [messageId], references: [id]) // 관계: 번개에 대한 메시지
+  // message    ChatMessage @relation(fields: [messageId], references: [id]) // 관계: 번개에 대한 메시지
 }
