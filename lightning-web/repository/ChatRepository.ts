@@ -1,7 +1,7 @@
 // import { PrismaClient } from '@prisma/client';
 import { initializeApp, cert, ServiceAccount } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
-import { AdminConfig } from "@/env/AdminConfig";
+import { AdminConfig } from "@/config/AdminConfig";
 
 const app = initializeApp({
     credential: cert(AdminConfig as ServiceAccount)
