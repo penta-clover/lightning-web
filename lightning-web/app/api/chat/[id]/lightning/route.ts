@@ -19,6 +19,10 @@ async function postHandler(req: Request, { params }: { params: Promise<{ id: str
         if (!chatMessage || !authorId) {
             return new Response(JSON.stringify({ message: 'Invalid chat message' }), { status: 400 });
         }
+
+        if (authorId === memberId) {
+            return new Response(JSON.stringify({ message: 'Cannot send lightning to yourself' }), { status: 400 });
+        }
         
         await saveLightning(memberId, authorId, chatId);
         return new Response(JSON.stringify({ message: 'Lightning sent successfully' }), { status: 200 });

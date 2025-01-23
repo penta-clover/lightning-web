@@ -9,7 +9,7 @@ const app = initializeApp({
 const db = getFirestore(app);
 const client = new PrismaClient();
 
-export async function saveChatMessage(roomId: string, senderId: string, content: string, transparency: number) {
+export async function saveChatMessage(roomId: string, senderId: string, profileImageUrl: string, senderNickname: string, content: string, transparency: number) {
     try {
         // 'chats' 서브컬렉션 참조
         const chatsRef = db.collection('chatmessages');
@@ -17,6 +17,8 @@ export async function saveChatMessage(roomId: string, senderId: string, content:
         // 메시지 추가
         await chatsRef.add({
             sender_id: senderId,
+            sender_nickname: senderNickname,
+            profile_image_url: profileImageUrl,
             room_id: roomId,
             content: content,
             created_at: new Date(),
@@ -50,6 +52,19 @@ export async function saveLightning(senderId: string, receiverId: string, chatMe
         });
     } catch(error) {
         console.error('Error saving lightning:', error);
+        return null;
+    }
+}
+
+export async function findLightningBySender(senderId: string) {
+    try {
+        return await client.lightning.findMany({
+            where: {
+                senderId: senderId
+            }
+        });
+    } catch(error) {
+        console.error('Error finding lightning:', error);
         return null;
     }
 }
