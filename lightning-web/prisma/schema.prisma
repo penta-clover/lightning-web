@@ -36,6 +36,8 @@ enum SocialType {
 enum Role {
   ADMIN
   USER
+  DUMMY
+  DISABLED_DUMMY
 }
 
 // model ChatRoom {

@@ -12,7 +12,7 @@ async function main() {
         email: 'chj7239@gmail.com',
         profileImageUrl: '/profile/default.png',
         alarmAllowed: true,
-        role: 'ADMIN'
+        role: 'DUMMY'
     }
   });
 

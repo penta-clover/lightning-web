@@ -11,8 +11,10 @@ import {
   onSnapshot,
   orderBy,
   where,
+  limit,
 } from "firebase/firestore";
 import axios from "axios";
+import { useSession } from "next-auth/react";
 
 type Chat = {
   id: string;
@@ -21,18 +23,30 @@ type Chat = {
   profile_image_url: string;
   content: string;
   created_at: string;
+  transparency: number;
+};
+
+type Lightning = {
+  id: string;
+  messageId: string;
+  senderId: string;
+  receiverId: string;
+  createdAt: Date;
 };
 
 export default function Page() {
   const app = useFirebaseApp();
   const db = getFirestore(app);
 
+  const { data: session, status } = useSession();
+
   const [chatRoom, setChatRoom] = useState<{
     roomId: string;
     status: string;
   }>();
-  const [chats, setChats] = useState<Chat[]>();
+  const [chats, setChats] = useState<Chat[]>([]);
   const [inputMessage, setInputMessage] = useState("");
+  const [lightnings, setLightnings] = useState<Lightning[]>([]);
 
   const sendChatMessage = async () => {
     if (!chatRoom || !inputMessage || inputMessage.trim() === "") {
@@ -61,6 +75,25 @@ export default function Page() {
     }
   };
 
+  function applyTransparency(chats: Chat[]) {
+    // console.log(`lightnings: ${lightnings}`);
+    const lightnedMembers = new Set(
+      lightnings.map((lightning) => lightning.receiverId)
+    );
+    const newChats = [...chats];
+
+    for (const chat of newChats) {
+      if (lightnedMembers.has(chat.sender_id)) {
+        chat.transparency = 85;
+        chat.profile_image_url = "/profile/lightned.png";
+      } else {
+        chat.transparency = 0;
+      }
+    }
+
+    return newChats;
+  };
+
   const handleLightning = async (chatId: string) => {
     const response = await axios.post(
       `/api/chat/${chatId}/lightning`,
@@ -78,6 +111,8 @@ export default function Page() {
     } else {
       console.error("Failed to send lightning");
     }
+
+    setLightnings([...lightnings, response.data]);
   };
 
   const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -107,26 +142,60 @@ export default function Page() {
     const q = query(
       collection(db, "chatmessages"),
       where("room_id", "==", chatRoom.roomId),
-      orderBy("created_at", "desc")
+      orderBy("created_at", "desc"),
+      limit(100)
     );
 
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const chats: Chat[] = [];
+      const newChats: Chat[] = [];
       querySnapshot.forEach((doc) => {
-        chats.push({ ...doc.data(), id: doc.id } as Chat);
+        newChats.push({ ...doc.data(), id: doc.id, transparency: 0 } as Chat);
       });
-      setChats(chats);
+      setChats(applyTransparency(newChats));
     });
 
     return unsubscribe;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [db, chatRoom]);
+
+  useEffect(() => {
+    setChats(applyTransparency(chats));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lightnings]);
+
+  useEffect(() => {
+    if (status !== "authenticated") {
+      return;
+    }
+
+    axios
+      .post(
+        "/api/chat/lightning/my",
+        {},
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        setLightnings(response.data.lightnings);
+        applyTransparency(chats);
+      });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session, status]);
 
   return (
     <div className="flex flex-col h-screen">
       {/* 채팅 메시지 컨테이너 */}
       <div className="flex-1 overflow-y-auto bg-gray-100 p-4 flex flex-col-reverse">
-        {chats?.map((chat, index) => (
-          <div key={index} className="flex items-start mb-4">
+        {chats.map((chat, index) => (
+          <div
+            key={index}
+            className="flex items-start mb-4"
+            style={{ opacity: (100 - chat.transparency) / 100 }}
+          >
             {/* 프로필 이미지 */}
             <Image
               width={40}
@@ -138,7 +207,7 @@ export default function Page() {
             <div className="flex items-end">
               <div className="flex flex-col">
                 {/* 닉네임 */}
-                <div className="text-sm font-semibold text-gray-800">
+                <div className="text-xs font-semibold text-gray-800">
                   {chat.sender_nickname}
                 </div>
                 {/* 메시지 내용 */}

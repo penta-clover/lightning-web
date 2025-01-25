@@ -1,12 +1,6 @@
 import { PrismaClient } from '@prisma/client';
-import { initializeApp, cert, ServiceAccount } from "firebase-admin/app";
-import { getFirestore } from "firebase-admin/firestore";
-import { AdminConfig } from "@/config/AdminConfig";
+import { db } from '../external/firebase/FirebaseApp';
 
-const app = initializeApp({
-    credential: cert(AdminConfig as ServiceAccount)
-});
-const db = getFirestore(app);
 const client = new PrismaClient();
 
 export async function saveChatMessage(roomId: string, senderId: string, profileImageUrl: string, senderNickname: string, content: string, transparency: number) {
@@ -43,7 +37,7 @@ export async function findChatMessageById(chatMessageId: string) {
 
 export async function saveLightning(senderId: string, receiverId: string, chatMessageId: string) {
     try {
-        await client.lightning.create({
+        return await client.lightning.create({
             data: {
                 senderId: senderId,
                 receiverId: receiverId,
@@ -56,7 +50,7 @@ export async function saveLightning(senderId: string, receiverId: string, chatMe
     }
 }
 
-export async function findLightningBySender(senderId: string) {
+export async function findLightningsBySender(senderId: string) {
     try {
         return await client.lightning.findMany({
             where: {

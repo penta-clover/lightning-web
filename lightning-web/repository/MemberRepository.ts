@@ -1,5 +1,6 @@
 import { PrismaClient, SocialType, Role } from '@prisma/client';
 import { JoinForm } from './dto/JoinForm';
+import { create } from 'domain';
 
 const client = new PrismaClient();
 
@@ -63,6 +64,40 @@ export async function updateLastLogin(memberId: string) {
     },
     data: {
       lastLoginAt: new Date(),
+    },
+  });
+}
+
+export async function findMembersByRoles(...roles: Role[]) {
+  return await client.member.findMany({
+    where: {
+      OR: roles.map((role) => ({role: role}))
+    },
+    take: 200,
+    orderBy: {
+      createdAt: 'desc',
+    },
+  });
+}
+
+export async function updateRole(memberId: string, role: Role) {
+  return await client.member.update({
+    where: {
+      id: memberId,
+    },
+    data: {
+      role: role,
+    },
+  });
+}
+
+export async function updateIsBlocked(memberId: string, value: boolean) {
+  return await client.member.update({
+    where: {
+      id: memberId,
+    },
+    data: {
+      isBlocked: value,
     },
   });
 }

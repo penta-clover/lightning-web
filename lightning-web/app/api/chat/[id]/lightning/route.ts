@@ -24,8 +24,8 @@ async function postHandler(req: Request, { params }: { params: Promise<{ id: str
             return new Response(JSON.stringify({ message: 'Cannot send lightning to yourself' }), { status: 400 });
         }
         
-        await saveLightning(memberId, authorId, chatId);
-        return new Response(JSON.stringify({ message: 'Lightning sent successfully' }), { status: 200 });
+        const lightning = await saveLightning(memberId, authorId, chatId);
+        return new Response(JSON.stringify(lightning), { status: 200 });
     } catch (error) {
         console.log(error);
         return new Response(JSON.stringify({ message: 'Internal server error' }), { status: 500 });  
