@@ -9,6 +9,7 @@ import clsx from "clsx";
 
 function Body() {
   const { status, update } = useSession();
+  const [isJoining, setIsJoining] = useState<boolean>(false)
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -22,6 +23,8 @@ function Body() {
   const isAllChecked = Object.values(checkedItems).every(Boolean);
 
   const handleComplete = async () => {
+    setIsJoining(true);
+    
     // 토큰이 없는 경우: 비정상적인 접근
     if (status !== "authenticated") {
       router.push("/error/401");
@@ -164,7 +167,7 @@ function Body() {
             }
           )}
           disabled={
-            !(checkedItems.terms && checkedItems.privacy && checkedItems.age)
+            !(checkedItems.terms && checkedItems.privacy && checkedItems.age) || isJoining
           }
           onClick={handleComplete}
         >
