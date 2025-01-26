@@ -3,6 +3,7 @@
 import { useSession } from 'next-auth/react'
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
+import Image from 'next/image';
 import axios from "axios";
 
 function Body() {
@@ -157,6 +158,22 @@ function Body() {
     </div>
   );
 }
+
+const ActionBar = () => {
+  return (
+    <div className="flex items-center justify-between w-full h-[72px] bg-white px-4">
+      {/* 뒤로가기 버튼 */}
+      <Image src="/icon/arrow_back.svg" alt="Back" width={24} height={24} />
+
+      {/* 제목 */}
+      <h1 className="text-lg font-semibold"></h1>
+
+      {/* 닫기 버튼 */}
+      <Image src="/icon/close.svg" alt="Close" width={24} height={24} />
+    </div>
+  );
+};
+
 
 export default function Page() {
   return <Suspense>
