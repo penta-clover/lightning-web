@@ -156,7 +156,7 @@ export default function Page() {
 
     return unsubscribe;
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [db, chatRoom]);
+  }, [db, chatRoom, lightnings]);
 
   useEffect(() => {
     setChats(applyTransparency(chats));
