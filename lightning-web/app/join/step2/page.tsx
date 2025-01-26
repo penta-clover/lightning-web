@@ -1,13 +1,14 @@
 "use client";
 
-import { useSession } from 'next-auth/react'
+import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
-import Image from 'next/image';
+import Image from "next/image";
 import axios from "axios";
+import clsx from "clsx";
 
 function Body() {
-  const { status } = useSession();
+  const { status, update } = useSession();
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -39,13 +40,14 @@ function Body() {
       {
         withCredentials: true,
         headers: {
-          'Content-Type': 'application/json',
-        }
+          "Content-Type": "application/json",
+        },
       }
     );
 
     if (response.status === 201) {
-      router.push("/");
+      await update();
+      router.replace("/");
     } else {
       router.push("/error/404");
     }
@@ -71,88 +73,102 @@ function Body() {
   };
 
   return (
-    <div className="h-screen bg-gray-50 flex justify-center items-center">
-      <div className="w-full max-w-md bg-white p-6 rounded-lg shadow-md">
-        <h1 className="text-xl font-bold mb-4">
-          라이트닝 이용을 위해 동의가 필요해요
-        </h1>
-        <div className="space-y-4">
-          <div className="flex items-center">
-            <input
-              type="checkbox"
-              id="all"
-              checked={isAllChecked}
-              onChange={() => handleCheckboxChange("all")}
-              className="mr-3 w-5 h-5"
-            />
-            <label htmlFor="all" className="text-gray-700 font-medium">
-              전체 선택
-            </label>
-          </div>
-          <div className="flex items-center">
-            <input
-              type="checkbox"
-              id="terms"
-              checked={checkedItems.terms}
-              onChange={() => handleCheckboxChange("terms")}
-              className="mr-3 w-5 h-5"
-            />
-            <label htmlFor="terms" className="text-gray-700">
-              이용약관 동의 (필수)
-            </label>
-          </div>
-          <div className="flex items-center">
-            <input
-              type="checkbox"
-              id="privacy"
-              checked={checkedItems.privacy}
-              onChange={() => handleCheckboxChange("privacy")}
-              className="mr-3 w-5 h-5"
-            />
-            <label htmlFor="privacy" className="text-gray-700">
-              개인정보 수집 및 이용동의 (필수)
-            </label>
-          </div>
-          <div className="flex items-center">
-            <input
-              type="checkbox"
-              id="age"
-              checked={checkedItems.age}
-              onChange={() => handleCheckboxChange("age")}
-              className="mr-3 w-5 h-5"
-            />
-            <label htmlFor="age" className="text-gray-700">
-              만 14세 이상입니다 (필수)
-            </label>
-          </div>
-          <div className="flex items-center">
-            <input
-              type="checkbox"
-              id="marketing"
-              checked={checkedItems.marketing}
-              onChange={() => handleCheckboxChange("marketing")}
-              className="mr-3 w-5 h-5"
-            />
-            <label htmlFor="marketing" className="text-gray-700">
-              마케팅 활용/광고성 정보 수신동의 (선택)
-            </label>
+    <div className="h-full">
+      <ActionBar />
+      <div className="flex flex-col justify-between h-[calc(100%-72px)] px-[16px]">
+        <div className="flex flex-col grow">
+          <h1 className="text-xl font-bold mb-[32px]">
+            서비스 이용을 위해 약관에 동의해주세요
+          </h1>
+          <div className="flex flex-col">
+            <div className="flex items-center h-[56px] border-b-[1px] border-darkgray">
+              <input
+                type="checkbox"
+                id="all"
+                checked={isAllChecked}
+                onChange={() => handleCheckboxChange("all")}
+                className="mr-3 w-[24px] h-[24px] border-0 bg-bggray rounded-full checked:bg-[url('/icon/circle_checkbox.svg')] checked:border-blue-500 appearance-none"
+              />
+              <label
+                htmlFor="all"
+                className="text-body16 text-darkgray font-bold"
+              >
+                모든 항목에 동의합니다
+              </label>
+            </div>
+            <div className="flex items-center h-[48px]">
+              <input
+                type="checkbox"
+                id="terms"
+                checked={checkedItems.terms}
+                onChange={() => handleCheckboxChange("terms")}
+                className="mr-3 w-[24px] h-[24px] border-0 bg-bggray rounded-full checked:bg-[url('/icon/circle_checkbox.svg')] checked:border-blue-500 appearance-none"
+              />
+              <label htmlFor="terms" className="text-body16">
+                <span className="text-blue font-bold">[필수] </span>
+                <span className="text-darkgray">이용약관 동의</span>
+              </label>
+            </div>
+            <div className="flex items-center h-[48px]">
+              <input
+                type="checkbox"
+                id="privacy"
+                checked={checkedItems.privacy}
+                onChange={() => handleCheckboxChange("privacy")}
+                className="mr-3 w-[24px] h-[24px] border-0 bg-bggray rounded-full checked:bg-[url('/icon/circle_checkbox.svg')] checked:border-blue-500 appearance-none"
+              />
+              <label htmlFor="privacy" className="text-body16">
+                <span className="text-blue font-bold">[필수] </span>
+                <span className="text-darkgray">개인정보 수집 및 이용동의</span>
+              </label>
+            </div>
+            <div className="flex items-center h-[48px]">
+              <input
+                type="checkbox"
+                id="age"
+                checked={checkedItems.age}
+                onChange={() => handleCheckboxChange("age")}
+                className="mr-3 w-[24px] h-[24px] border-0 bg-bggray rounded-full checked:bg-[url('/icon/circle_checkbox.svg')] checked:border-blue-500 appearance-none"
+              />
+              <label htmlFor="age" className="text-body16">
+                <span className="text-blue font-bold">[필수] </span>
+                <span className="text-darkgray">만 14세 이상입니다</span>
+              </label>
+            </div>
+            <div className="flex items-center h-[48px]">
+              <input
+                type="checkbox"
+                id="marketing"
+                checked={checkedItems.marketing}
+                onChange={() => handleCheckboxChange("marketing")}
+                className="mr-3 w-[24px] h-[24px] border-0 bg-bggray rounded-full checked:bg-[url('/icon/circle_checkbox.svg')] checked:border-blue-500 appearance-none"
+              />
+              <label htmlFor="marketing" className="text-body16">
+                <span className="text-blue font-bold">[선택] </span>
+                <span className="text-darkgray">
+                  마케팅 활용 · 광고성 정보 수신 동의
+                </span>
+              </label>
+            </div>
           </div>
         </div>
         <button
-          className={`
-            w-full mt-6 text-white py-2 px-4 rounded-md hover:bg-blue-600
-            ${
-              checkedItems.terms && checkedItems.privacy && checkedItems.age
-                ? "bg-blue-500"
-                : "bg-gray-400"
+          className={clsx(
+            "px-4 py-2 my-[24px] h-[48px] bg-black text-white cursor-not-allowed rounded-[10px]",
+            {
+              "bg-lightgray text-body16": !(
+                checkedItems.terms &&
+                checkedItems.privacy &&
+                checkedItems.age
+              ),
             }
-          `}
+          )}
           disabled={
             !(checkedItems.terms && checkedItems.privacy && checkedItems.age)
           }
           onClick={handleComplete}
         >
-          완료
+          채팅 시작하기
         </button>
       </div>
     </div>
@@ -174,9 +190,10 @@ const ActionBar = () => {
   );
 };
 
-
 export default function Page() {
-  return <Suspense>
-    <Body />
-  </Suspense>
+  return (
+    <Suspense>
+      <Body />
+    </Suspense>
+  );
 }

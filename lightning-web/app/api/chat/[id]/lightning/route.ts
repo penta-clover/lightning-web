@@ -7,7 +7,7 @@ async function postHandler(req: Request, { params }: { params: Promise<{ id: str
         const session = await getServerSession(authOptions);
 
         const chatId = (await params).id;
-        const memberId = session!.memberId;
+        const memberId = session!.id;
 
         if (!chatId || !memberId) {
             return new Response(JSON.stringify({ message: 'Missing required fields' }), { status: 400 });

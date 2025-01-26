@@ -125,7 +125,6 @@ function Body() {
         </div>
 
         <button
-          type="button"
           className={clsx("px-4 py-2 my-[24px] h-[48px] bg-black text-white cursor-not-allowed rounded-[10px]",
             {"bg-lightgray text-body16": !(isNicknameValid && isNicknameUnique)},
           )}

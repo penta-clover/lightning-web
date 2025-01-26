@@ -10,7 +10,7 @@ async function postHandler(req: Request) {
 
         const roomId = body.roomId;
         const content = body.content;
-        const memberId = session!.memberId;
+        const memberId = session!.id;
 
         if (!roomId || !content || !memberId) {
             return new Response(JSON.stringify({ message: 'Missing required fields' }), { status: 400 });

@@ -42,7 +42,7 @@ export const authOptions: NextAuthOptions = {
         account.providerAccountId
       );
 
-      token.memberId = member?.id;
+      token.id = member?.id;
       token.role = member?.role;
 
       token.socialType = account.provider;
@@ -52,7 +52,7 @@ export const authOptions: NextAuthOptions = {
     },
 
     async session({ session, token }: { session: Session, token: JWT }) {
-      session.memberId = token.memberId as string | undefined;
+      session.id = token.id as string | undefined;
       session.role = token.role as string | undefined;
 
       session.socialType = token.socialType as string;

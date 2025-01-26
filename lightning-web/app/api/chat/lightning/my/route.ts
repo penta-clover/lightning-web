@@ -5,7 +5,7 @@ import { findLightningsBySender } from '@/repository/ChatRepository';
 async function postHandler() {
     try {
         const session = await getServerSession(authOptions);
-        const memberId = session!.memberId;
+        const memberId = session!.id;
 
         const lightnings = await findLightningsBySender(memberId!);;
         return new Response(JSON.stringify({ lightnings: lightnings }), { status: 200 });

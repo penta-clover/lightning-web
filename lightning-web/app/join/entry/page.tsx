@@ -13,7 +13,7 @@ export default function Page() {
             return;
         } else if (status === "unauthenticated") {
             router.push('/');
-        } else if (session!.memberId) {
+        } else if (session!.id) {
             // 사용자 정보가 있다면, 회원가입을 수행하지 않고 메인 페이지로 이동
             router.push('/');
         } else {

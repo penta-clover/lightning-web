@@ -17,7 +17,7 @@ export async function middleware(request: NextRequest) {
 
   if (!token || token.role !== "ADMIN") {
     return NextResponse.json(
-      { message: "Access denied: Admin permissions required." },
+      { message: `Access denied: Admin permissions required. your role is ${token?.role}` },
       { status: 403 }
     );
   }
