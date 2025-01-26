@@ -1,9 +1,19 @@
 'use client';
 
 import { useSession, signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function Home() {
   const { data: session, status } = useSession();
+  const router = useRouter();
+
+  useEffect (() => {
+    if (status === 'authenticated' && session.id) {
+      // 사용자 정보가 있다면, 메인 페이지로 이동
+    router.replace("/chat/room/main");
+    }
+  }, [status, session]);
 
   if (status === "authenticated" && session.id) {
     // 로그인되어 있다면, 세션에 사용자 정보가 들어있습니다

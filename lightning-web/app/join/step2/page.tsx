@@ -47,7 +47,7 @@ function Body() {
 
     if (response.status === 201) {
       await update();
-      router.replace("/");
+      router.replace("/chat/room/main");
     } else {
       router.push("/error/404");
     }
