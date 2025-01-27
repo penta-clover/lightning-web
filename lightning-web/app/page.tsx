@@ -3,6 +3,7 @@
 import { useSession, signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { signOut } from 'next-auth/react';
 
 export default function Home() {
   const { data: session, status } = useSession();
@@ -23,6 +24,7 @@ export default function Home() {
       <div>
         <h1>Welcome, {user?.name}!</h1>
         <p>Email: {user?.email}</p>
+        <LogoutButton />
       </div>
     );
   } else if (status === 'loading') {
@@ -45,4 +47,8 @@ export default function Home() {
       </div>
     );
   }
+}
+
+function LogoutButton() {
+  return <button onClick={() => signOut()}>Logout</button>;
 }

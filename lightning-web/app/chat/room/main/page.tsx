@@ -244,12 +244,12 @@ export default function Page() {
         ))}
       </div>
       {/* 메시지 입력창 */}
-      <div className="flex items-center border-t p-4 bg-white">
+      <div className="flex items-end px-[16px] py-[12px] bg-bggray">
         <textarea
           value={inputMessage}
           onChange={handleInput}
           placeholder="메시지를 입력하세요..."
-          className="flex-1 p-2 border rounded resize-none overflow-hidden max-h-[6rem] h-auto"
+          className="flex-1 p-2 border-[1px] border-lightgray rounded resize-none overflow-hidden max-h-[6rem] h-auto"
           rows={1}
           style={{
             lineHeight: "1.5rem",
@@ -257,9 +257,9 @@ export default function Page() {
         />
         <button
           onClick={sendChatMessage}
-          className="ml-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          className="flex ml-[8px] justify-center items-center w-[42px] h-[42px] bg-black text-white rounded hover:bg-blue-600"
         >
-          전송
+          <Image src="/icon/upload.svg" alt="upload" width={17} height={17}></Image>
         </button>
       </div>
     </div>
