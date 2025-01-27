@@ -12,7 +12,7 @@ export function LayoutUI({ children }: { children: React.ReactNode }) {
     }
 
     useEffect(() => {
-      const preventZoom = (e) => {
+      const preventZoom = (e: TouchEvent) => {
         if (e.touches && e.touches.length > 1) {
           e.preventDefault();
         }
