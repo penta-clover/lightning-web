@@ -11,7 +11,7 @@ CREATE TABLE "User" (
     "socialType" "SocialType" NOT NULL,
     "socialId" VARCHAR(50) NOT NULL,
     "email" VARCHAR(100) NOT NULL,
-    "profileImageUrl" VARCHAR(200) NOT NULL DEFAULT 'profile/default.png',
+    "profileImageUrl" VARCHAR(200) NOT NULL DEFAULT 'profile/default.svg',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "lastLoginAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "alarmAllowed" BOOLEAN NOT NULL DEFAULT false,

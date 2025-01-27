@@ -36,7 +36,7 @@ async function handler(req: Request) {
       socialType: stringToSocialType(socialType),
       socialId: socialId,
       email: email,
-      profileImageUrl: "/profile/default.png",
+      profileImageUrl: "/profile/default.svg",
       alarmAllowed: alarmAllowed,
       role: "USER",
     });

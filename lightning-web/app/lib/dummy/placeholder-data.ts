@@ -6,7 +6,7 @@ const users = [
       social_type: 'local',
       social_id: 'admin',
       email: 'chj7239@gmail.com',
-      profile_image_url: 'profile/default.png',
+      profile_image_url: 'profile/default.svg',
       alarm_allowed: false,
       role: 'admin',
     },

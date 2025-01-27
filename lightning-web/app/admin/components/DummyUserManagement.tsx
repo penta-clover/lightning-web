@@ -30,7 +30,7 @@ export function DummyUserManagement() {
         socialType: "LOCAL",
         socialId: "dummy",
         email: "dummy@a.com",
-        profileImageUrl: "/profile/default.png",
+        profileImageUrl: "/profile/default.svg",
         alarmAllowed: false,
         role: "DUMMY",
       },

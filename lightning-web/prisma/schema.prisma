@@ -13,7 +13,7 @@ model Member {
   socialType       SocialType                   // Enum 타입
   socialId         String         @db.VarChar(50)     // VARCHAR(50)
   email            String         @db.VarChar(100)    // VARCHAR(100)
-  profileImageUrl  String         @default("profile/default.png") @db.VarChar(200)
+  profileImageUrl  String         @default("profile/default.svg") @db.VarChar(200)
   createdAt        DateTime       @default(now())      // TIMESTAMP
   lastLoginAt      DateTime       @default(now())      // TIMESTAMP
   alarmAllowed     Boolean        @default(false)      // BOOLEAN

@@ -10,7 +10,7 @@ async function main() {
         socialType: 'LOCAL',
         socialId: '1',
         email: 'chj7239@gmail.com',
-        profileImageUrl: '/profile/default.png',
+        profileImageUrl: '/profile/default.svg',
         alarmAllowed: true,
         role: 'DUMMY'
     }

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useFirebaseApp } from "@/app/firebase-provider";
-import { useState, useEffect, use } from "react";
+import { useState, useEffect, use, MouseEventHandler } from "react";
 import {
   getFirestore,
   collection,
@@ -17,6 +17,8 @@ import {
 } from "firebase/firestore";
 import axios from "axios";
 import { useSession } from "next-auth/react";
+import clsx from "clsx";
+import Sidebar from "./component/sidebar";
 
 type Chat = {
   id: string;
@@ -50,8 +52,16 @@ export default function Page() {
   const [chats, setChats] = useState<Chat[]>([]);
   const [inputMessage, setInputMessage] = useState("");
   const [lightnings, setLightnings] = useState<Lightning[]>([]);
+  const [enableSidebar, setEnableSidebar] = useState(false);
+  const [canSending, setCanSending] = useState(false);
+  const [canInput, setCanInput] = useState(true);
+
+  const [chatToLightning, setChatToLightning] = useState<string>();
 
   const sendChatMessage = async () => {
+    setCanSending(false);
+    setCanInput(false);
+
     if (!chatRoom || !inputMessage || inputMessage.trim() === "") {
       return;
     }
@@ -73,9 +83,13 @@ export default function Page() {
 
     if (response.status === 200) {
       setInputMessage("");
+      setCanSending(false);
     } else {
       console.error("Failed to send chat message");
+      setCanSending(true);
     }
+
+    setCanInput(true);
   };
 
   function applyTransparency(chats: Chat[]) {
@@ -88,16 +102,22 @@ export default function Page() {
     for (const chat of newChats) {
       if (lightnedMembers.has(chat.sender_id)) {
         chat.transparency = 85;
-        chat.profile_image_url = "/profile/lightned.png";
+        chat.profile_image_url = "/profile/lightned.svg";
       } else {
         chat.transparency = 0;
       }
     }
 
     return newChats;
+  }
+
+  const onClickLightning = async (chatId: string) => {
+    setChatToLightning(chatId);
   };
 
-  const handleLightning = async (chatId: string) => {
+  const onConfirmLightning = async () => {
+    const chatId = chatToLightning;
+
     const response = await axios.post(
       `/api/chat/${chatId}/lightning`,
       {},
@@ -110,20 +130,32 @@ export default function Page() {
     );
 
     if (response.status === 200) {
-      alert("지지직...");
+      console.log("Success to send lightning");
     } else {
       console.error("Failed to send lightning");
     }
 
     setLightnings([...lightnings, response.data]);
+    setChatToLightning(undefined);
+  };
+
+  const onCancelLightning = () => {
+    setChatToLightning(undefined);
   };
 
   const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const textarea = e.target;
 
+    if (textarea.value.trim().length === 0) {
+      setCanSending(false);
+    } else {
+      setCanSending(true);
+    }
+
     // 높이를 자동으로 조정
     textarea.style.height = "auto";
-    textarea.style.height = Math.min(textarea.scrollHeight, 96) + "px"; // 최대 높이 96px (4줄)
+    textarea.style.height =
+      Math.min(Math.max(textarea.scrollHeight, 42), 96) + "px"; // 최대 높이 96px (4줄)
     setInputMessage(textarea.value);
   };
 
@@ -148,9 +180,7 @@ export default function Page() {
         const data = docSnap.data();
         setChatRoomName(data!.name);
       }
-    })
-
-    
+    });
   }, [chatRoom]);
 
   useEffect(() => {
@@ -172,12 +202,10 @@ export default function Page() {
     });
 
     return unsubscribe;
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [db, chatRoom, lightnings]);
 
   useEffect(() => {
     setChats(applyTransparency(chats));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lightnings]);
 
   useEffect(() => {
@@ -199,84 +227,211 @@ export default function Page() {
       .then((response) => {
         setLightnings(response.data.lightnings);
       });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session, status]);
 
   return (
-    <div className="flex flex-col h-screen">
-      <ActionBar title={chatRoomName} />
-      {/* 채팅 메시지 컨테이너 */}
-      <div className="flex-1 overflow-y-auto scrollbar-hide bg-gray-100 p-4 h-[calc(100%)-72px] flex flex-col-reverse">
-        {chats.map((chat, index) => (
-          <div
-            key={index}
-            className="flex items-start mb-4"
-            style={{ opacity: (100 - chat.transparency) / 100 }}
-          >
-            {/* 프로필 이미지 */}
-            <Image
-              width={40}
-              height={40}
-              src={chat.profile_image_url}
-              alt={`${chat.sender_nickname} 프로필`}
-              className="w-10 h-10 rounded-full mr-4"
-            />
-            <div className="flex items-end">
-              <div className="flex flex-col">
-                {/* 닉네임 */}
-                <div className="text-xs font-semibold text-gray-800">
-                  {chat.sender_nickname}
-                </div>
-                {/* 메시지 내용 */}
-                <div className="text-gray-800 p-2 bg-white rounded shadow break-words max-w-xs">
-                  {chat.content}
-                </div>
-              </div>
-              {/* 번개 버튼 */}
-              <button
-                className="p-2 text-yellow-500"
-                onClick={() => handleLightning(chat.id)}
-              >
-                ⚡
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
-      {/* 메시지 입력창 */}
-      <div className="flex items-end px-[16px] py-[12px] bg-bggray">
-        <textarea
-          value={inputMessage}
-          onChange={handleInput}
-          placeholder="메시지를 입력하세요..."
-          className="flex-1 p-2 border-[1px] border-lightgray rounded resize-none overflow-hidden max-h-[6rem] h-auto"
-          rows={1}
-          style={{
-            lineHeight: "1.5rem",
-          }}
+    <div className="relative">
+      <div
+        className={`absolute top-0 right-0 w-full h-full ${
+          chatToLightning ? "opacity-100 z-50 transition-opacity" : "opacity-0 -z-50"
+        }`}
+      >
+      <LightningDialog
+        onClickConfirm={onConfirmLightning}
+        onClickCancel={onCancelLightning}
+      />
+    </div>
+      <div
+        className={`flex flex-col w-full h-screen ${
+          chatToLightning && "filter blur transition-all"
+        }`}
+      >
+        <ActionBar
+          title={chatRoomName}
+          onClickMenuBtn={() => setEnableSidebar(true)}
         />
-        <button
-          onClick={sendChatMessage}
-          className="flex ml-[8px] justify-center items-center w-[42px] h-[42px] bg-black text-white rounded hover:bg-blue-600"
-        >
-          <Image src="/icon/upload.svg" alt="upload" width={17} height={17}></Image>
-        </button>
+        {/* 채팅 메시지 컨테이너 */}
+        <div className="flex-1 w-full overflow-y-auto scrollbar-hide bg-gray-100 p-4 h-[calc(100%)-72px] flex flex-col-reverse transition-all">
+          {chats.map((chat, index) => (
+            <div
+              key={index}
+              className={`flex mb-4 w-full ${
+                chat.sender_id === session?.id ? "justify-end" : "justify-start"
+              }`}
+              style={{ opacity: (100 - chat.transparency) / 100 }}
+            >
+              {chat.sender_id === session?.id ? (
+                <MyChat chat={chat} />
+              ) : (
+                <OthersChat chat={chat} onClickLightning={onClickLightning} />
+              )}
+            </div>
+          ))}
+        </div>
+        {/* 메시지 입력창 */}
+        <div className="flex items-end px-[16px] py-[12px] bg-bggray">
+          <textarea
+            value={inputMessage}
+            onChange={handleInput}
+            placeholder="메시지를 입력하세요..."
+            className="flex-1 p-2 border-[1px] border-lightgray text-body14 rounded resize-none overflow-hidden min-h-[42px] max-h-[6rem] h-auto focus:border-[1px] focus:border-lightgray"
+            rows={1}
+            maxLength={280}
+            disabled={!canInput}
+            style={{
+              lineHeight: "1.5rem",
+            }}
+          />
+          <button
+            onClick={sendChatMessage}
+            className={clsx(
+              "flex ml-[8px] justify-center items-center w-[42px] h-[42px] text-white rounded hover:bg-blue-600",
+              canSending ? "bg-black" : "bg-lightgray"
+            )}
+            disabled={!canSending}
+          >
+            <Image
+              src="/icon/upload.svg"
+              alt="upload"
+              width={17}
+              height={17}
+            ></Image>
+          </button>
+        </div>
+      </div>
+      <div
+        className={clsx(
+          "absolute top-0 right-0 w-full h-full bg-white z-50 transition-all",
+          enableSidebar ? "translate-x-0" : "translate-x-full"
+        )}
+      >
+        <Sidebar onClickCloseBtn={() => setEnableSidebar(false)} />
       </div>
     </div>
   );
 }
 
-const ActionBar = (props: {title: string}) => {
+const ActionBar = (props: {
+  title: string;
+  onClickMenuBtn: MouseEventHandler<HTMLButtonElement>;
+}) => {
   return (
-    <div className="flex items-center justify-between w-full h-[72px] bg-white px-4 border-b-[1px] border-strokeblack">
+    <div className="flex items-center justify-between w-full h-[72px] bg-white border-b-[1px] border-strokeblack">
       {/* 뒤로가기 버튼 */}
-      <span className="w-[24px] h-[24px]" />
+      <span className="py-[24px] px-[16px] w-[24px] h-[24px]" />
 
       {/* 제목 */}
       <h1 className="text-body16 font-bold">{props.title}</h1>
 
       {/* 닫기 버튼 */}
-      <Image src="/icon/menu.svg" alt="Menu" width={24} height={24} />
+      <button onClick={props.onClickMenuBtn} className="py-[24px] px-[16px]">
+        <Image src="/icon/menu.svg" alt="Menu" width={24} height={24} />
+      </button>
+    </div>
+  );
+};
+
+const OthersChat = (props: {
+  chat: Chat;
+  onClickLightning: (chatId: string) => void;
+}) => {
+  const chat = props.chat;
+
+  return (
+    <>
+      <Image
+        width={36}
+        height={36}
+        src={chat.profile_image_url}
+        alt={`${chat.sender_nickname} 프로필`}
+        className="w-10 h-10 rounded-[12] mr-[16px]"
+      />
+      <div className="flex items-end">
+        <div className="flex flex-col">
+          {/* 닉네임 */}
+          <div className="text-caption12 text-darkgray mb-[7px]">
+            {chat.sender_nickname}
+          </div>
+          {/* 메시지 내용 */}
+          <div className="text-black text-body14 font-medium px-[12px] py-[8px] bg-bgblue rounded-[4px] break-words max-w-xs">
+            {chat.content}
+          </div>
+        </div>
+        {/* 번개 버튼 */}
+        <button
+          className="p-2 text-yellow-500"
+          onClick={() => props.onClickLightning(chat.id)}
+        >
+          ⚡
+        </button>
+      </div>
+    </>
+  );
+};
+
+const MyChat = (props: { chat: Chat }) => {
+  const chat = props.chat;
+
+  return (
+    <div className="flex flex-col items-end">
+      {/* 메시지 내용 */}
+      <div className="text-black text-body14 font-medium px-[12px] py-[8px] bg-yellow rounded-[4px] break-words max-w-xs">
+        {chat.content}
+      </div>
+    </div>
+  );
+};
+
+const LightningDialog = (props: {
+  onClickConfirm: () => Promise<void>;
+  onClickCancel: () => void;
+}) => {
+  const [isSendingLightning, setIsSendingLightning] = useState(false);
+
+  const onClickConfirmBtn = async () => {
+    setIsSendingLightning(true);
+    await props.onClickConfirm();
+    setIsSendingLightning(false);
+  };
+
+  return (
+    <div className="relative w-full h-full">
+      <div
+        className="w-full h-full bg-black opacity-40"
+        onClick={props.onClickCancel}
+      />
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white w-[343px] rounded-[10px] flex flex-col items-center justify-center px-[16px] pt-[32px] pb-[12px]">
+        <h1 className="text-heading24 text-black font-bold">
+          라이트닝 적용하기
+        </h1>
+        <Image
+          src="/icon/lightned_skeleton.svg"
+          alt="라이트닝 당하는 해골"
+          width={133}
+          height={137}
+          className="my-[16px]"
+        ></Image>
+        <div className="text-body16 text-black text-center">
+          라이트닝을 적용하면
+          <br />이 유저의 채팅을 가릴 수 있어요
+        </div>
+        <button
+          onClick={onClickConfirmBtn}
+          className={`w-full h-[48px] mt-[11px] bg-black text-body16 text-white font-bold rounded-[10px] ${
+            isSendingLightning && "opacity-50"
+          }`}
+          disabled={isSendingLightning}
+        >
+          지금 적용하기
+        </button>
+        <button
+          onClick={props.onClickCancel}
+          className="w-full h-[42px] mb-[12px] text-body14 text-darkgray"
+        >
+          나중에 할게요
+        </button>
+      </div>
     </div>
   );
 };
