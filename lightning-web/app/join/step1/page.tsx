@@ -147,16 +147,18 @@ export default function Page() {
 }
 
 const ActionBar = () => {
+  const router = useRouter();
+
   return (
-    <div className="flex items-center justify-between w-full h-[72px] bg-white px-4">
+    <div className="flex items-center justify-between w-full h-[72px] bg-white">
       {/* 뒤로가기 버튼 */}
-      <Image src="/icon/arrow_back.svg" alt="Back" width={24} height={24} />
+      <Image src="/icon/arrow_back.svg" alt="Back" width={56} height={72} onClick={() => router.push("/")} className="px-[16px] py-[24px]"/>
 
       {/* 제목 */}
       <h1 className="text-lg font-semibold"></h1>
 
       {/* 닫기 버튼 */}
-      <Image src="/icon/close.svg" alt="Close" width={24} height={24} />
+      <Image src="/icon/close.svg" alt="Close" width={56} height={72} onClick={() => router.push("/")} className="px-[16px] py-[24px]"/>
     </div>
   );
 };
