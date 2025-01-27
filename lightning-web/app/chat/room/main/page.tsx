@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useFirebaseApp } from "@/app/firebase-provider";
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import {
   getFirestore,
   collection,
@@ -12,6 +12,8 @@ import {
   orderBy,
   where,
   limit,
+  getDoc,
+  getDocs,
 } from "firebase/firestore";
 import axios from "axios";
 import { useSession } from "next-auth/react";
@@ -44,6 +46,7 @@ export default function Page() {
     roomId: string;
     status: string;
   }>();
+  const [chatRoomName, setChatRoomName] = useState("");
   const [chats, setChats] = useState<Chat[]>([]);
   const [inputMessage, setInputMessage] = useState("");
   const [lightnings, setLightnings] = useState<Lightning[]>([]);
@@ -137,6 +140,20 @@ export default function Page() {
   }, [db]);
 
   useEffect(() => {
+    if (!chatRoom || !chatRoom.roomId) return;
+
+    const docRef = doc(db, "chatrooms", chatRoom.roomId);
+    getDoc(docRef).then((docSnap) => {
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        setChatRoomName(data!.name);
+      }
+    })
+
+    
+  }, [chatRoom]);
+
+  useEffect(() => {
     if (!chatRoom) return;
 
     const q = query(
@@ -181,15 +198,15 @@ export default function Page() {
       )
       .then((response) => {
         setLightnings(response.data.lightnings);
-        applyTransparency(chats);
       });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session, status]);
 
   return (
     <div className="flex flex-col h-screen">
+      <ActionBar title={chatRoomName} />
       {/* 채팅 메시지 컨테이너 */}
-      <div className="flex-1 overflow-y-auto bg-gray-100 p-4 flex flex-col-reverse">
+      <div className="flex-1 overflow-y-auto scrollbar-hide bg-gray-100 p-4 h-[calc(100%)-72px] flex flex-col-reverse">
         {chats.map((chat, index) => (
           <div
             key={index}
@@ -248,3 +265,18 @@ export default function Page() {
     </div>
   );
 }
+
+const ActionBar = (props: {title: string}) => {
+  return (
+    <div className="flex items-center justify-between w-full h-[72px] bg-white px-4 border-b-[1px] border-strokeblack">
+      {/* 뒤로가기 버튼 */}
+      <span className="w-[24px] h-[24px]" />
+
+      {/* 제목 */}
+      <h1 className="text-body16 font-bold">{props.title}</h1>
+
+      {/* 닫기 버튼 */}
+      <Image src="/icon/menu.svg" alt="Menu" width={24} height={24} />
+    </div>
+  );
+};
