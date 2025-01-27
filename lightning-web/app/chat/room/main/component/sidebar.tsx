@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { signOut } from "next-auth/react";
 import Image from "next/image";
@@ -17,7 +17,8 @@ export default function Sidebar(props: { onClickCloseBtn: () => void }) {
         <button className="block w-full flex flex-start p-[16px] border-b-[1px] border-darkgray text-darkgray h-[56px]">
           고객 센터
         </button>
-        <button className="block w-full flex flex-start p-[16px] border-b-[1px] border-darkgray text-darkgray h-[56px]">
+        <button className="block w-full flex flex-start p-[16px] border-b-[1px] border-darkgray text-darkgray h-[56px]"
+        onClick={() => router.push("https://cac.notion.site/2faf403cf9e14d1f94f5315af8256ac3?pvs=4")}>
           운영 정책
         </button>
         <button

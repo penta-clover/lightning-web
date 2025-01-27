@@ -9,7 +9,7 @@ import clsx from "clsx";
 
 function Body() {
   const { status, update } = useSession();
-  const [isJoining, setIsJoining] = useState<boolean>(false)
+  const [isJoining, setIsJoining] = useState<boolean>(false);
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -24,7 +24,7 @@ function Body() {
 
   const handleComplete = async () => {
     setIsJoining(true);
-    
+
     // 토큰이 없는 경우: 비정상적인 접근
     if (status !== "authenticated") {
       router.push("/error/401");
@@ -99,31 +99,52 @@ function Body() {
                 모든 항목에 동의합니다
               </label>
             </div>
-            <div className="flex items-center h-[48px]">
-              <input
-                type="checkbox"
-                id="terms"
-                checked={checkedItems.terms}
-                onChange={() => handleCheckboxChange("terms")}
-                className="mr-3 w-[24px] h-[24px] border-0 bg-bggray rounded-full checked:bg-[url('/icon/circle_checkbox.svg')] checked:border-blue-500 appearance-none"
+            <div className="flex justify-between items-center h-[48px]">
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id="terms"
+                  checked={checkedItems.terms}
+                  onChange={() => handleCheckboxChange("terms")}
+                  className="mr-3 w-[24px] h-[24px] border-0 bg-bggray rounded-full checked:bg-[url('/icon/circle_checkbox.svg')] checked:border-blue-500 appearance-none"
+                />
+                <label htmlFor="terms" className="text-body16">
+                  <span className="text-blue font-bold">[필수] </span>
+                  <span className="text-darkgray">이용약관 동의</span>
+                </label>
+              </div>
+              <Image
+                src="/icon/chevron_right.svg"
+                alt="Chevron Right"
+                width={36}
+                height={48}
+                className="py-[12px] pl-[12px]"
+                onClick={() => {
+                  router.push("https://cac.notion.site/2faf403cf9e14d1f94f5315af8256ac3?pvs=4")
+                }}
               />
-              <label htmlFor="terms" className="text-body16">
-                <span className="text-blue font-bold">[필수] </span>
-                <span className="text-darkgray">이용약관 동의</span>
-              </label>
             </div>
-            <div className="flex items-center h-[48px]">
-              <input
-                type="checkbox"
-                id="privacy"
-                checked={checkedItems.privacy}
-                onChange={() => handleCheckboxChange("privacy")}
-                className="mr-3 w-[24px] h-[24px] border-0 bg-bggray rounded-full checked:bg-[url('/icon/circle_checkbox.svg')] checked:border-blue-500 appearance-none"
+            <div className="flex justify-between items-center h-[48px]">
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id="privacy"
+                  checked={checkedItems.privacy}
+                  onChange={() => handleCheckboxChange("privacy")}
+                  className="mr-3 w-[24px] h-[24px] border-0 bg-bggray rounded-full checked:bg-[url('/icon/circle_checkbox.svg')] checked:border-blue-500 appearance-none"
+                />
+                <label htmlFor="privacy" className="text-body16">
+                  <span className="text-blue font-bold">[필수] </span>
+                  <span className="text-darkgray">개인정보 수집 및 이용동의</span>
+                </label>
+              </div>
+              <Image
+                src="/icon/chevron_right.svg"
+                alt="Chevron Right"
+                width={36}
+                height={48}
+                className="py-[12px] pl-[12px]"
               />
-              <label htmlFor="privacy" className="text-body16">
-                <span className="text-blue font-bold">[필수] </span>
-                <span className="text-darkgray">개인정보 수집 및 이용동의</span>
-              </label>
             </div>
             <div className="flex items-center h-[48px]">
               <input
@@ -167,7 +188,8 @@ function Body() {
             }
           )}
           disabled={
-            !(checkedItems.terms && checkedItems.privacy && checkedItems.age) || isJoining
+            !(checkedItems.terms && checkedItems.privacy && checkedItems.age) ||
+            isJoining
           }
           onClick={handleComplete}
         >
