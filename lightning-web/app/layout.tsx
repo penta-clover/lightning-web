@@ -11,7 +11,7 @@ export default function RootLayout({
   return (
         <html lang="en">
           <body
-            className={`antialiased overflow-hidden`}
+            className={`antialiased overflow-hidden safe-area`}
           >
             <SpeedInsights />
             <LayoutUI>

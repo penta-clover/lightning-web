@@ -26,3 +26,10 @@ textarea:focus {
   box-shadow: none;
   border-color: inherit; /* 선택 사항: border 변경 방지 */
 }
+
+.safe-area {
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-top: env(safe-area-inset-top);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
