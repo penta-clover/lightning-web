@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useFirebaseApp } from "@/app/firebase-provider";
-import { useState, useEffect, use, MouseEventHandler } from "react";
+import React, { useState, useEffect, use, MouseEventHandler } from "react";
 import {
   getFirestore,
   collection,
@@ -234,17 +234,44 @@ export default function Page() {
     <div className="relative">
       <div
         className={`absolute top-0 right-0 w-full h-full ${
-          chatToLightning ? "opacity-100 z-50 transition-opacity" : "opacity-0 -z-50"
+          chatToLightning
+            ? "opacity-100 z-50 transition-opacity"
+            : "opacity-0 -z-50"
         }`}
       >
-      <LightningDialog
-        onClickConfirm={onConfirmLightning}
-        onClickCancel={onCancelLightning}
-      />
-    </div>
+        <LightningDialog
+          onClickConfirm={onConfirmLightning}
+          onClickCancel={onCancelLightning}
+        />
+      </div>
+      <div
+        className={`absolute top-0 right-0 w-full h-full ${
+          chatRoom?.status === "RESERVED"
+            ? "opacity-100 z-50 transition-opacity"
+            : "opacity-0 -z-50"
+        }`}
+      >
+        <ClosedDialog onClickAlarmBtn={ () => console.log("알림 받기!!") }>
+          <span>경기 방송 시작되면 오픈됩니다.</span>
+          <span>잠시만 기다려주세요!</span>
+        </ClosedDialog>
+      </div>
+      <div
+        className={`absolute top-0 right-0 w-full h-full ${
+          chatRoom?.status === "TERMINATED"
+            ? "opacity-100 z-50 transition-opacity"
+            : "opacity-0 -z-50"
+        }`}
+      >
+        <ClosedDialog onClickAlarmBtn={ () => console.log("알림 받기!!") }>
+          <span>채팅방은 다음 경기 전에 오픈됩니다.</span>
+          <span>다음 경기에서 봬요!</span>
+        </ClosedDialog>
+      </div>
       <div
         className={`flex flex-col w-full h-screen ${
-          chatToLightning && "filter blur transition-all"
+          (chatToLightning || chatRoom?.status !== "ACTIVE") &&
+          "filter blur transition-all"
         }`}
       >
         <ActionBar
@@ -430,6 +457,27 @@ const LightningDialog = (props: {
           className="w-full h-[42px] mb-[12px] text-body14 text-darkgray"
         >
           나중에 할게요
+        </button>
+      </div>
+    </div>
+  );
+};
+
+const ClosedDialog = (props: {children: React.ReactNode, onClickAlarmBtn: () => void}) => {
+  return (
+    <div className="relative w-full h-full">
+      <div
+        className="w-full h-full bg-black opacity-40"
+      />
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white w-[343px] h-[340px] rounded-[10px] flex flex-col px-[16px] py-[24px]">
+        <div className="text-heading20 text-black font-bold grow flex flex-col justify-center items-center">
+          {props.children}
+        </div>
+        <button
+          onClick={props.onClickAlarmBtn}
+          className={`w-full h-[48px] mt-[11px] bg-black text-body16 text-white font-bold rounded-[10px] active:bg-opacity-50`}
+        >
+          채팅 시작할 때 알림 받기
         </button>
       </div>
     </div>
