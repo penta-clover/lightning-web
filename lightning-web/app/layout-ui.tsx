@@ -1,6 +1,7 @@
 'use client';
 
 import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 
 export function LayoutUI({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
@@ -9,6 +10,22 @@ export function LayoutUI({ children }: { children: React.ReactNode }) {
     if (isAdminPage) {
       return <>{children}</>;
     }
+
+    useEffect(() => {
+      const preventZoom = (e) => {
+        if (e.touches && e.touches.length > 1) {
+          e.preventDefault();
+        }
+      };
+    
+      document.addEventListener('touchstart', preventZoom, { passive: false });
+      document.addEventListener('touchmove', preventZoom, { passive: false });
+    
+      return () => {
+        document.removeEventListener('touchstart', preventZoom);
+        document.removeEventListener('touchmove', preventZoom);
+      };
+    }, []);
   
     return (
       <div className="flex h-screen w-screen">
