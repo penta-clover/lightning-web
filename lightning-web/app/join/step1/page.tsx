@@ -14,6 +14,7 @@ function Body() {
   const [isNicknameUnique, setIsNicknameUnique] = useState<boolean | undefined>(
     undefined
   );
+  const [isChecking, setIsChecking] = useState<boolean>(false);
 
   const handleComplete = () => {
     const newParams = new URLSearchParams(searchParams);
@@ -38,12 +39,16 @@ function Body() {
   };
 
   const checkNicknameUnique = async (nickname: string) => {
+    setIsChecking(true);
+
     const response = await fetch(`/api/member/nickname/${nickname}`);
     if (response.status == 200) {
       setIsNicknameUnique(false);
     } else {
       setIsNicknameUnique(true);
     }
+
+    setIsChecking(false);
   };
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -88,10 +93,10 @@ function Body() {
               onClick={() => {
                 checkNicknameUnique(nickname);
               }}
-              className={`py-2 w-[50px] text-darkgray text-caption12 rounded-md`}
-              disabled={!isNicknameValid}
+              className={`py-2 w-[50px] text-darkgray text-caption12 rounded-md flex items-center justify-center`}
+              disabled={isChecking}
             >
-              중복확인
+              { isChecking ? <Image src="/icon/rolling_spinner.gif" alt="로딩 스피너" width={24} height={24} /> : "중복확인"}
             </button>
           </div>
           <div

@@ -73,28 +73,28 @@ export default function Page() {
 
   return (
     <div className="flex flex-col h-screen">
-      <div className="bg-primary h-16 shadow-sm">
+      <div className="bg-white h-16 shadow-sm">
         <div className="flex justify-between items-center max-w-7xl mx-auto h-full px-4">
-          <span className="text-primary-foreground text-xl font-bold">Admin</span>
+          <span className="text-white-foreground text-xl font-bold">Admin</span>
           <div className="flex h-full">
             <Button
               variant={currentPage === "chatroom" ? "secondary" : "ghost"}
               onClick={() => setCurrentPage("chatroom")}
-              className={clsx("text-primary-foreground h-full rounded-none hover:bg-white transition-all", currentPage === "chatroom" && "bg-white")}
+              className={clsx("text-white-foreground h-full rounded-none hover:bg-lightgray transition-all", currentPage === "chatroom" && "bg-lightgray")}
             >
               채팅방 설정
             </Button>
             <Button
               variant={currentPage === "dummyUser" ? "secondary" : "ghost"}
               onClick={() => setCurrentPage("dummyUser")}
-              className={clsx("text-primary-foreground h-full rounded-none hover:bg-white transition-all", currentPage === "dummyUser" && "bg-white")}
+              className={clsx("text-white-foreground h-full rounded-none hover:bg-lightgray transition-all", currentPage === "dummyUser" && "bg-lightgray")}
             >
               더미 유저 관리
             </Button>
             <Button
               variant={currentPage === "liveChat" ? "secondary" : "ghost"}
               onClick={() => setCurrentPage("liveChat")}
-              className={clsx("text-primary-foreground h-full rounded-none hover:bg-white transition-all", currentPage === "liveChat" && "bg-white")}
+              className={clsx("text-white-foreground h-full rounded-none hover:bg-lightgray transition-all", currentPage === "liveChat" && "bg-lightgray")}
             >
               실시간 채팅창
             </Button>
