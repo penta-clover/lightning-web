@@ -12,7 +12,7 @@ export default function RootLayout({
         <html lang="en">
           <title>라이트닝 - 클린한 LCK 팬 채팅</title>
           <meta name="description" content="클린한 LCK 팬 채팅" />
-          <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
           <body
             className={`antialiased overflow-hidden safe-area`}
           >

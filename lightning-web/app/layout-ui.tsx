@@ -11,6 +11,7 @@ export function LayoutUI({ children }: { children: React.ReactNode }) {
       return <>{children}</>;
     }
 
+    // block pinch zoom on mobile
     useEffect(() => {
       const preventZoom = (e: TouchEvent) => {
         if (e.touches && e.touches.length > 1) {
@@ -26,9 +27,9 @@ export function LayoutUI({ children }: { children: React.ReactNode }) {
         document.removeEventListener('touchmove', preventZoom);
       };
     }, []);
-  
+    
     return (
-      <div className="flex h-screen w-screen">
+      <div className="flex h-screen w-screen touch-pan-x touch-pan-y">
         {/* Left Hero Image Section */}
         <div className="hidden grow lg:flex lg:w-full bg-gray-50 items-center justify-center">
           {/* Hero Image Placeholder */}

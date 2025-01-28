@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useFirebaseApp } from "@/app/firebase-provider";
-import React, { useState, useEffect, use, MouseEventHandler } from "react";
+import React, { useState, useEffect, use, MouseEventHandler, useRef } from "react";
 import {
   getFirestore,
   collection,
@@ -55,8 +55,9 @@ export default function Page() {
   const [enableSidebar, setEnableSidebar] = useState(false);
   const [canSending, setCanSending] = useState(false);
   const [canInput, setCanInput] = useState(true);
-
   const [chatToLightning, setChatToLightning] = useState<string>();
+
+  const chatInputRef = useRef<HTMLTextAreaElement>(null);
 
   const sendChatMessage = async () => {
     setCanSending(false);
@@ -158,6 +159,28 @@ export default function Page() {
       Math.min(Math.max(textarea.scrollHeight, 42), 96) + "px"; // 최대 높이 96px (4줄)
     setInputMessage(textarea.value);
   };
+
+  // useEffect(() => {
+  //   function handleFocus() {
+  //   setTimeout(() => {
+  //     chatInputRef.current?.scrollIntoView({
+  //       behavior: "smooth",
+  //       block: "nearest"
+  //     });
+  //   }, 200);
+
+  //   const el = chatInputRef.current;
+  //   if (el) {
+  //     el.addEventListener("focus", handleFocus);
+  //   }
+  
+  //   // 4) cleanup
+  //   return () => {
+  //     if (el) {
+  //       el.removeEventListener("focus", handleFocus);
+  //     }
+  //   };
+  // }, []);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(doc(db, "policy", "main_room"), (doc) => {
@@ -269,7 +292,7 @@ export default function Page() {
         </ClosedDialog>
       </div>
       <div
-        className={`flex flex-col w-full h-screen ${
+        className={`flex flex-col w-full h-[calc(100dvh)] pb-0 relative ${
           (chatToLightning || chatRoom?.status !== "ACTIVE") &&
           "filter blur transition-all"
         }`}
@@ -279,7 +302,7 @@ export default function Page() {
           onClickMenuBtn={() => setEnableSidebar(true)}
         />
         {/* 채팅 메시지 컨테이너 */}
-        <div className="flex-1 w-full overflow-y-auto scrollbar-hide bg-gray-100 p-4 h-[calc(100%)-72px] flex flex-col-reverse transition-all">
+        <div className="flex-1 w-full overflow-y-auto scrollbar-hide bg-gray-100 p-4 grow flex flex-col-reverse transition-all">
           {chats.map((chat, index) => (
             <div
               key={index}
@@ -297,12 +320,13 @@ export default function Page() {
           ))}
         </div>
         {/* 메시지 입력창 */}
-        <div className="flex items-end px-[16px] py-[12px] bg-bggray">
+        <div className="sticky w-full bottom-0 flex items-end px-[16px] py-[12px] bg-bggray">
           <textarea
+            ref={chatInputRef}
             value={inputMessage}
             onChange={handleInput}
             placeholder="메시지를 입력하세요..."
-            className="flex-1 p-2 border-[1px] border-lightgray text-body14 rounded resize-none overflow-hidden min-h-[42px] max-h-[6rem] h-auto focus:border-[1px] focus:border-lightgray"
+            className="flex-1 p-2 border-[1px] border-lightgray text-body16 rounded resize-none overflow-hidden min-h-[42px] max-h-[6rem] h-auto focus:border-[1px] focus:border-lightgray"
             rows={1}
             maxLength={280}
             disabled={!canInput}
