@@ -19,6 +19,7 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import clsx from "clsx";
 import Sidebar from "./component/sidebar";
+import { useRouter } from "next/navigation";
 
 type Chat = {
   id: string;
@@ -43,6 +44,11 @@ export default function Page() {
   const db = getFirestore(app);
 
   const { data: session, status } = useSession();
+  const router = useRouter();
+
+  if (session?.id === undefined) {
+    router.push("/");
+  }
 
   const [chatRoom, setChatRoom] = useState<{
     roomId: string;
@@ -56,8 +62,6 @@ export default function Page() {
   const [canSending, setCanSending] = useState(false);
   const [canInput, setCanInput] = useState(true);
   const [chatToLightning, setChatToLightning] = useState<string>();
-
-  const chatInputRef = useRef<HTMLTextAreaElement>(null);
 
   const sendChatMessage = async () => {
     setCanSending(false);
@@ -159,28 +163,6 @@ export default function Page() {
       Math.min(Math.max(textarea.scrollHeight, 42), 96) + "px"; // 최대 높이 96px (4줄)
     setInputMessage(textarea.value);
   };
-
-  // useEffect(() => {
-  //   function handleFocus() {
-  //   setTimeout(() => {
-  //     chatInputRef.current?.scrollIntoView({
-  //       behavior: "smooth",
-  //       block: "nearest"
-  //     });
-  //   }, 200);
-
-  //   const el = chatInputRef.current;
-  //   if (el) {
-  //     el.addEventListener("focus", handleFocus);
-  //   }
-  
-  //   // 4) cleanup
-  //   return () => {
-  //     if (el) {
-  //       el.removeEventListener("focus", handleFocus);
-  //     }
-  //   };
-  // }, []);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(doc(db, "policy", "main_room"), (doc) => {
@@ -322,7 +304,6 @@ export default function Page() {
         {/* 메시지 입력창 */}
         <div className="sticky w-full bottom-0 flex items-end px-[16px] py-[12px] bg-bggray">
           <textarea
-            ref={chatInputRef}
             value={inputMessage}
             onChange={handleInput}
             placeholder="메시지를 입력하세요..."
