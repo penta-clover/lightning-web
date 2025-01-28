@@ -8,6 +8,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
         <html lang="en">
           <title>라이트닝 - 클린한 LCK 팬 채팅</title>

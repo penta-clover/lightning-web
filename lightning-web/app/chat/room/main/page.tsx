@@ -20,6 +20,7 @@ import { useSession } from "next-auth/react";
 import clsx from "clsx";
 import Sidebar from "./component/sidebar";
 import { useRouter } from "next/navigation";
+import * as ChannelService from '@channel.io/channel-web-sdk-loader';
 
 type Chat = {
   id: string;
@@ -45,10 +46,6 @@ export default function Page() {
 
   const { data: session, status } = useSession();
   const router = useRouter();
-
-  if (session?.id === undefined) {
-    router.push("/");
-  }
 
   const [chatRoom, setChatRoom] = useState<{
     roomId: string;
@@ -163,6 +160,26 @@ export default function Page() {
       Math.min(Math.max(textarea.scrollHeight, 42), 96) + "px"; // 최대 높이 96px (4줄)
     setInputMessage(textarea.value);
   };
+
+  useEffect(() => {
+    if (session?.id === undefined) {
+      router.push("/");
+    } else {
+      ChannelService.shutdown();
+      ChannelService.boot({
+        pluginKey: "3ff291f4-ea2a-411a-9a1d-1d82c1870c54",
+        customLauncherSelector: ".channel-talk-button",
+        hideChannelButtonOnBoot: true,
+        memberId: session.id,
+        profile: {
+          name: session.user?.name ?? "알 수 없음",
+          email: session.user?.email ?? "알 수 없음",
+        },
+      })
+    }
+
+
+  }, [session]);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(doc(db, "policy", "main_room"), (doc) => {

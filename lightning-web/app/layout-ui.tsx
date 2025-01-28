@@ -2,10 +2,13 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
+import * as ChannelService from '@channel.io/channel-web-sdk-loader';
 
 export function LayoutUI({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
     const isAdminPage = pathname.startsWith("/admin");
+
+    ChannelService.loadScript();
   
     if (isAdminPage) {
       return <>{children}</>;

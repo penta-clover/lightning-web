@@ -4,6 +4,7 @@ import { signOut } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import * as ChannelService from '@channel.io/channel-web-sdk-loader';
 
 export default function Sidebar(props: { onClickCloseBtn: () => void }) {
   const router = useRouter();
@@ -35,7 +36,7 @@ export default function Sidebar(props: { onClickCloseBtn: () => void }) {
             )}
           </div>
         </button>
-        <button className="block w-full flex flex-start p-[16px] border-b-[1px] border-darkgray text-darkgray h-[56px]">
+        <button className="block w-full flex flex-start p-[16px] border-b-[1px] border-darkgray text-darkgray h-[56px] channel-talk-button">
           고객 센터
         </button>
         <button
@@ -52,6 +53,7 @@ export default function Sidebar(props: { onClickCloseBtn: () => void }) {
           className="block w-full flex flex-start p-[16px] border-b-[1px] border-darkgray text-darkgray h-[56px]"
           onClick={() => {
             signOut();
+            ChannelService.shutdown();
             router.push("/");
           }}
         >
