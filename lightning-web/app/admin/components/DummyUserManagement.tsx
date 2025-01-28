@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import axios from "axios";
-import { randomUUID } from "crypto";
+import { v4 as uuidv4 } from 'uuid';
 
 type User = {
   id: string;
@@ -23,13 +23,13 @@ export function DummyUserManagement() {
   const [newNickname, setNewNickname] = useState<string>("");
   const [isDirty, setIsDirty] = useState<boolean>(false);
 
-  const createDummyUser = () => {
-    axios.post(
+  const createDummyUser = async () => {
+    await axios.post(
       "/api/admin/member",
       {
         nickname: newNickname,
         socialType: "LOCAL",
-        socialId: randomUUID(),
+        socialId: uuidv4(),
         email: "dummy@a.com",
         profileImageUrl: "/profile/default.svg",
         alarmAllowed: false,
@@ -57,8 +57,6 @@ export function DummyUserManagement() {
       setDummyUsers(dummies);
       return res;
     });
-
-    setIsDirty(false);
   }, [isDirty]);
 
   const toggleUserStatus = (id: string) => {
