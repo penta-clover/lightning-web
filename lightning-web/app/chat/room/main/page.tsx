@@ -256,7 +256,7 @@ export default function Page() {
             : "opacity-0 -z-50"
         }`}
       >
-        <ClosedDialog onClickAlarmBtn={ () => console.log("알림 받기!!") }>
+        <ClosedDialog onClickAlarmBtn={ () => router.push("http://pf.kakao.com/_VxjiTn/friend") }>
           <span>경기 방송 시작되면 오픈됩니다.</span>
           <span>잠시만 기다려주세요!</span>
         </ClosedDialog>
@@ -268,7 +268,7 @@ export default function Page() {
             : "opacity-0 -z-50"
         }`}
       >
-        <ClosedDialog onClickAlarmBtn={ () => console.log("알림 받기!!") }>
+        <ClosedDialog onClickAlarmBtn={ () => router.push("http://pf.kakao.com/_VxjiTn/friend") }>
           <span>채팅방은 다음 경기 전에 오픈됩니다.</span>
           <span>다음 경기에서 봬요!</span>
         </ClosedDialog>
