@@ -82,7 +82,7 @@ function Body() {
                 value={nickname}
                 onInput={handleInput}
                 placeholder="닉네임을 입력하세요"
-                className={clsx("flex-1 w-full px-[16px] py-[12px] text-body16 border-b border-gray-300 rounded-t-[4px] bg-bggray  focus:outline-none focus:ring-0",
+                className={clsx("flex-1 w-full px-[16px] py-[12px] text-body16 border-b border-gray-300 rounded-t-[4px] rounded-b-[0px] bg-bggray focus:outline-none focus:ring-0",
                     {"border-red text-red": isNicknameUnique === false},)}
                 />
                 <div className={clsx("absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer", {"hidden": isNicknameUnique !== false})}>
