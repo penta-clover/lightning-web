@@ -27,33 +27,43 @@ function Body() {
 
     // 토큰이 없는 경우: 비정상적인 접근
     if (status !== "authenticated") {
-      router.push("/error/401");
+      router.push("/");
       return;
     }
 
-    const response = await axios.post(
-      "/api/member/join",
-      {
-        nickname: searchParams.get("nickname"),
-        socialType: searchParams.get("socialType"),
-        socialId: searchParams.get("socialId"),
-        email: searchParams.get("email"),
-        alarmAllowed: checkedItems.marketing,
-      },
-      {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "application/json",
+    try {
+      const response = await axios.post(
+        "/api/member/join",
+        {
+          nickname: searchParams.get("nickname"),
+          socialType: searchParams.get("socialType"),
+          socialId: searchParams.get("socialId"),
+          email: searchParams.get("email"),
+          alarmAllowed: checkedItems.marketing,
         },
-      }
-    );
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-    if (response.status === 201) {
+      if (response.status !== 201) {
+        alert("회원가입 중 오류가 발생했습니다. 다시 시도해주세요.");
+        router.back();
+        return;
+      }
+
       await update();
       router.replace("/chat/room/main");
-    } else {
-      router.push("/error/404");
+    } catch (error) {
+      alert("회원가입 중 오류가 발생했습니다. 다시 시도해주세요.");
+      router.back();
+      return;
     }
+
+    setIsJoining(false);
   };
 
   const handleCheckboxChange = (
@@ -178,9 +188,9 @@ function Body() {
         </div>
         <button
           className={clsx(
-            "px-4 py-2 my-[24px] h-[48px] bg-black text-white cursor-not-allowed rounded-[10px]",
+            "px-4 py-2 my-[24px] h-[48px] bg-black text-white cursor-not-allowed rounded-[10px] text-body16 active:bg-lightgray",
             {
-              "bg-lightgray text-body16": !(
+              "bg-lightgray": !(
                 checkedItems.terms &&
                 checkedItems.privacy &&
                 checkedItems.age

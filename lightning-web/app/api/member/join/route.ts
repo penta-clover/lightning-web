@@ -31,6 +31,7 @@ async function handler(req: Request) {
       });
     }
 
+    // check if member already exists
     const result = await join({
       nickname: nickname,
       socialType: stringToSocialType(socialType),

@@ -43,7 +43,7 @@ export async function join(joinForm: JoinForm) {
         },
     });
   } catch (error) {
-    console.error('Error joining member:', error);
+    console.log(error);
     return null;
   }
 }

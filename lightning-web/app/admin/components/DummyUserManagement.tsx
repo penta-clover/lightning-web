@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import axios from "axios";
+import { randomUUID } from "crypto";
 
 type User = {
   id: string;
@@ -28,7 +29,7 @@ export function DummyUserManagement() {
       {
         nickname: newNickname,
         socialType: "LOCAL",
-        socialId: "dummy",
+        socialId: randomUUID(),
         email: "dummy@a.com",
         profileImageUrl: "/profile/default.svg",
         alarmAllowed: false,

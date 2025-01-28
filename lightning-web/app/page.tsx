@@ -8,7 +8,7 @@ import { signOut } from 'next-auth/react';
 export default function Home() {
   const { data: session, status } = useSession();
   const router = useRouter();
-
+  
   useEffect (() => {
     if (status === 'authenticated' && session.id) {
       // 사용자 정보가 있다면, 메인 페이지로 이동

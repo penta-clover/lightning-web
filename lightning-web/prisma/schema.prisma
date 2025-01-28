@@ -23,6 +23,8 @@ model Member {
   // chatMessages     ChatMessage[]   // 관계: 보낸 메시지
   lightningsSent   Lightning[]    @relation("LightningsSent")   // 관계: 보낸 번개
   lightningsReceived Lightning[]  @relation("LightningsReceived") // 관계: 받은 번개
+
+  @@unique([socialType, socialId])
 }
 
 enum SocialType {
