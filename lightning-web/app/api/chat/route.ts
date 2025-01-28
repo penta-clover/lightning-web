@@ -19,7 +19,7 @@ async function postHandler(req: Request) {
         const member = await findMemberById(memberId);
 
         if (!member) {
-            return new Response(JSON.stringify({ message: 'Member not found' }), { status: 404 });
+            return new Response(JSON.stringify({ message: 'Member not found' }), { status: 400 });
         }
         
         await saveChatMessage(roomId, memberId, member.profileImageUrl, member.nickname, content, member.isBlocked ? 100 : 0);
