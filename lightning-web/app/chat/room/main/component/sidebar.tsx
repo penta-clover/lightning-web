@@ -10,13 +10,19 @@ export default function Sidebar(props: { onClickCloseBtn: () => void }) {
   const router = useRouter();
   const [isInvitationCopied, setIsInvitationCopied] = useState(false);
 
+  const copyInvitation = () => {
+    const textToCopy = "https://bit.ly/4gjRvKl";
+    navigator.clipboard.writeText(textToCopy);
+  };
+
   return (
     <div>
       <ActionBar onClickCloseBtn={props.onClickCloseBtn} />
       <div className="w-full px-[16px]">
         <button
-          className="block w-full flex flex-start p-[16px] border-b-[1px] border-darkgray text-darkgray h-[56px]"
+          className="block w-full flex flex-start p-[16px] border-b-[1px] border-darkgray text-darkgray h-[56px] active:bg-lightgray hover:bg-bggray"
           onClick={() => {
+            copyInvitation();
             setIsInvitationCopied(true);
             setTimeout(() => setIsInvitationCopied(false), 3000);
           }}
@@ -36,11 +42,11 @@ export default function Sidebar(props: { onClickCloseBtn: () => void }) {
             )}
           </div>
         </button>
-        <button className="block w-full flex flex-start p-[16px] border-b-[1px] border-darkgray text-darkgray h-[56px] channel-talk-button">
+        <button className="block w-full flex flex-start p-[16px] border-b-[1px] border-darkgray text-darkgray h-[56px] active:bg-lightgray hover:bg-bggray channel-talk-button">
           고객 센터
         </button>
         <button
-          className="block w-full flex flex-start p-[16px] border-b-[1px] border-darkgray text-darkgray h-[56px]"
+          className="block w-full flex flex-start p-[16px] border-b-[1px] border-darkgray text-darkgray h-[56px] active:bg-lightgray hover:bg-bggray"
           onClick={() =>
             router.push(
               "https://cac.notion.site/2faf403cf9e14d1f94f5315af8256ac3?pvs=4"
@@ -50,7 +56,7 @@ export default function Sidebar(props: { onClickCloseBtn: () => void }) {
           운영 정책
         </button>
         <button
-          className="block w-full flex flex-start p-[16px] border-b-[1px] border-darkgray text-darkgray h-[56px]"
+          className="block w-full flex flex-start p-[16px] border-b-[1px] border-darkgray text-darkgray h-[56px] active:bg-lightgray hover:bg-bggray"
           onClick={() => {
             signOut();
             ChannelService.shutdown();
