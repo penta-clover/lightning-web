@@ -3,7 +3,7 @@ import { db } from '../external/firebase/FirebaseApp';
 
 const client = new PrismaClient();
 
-export async function saveChatMessage(roomId: string, senderId: string, profileImageUrl: string, senderNickname: string, content: string, transparency: number) {
+export async function saveChatMessage(roomId: string, senderId: string, profileImageUrl: string, senderNickname: string, content: string, transparency: number, blockType: string) {
     try {
         // 'chats' 서브컬렉션 참조
         const chatsRef = db.collection('chatmessages');
@@ -17,6 +17,7 @@ export async function saveChatMessage(roomId: string, senderId: string, profileI
             content: content,
             created_at: new Date(),
             transparency: transparency,
+            block_type: blockType
         });
     } catch(error) {
         console.error('Error saving chat message:', error);
@@ -59,6 +60,21 @@ export async function findLightningsBySender(senderId: string) {
         });
     } catch(error) {
         console.error('Error finding lightning:', error);
+        return null;
+    }
+}
+
+export async function updateBlockType(chatId: string, blockType: string) {
+    try {
+        let transparency = blockType === "TRANSPARENT" ? 85 : 0;
+
+        const chatRef = db.collection('chatmessages').doc(chatId);
+        return await chatRef.update({
+            block_type: blockType,
+            transparency: transparency
+        });
+    } catch(error) {
+        console.error('Error changing main room policy:', error);
         return null;
     }
 }

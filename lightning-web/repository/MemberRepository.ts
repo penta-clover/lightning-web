@@ -1,4 +1,4 @@
-import { PrismaClient, SocialType, Role } from '@prisma/client';
+import { PrismaClient, SocialType, Role, BlockLevel } from '@prisma/client';
 import { JoinForm } from './dto/JoinForm';
 import { create } from 'domain';
 
@@ -91,13 +91,13 @@ export async function updateRole(memberId: string, role: Role) {
   });
 }
 
-export async function updateIsBlocked(memberId: string, value: boolean) {
+export async function updateBlockLevel(memberId: string, blockLevel: BlockLevel) {
   return await client.member.update({
     where: {
       id: memberId,
     },
     data: {
-      isBlocked: value,
+      blockLevel: blockLevel,
     },
   });
 }

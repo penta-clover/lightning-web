@@ -10,21 +10,29 @@ datasource db {
 model Member {
   id               String         @id @default(uuid()) // UUID 기본값
   nickname         String         @db.VarChar(50)      // VARCHAR(50)
-  socialType       SocialType                   // Enum 타입
+  socialType       SocialType                         // Enum 타입
   socialId         String         @db.VarChar(50)     // VARCHAR(50)
   email            String         @db.VarChar(100)    // VARCHAR(100)
   profileImageUrl  String         @default("profile/default.svg") @db.VarChar(200)
   createdAt        DateTime       @default(now())      // TIMESTAMP
   lastLoginAt      DateTime       @default(now())      // TIMESTAMP
   alarmAllowed     Boolean        @default(false)      // BOOLEAN
-  role             Role                         // Enum 타입
-  isBlocked        Boolean        @default(false)      // BOOLEAN
+  role             Role                                // Enum 타입
+  blockLevel       BlockLevel     @default(NONE)       // Enum 타입
 
   // chatMessages     ChatMessage[]   // 관계: 보낸 메시지
   lightningsSent   Lightning[]    @relation("LightningsSent")   // 관계: 보낸 번개
   lightningsReceived Lightning[]  @relation("LightningsReceived") // 관계: 받은 번개
 
   @@unique([socialType, socialId])
+}
+
+enum BlockLevel {
+  DISABLED
+  INVISIBLE
+  BLOCKED
+  TRANSPARENT
+  NONE
 }
 
 enum SocialType {

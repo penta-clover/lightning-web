@@ -19,7 +19,7 @@ async function postHandler(req: Request) {
             return new Response(JSON.stringify({ message: 'Member not found' }), { status: 404 });
         }
         
-        await saveChatMessage(roomId, memberId, member.profileImageUrl, member.nickname, content, member.isBlocked ? 100 : 0);
+        await saveChatMessage(roomId, memberId, member.profileImageUrl, member.nickname, content, 0, "NONE");
         return new Response(JSON.stringify({ message: 'Message sent successfully' }), { status: 200 });
     } catch (error) {
         console.log(error);

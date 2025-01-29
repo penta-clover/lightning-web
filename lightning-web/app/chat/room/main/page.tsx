@@ -36,6 +36,7 @@ type Chat = {
   content: string;
   created_at: string;
   transparency: number;
+  block_type: string;
 };
 
 type Lightning = {
@@ -104,19 +105,26 @@ export default function Page() {
     setCanInput(true);
   };
 
-  function applyTransparency(chats: Chat[]) {
+  function applyBlock(chats: Chat[]) {
     // console.log(`lightnings: ${lightnings}`);
     const lightnedMembers = new Set(
       lightnings.map((lightning) => lightning.receiverId)
     );
+
     const newChats = [...chats];
 
     for (const chat of newChats) {
       if (lightnedMembers.has(chat.sender_id)) {
         chat.transparency = 85;
         chat.profile_image_url = "/profile/lightned.svg";
-      } else {
+      }
+
+      if (chat.sender_id === session?.id) {
         chat.transparency = 0;
+
+        if (chat.block_type !== "DISABLED") {
+          chat.block_type = "NONE";
+        }
       }
     }
 
@@ -240,16 +248,16 @@ export default function Page() {
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const newChats: Chat[] = [];
       querySnapshot.forEach((doc) => {
-        newChats.push({ ...doc.data(), id: doc.id, transparency: 0 } as Chat);
+        newChats.push({ ...doc.data(), id: doc.id } as Chat);
       });
-      setChats(applyTransparency(newChats));
+      setChats(applyBlock(newChats));
     });
 
     return unsubscribe;
   }, [db, chatRoom, lightnings]);
 
   useEffect(() => {
-    setChats(applyTransparency(chats));
+    setChats(applyBlock(chats));
   }, [lightnings]);
 
   useEffect(() => {
@@ -332,21 +340,43 @@ export default function Page() {
         />
         {/* 채팅 메시지 컨테이너 */}
         <div className="flex-1 w-full overflow-y-auto scrollbar-hide bg-gray-100 p-4 grow flex flex-col-reverse transition-all">
-          {chats.map((chat, index) => (
-            <div
-              key={index}
-              className={`flex mb-4 w-full ${
-                chat.sender_id === session?.id ? "justify-end" : "justify-start"
-              }`}
-              style={{ opacity: (100 - chat.transparency) / 100 }}
-            >
-              {chat.sender_id === session?.id ? (
-                <MyChat chat={chat} />
-              ) : (
-                <OthersChat chat={chat} onClickLightning={onClickLightning} />
-              )}
-            </div>
-          ))}
+          {chats.map((chat, index) => {
+            switch (chat.block_type) {
+              case "NONE":
+              case "TRANSPARENT":
+                return (
+                  <div
+                    key={index}
+                    className={`flex mb-4 w-full ${
+                      chat.sender_id === session?.id
+                        ? "justify-end"
+                        : "justify-start"
+                    }`}
+                    style={{ opacity: (100 - chat.transparency) / 100 }}
+                  >
+                    {chat.sender_id === session?.id ? (
+                      <MyChat chat={chat} />
+                    ) : (
+                      <OthersChat
+                        chat={chat}
+                        onClickLightning={onClickLightning}
+                      />
+                    )}
+                  </div>
+                );
+              case "BLOCKED":
+                return (
+                  <div
+                    key={index}
+                    className={"flex mb-4 w-full justify-start"}
+                  >
+                    <BlockedChat key={index} chat={chat} />
+                  </div>);
+              case "INVISIBLE":
+              case "DISABLED":
+                return <div key={index}></div>;
+            }
+          })}
         </div>
         {/* 메시지 입력창 */}
         <div className="sticky w-full bottom-0 flex items-end px-[16px] py-[12px] bg-bggray">
@@ -416,6 +446,35 @@ const ActionBar = (props: {
         <Image src="/icon/menu.svg" alt="Menu" width={24} height={24} />
       </button>
     </div>
+  );
+};
+
+const BlockedChat = (props: { chat: Chat }) => {
+  const chat = props.chat;
+
+  return (
+    <>
+      <Image
+        width={36}
+        height={36}
+        src={chat.profile_image_url}
+        alt={`${chat.sender_nickname} 프로필`}
+        className="w-10 h-10 rounded-[12] mr-[16px]"
+      />
+      <div className="flex items-end">
+        <div className="flex flex-col">
+          {/* 닉네임 */}
+          <div className="text-caption12 text-darkgray mb-[7px]">
+            {chat.sender_nickname}
+          </div>
+          {/* 메시지 내용 */}
+          <div className="flex flex-row items-center text-black text-body14 font-medium px-[12px] py-[8px] bg-lightgray rounded-[4px] break-words max-w-xs">
+            <Image src="/icon/error_circle_black.svg" width={16} height={16} alt="블라인드 표시"/>
+            <span className="ml-[4px]">블라인드 처리된 내용이에요.</span>
+          </div>
+        </div>
+      </div>
+    </>
   );
 };
 

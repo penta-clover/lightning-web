@@ -21,8 +21,10 @@ async function postHandler(req: Request) {
         if (!member) {
             return new Response(JSON.stringify({ message: 'Member not found' }), { status: 400 });
         }
+
+        const transparency = member.blockLevel === "TRANSPARENT" ? 85 : 0;
         
-        await saveChatMessage(roomId, memberId, member.profileImageUrl, member.nickname, content, member.isBlocked ? 100 : 0);
+        await saveChatMessage(roomId, memberId, member.profileImageUrl, member.nickname, content, transparency, member.blockLevel);
         return new Response(JSON.stringify({ message: 'Message sent successfully' }), { status: 200 });
     } catch (error) {
         console.log(error);

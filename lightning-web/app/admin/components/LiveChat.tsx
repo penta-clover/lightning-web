@@ -35,6 +35,7 @@ type Chat = {
   content: string;
   created_at: string;
   transparency: number;
+  block_type: string;
 };
 
 type LiveChatProps = {
@@ -120,14 +121,27 @@ export function LiveChat({ className }: LiveChatProps) {
     };
   });
 
-  const handleBlind = async (memberId: string) => {
+  const handleMemberBlind = async (memberId: string, blockLevel: string) => {
     const res = await axios.post("/api/admin/member/blind", {
       memberId: memberId,
-      isBlind: true,
+      blockLevel: blockLevel,
     });
 
     if (res.status === 200) {
-      alert("블라인드 처리되었습니다.");
+      alert("반영 완료되었습니다.");
+    } else {
+      alert("블라인드 처리에 실패했습니다.");
+    }
+  };
+
+  const handleChatBlind = async (chatId: string, blockType: string) => {
+    const res = await axios.post("/api/admin/chat/blind", {
+      chatId: chatId,
+      blockType: blockType,
+    });
+
+    if (res.status === 200) {
+      alert("반영 완료되었습니다.");
     } else {
       alert("블라인드 처리에 실패했습니다.");
     }
@@ -144,7 +158,7 @@ export function LiveChat({ className }: LiveChatProps) {
           className="h-[calc(100vh-12rem)] overflow-y-auto flex flex-col-reverse border p-2 scroll-smooth"
         >
           {chats.map((msg) => (
-            <div key={msg.id} className="flex flex-col items-start mb-2">
+            <div key={msg.id} className="flex flex-col items-start mb-2 shadow-md p-2 rounded">
               <Dialog>
                 <DialogTrigger asChild>
                   <Button
@@ -156,20 +170,53 @@ export function LiveChat({ className }: LiveChatProps) {
                 </DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
-                    <DialogTitle>⛔️ 블라인드</DialogTitle>
+                    <DialogTitle>🤐 사용자 블라인드</DialogTitle>
                     <DialogDescription className="break-words">
-                      사용자 ({msg.sender_nickname}, {msg.sender_id})를
-                      블라인드하시겠습니까?
+                      사용자 ({msg.sender_nickname}, {msg.sender_id})의
+                      블라인드 수준을 선택해주세요.
                     </DialogDescription>
                   </DialogHeader>
                   <DialogClose asChild>
-                    <div className="flex justify-end space-x-2">
-                      <Button onClick={() => handleBlind(msg.sender_id)}>확인</Button>
+                    <div className="flex justify-end space-x-2 ">
+                      <Button className="bg-bggray hover:bg-lightgray active:bg-darkgray px-[8px]" onClick={() => handleMemberBlind(msg.sender_id, "NONE")}>NONE</Button>
+                      <Button className="bg-bggray hover:bg-lightgray active:bg-darkgray px-[8px]" onClick={() => handleMemberBlind(msg.sender_id, "TRANSPARENT")}>TRANSPARENT</Button>
+                      <Button className="bg-bggray hover:bg-lightgray active:bg-darkgray px-[8px]" onClick={() => handleMemberBlind(msg.sender_id, "BLOCKED")}>BLOCKED</Button>
+                      <Button className="bg-bggray hover:bg-lightgray active:bg-darkgray px-[8px]" onClick={() => handleMemberBlind(msg.sender_id, "INVISIBLE")}>INVISIBLE</Button>
+                      <Button className="bg-bggray hover:bg-lightgray active:bg-darkgray px-[8px]" onClick={() => handleMemberBlind(msg.sender_id, "DISABLED")}>DISABLED</Button>
                     </div>
                   </DialogClose>
                 </DialogContent>
               </Dialog>
-              <span className="px-2 py-0 text-sm break-all">{msg.content}</span>
+
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button
+                    variant="link"
+                    className="px-2 py-0 h-4 text-sm break-all"
+                  >
+                    {msg.content}
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>⛔️ 채팅 블라인드</DialogTitle>
+                    <DialogDescription className="break-words">
+                      채팅 ({msg.content}, {msg.id})의
+                      블라인드 수준을 선택해주세요.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogClose asChild>
+                    <div className="flex justify-end space-x-2 ">
+                      <Button className="bg-bggray hover:bg-lightgray active:bg-darkgray px-[8px]" onClick={() => handleChatBlind(msg.id, "NONE")}>NONE</Button>
+                      <Button className="bg-bggray hover:bg-lightgray active:bg-darkgray px-[8px]" onClick={() => handleChatBlind(msg.id, "TRANSPARENT")}>TRANSPARENT</Button>
+                      <Button className="bg-bggray hover:bg-lightgray active:bg-darkgray px-[8px]" onClick={() => handleChatBlind(msg.id, "BLOCKED")}>BLOCKED</Button>
+                      <Button className="bg-bggray hover:bg-lightgray active:bg-darkgray px-[8px]" onClick={() => handleChatBlind(msg.id, "INVISIBLE")}>INVISIBLE</Button>
+                      <Button className="bg-bggray hover:bg-lightgray active:bg-darkgray px-[8px]" onClick={() => handleChatBlind(msg.id, "DISABLED")}>DISABLED</Button>
+                    </div>
+                  </DialogClose>
+                </DialogContent>
+              </Dialog>
+              <span className="px-2 py-0 text-xs text-darkgray">{msg.block_type}</span>
             </div>
           ))}
         </div>
