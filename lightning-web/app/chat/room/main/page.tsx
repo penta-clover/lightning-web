@@ -459,12 +459,12 @@ const BlockedChat = (props: { chat: Chat }) => {
         height={36}
         src={chat.profile_image_url}
         alt={`${chat.sender_nickname} 프로필`}
-        className="w-10 h-10 rounded-[12] mr-[16px]"
+        className="w-10 h-10 rounded-[12] mr-[16px] opacity-85"
       />
       <div className="flex items-end">
         <div className="flex flex-col">
           {/* 닉네임 */}
-          <div className="text-caption12 text-darkgray mb-[7px]">
+          <div className="text-caption12 text-darkgray mb-[7px] opacity-85">
             {chat.sender_nickname}
           </div>
           {/* 메시지 내용 */}
