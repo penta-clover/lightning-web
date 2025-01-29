@@ -47,6 +47,7 @@ export function ChatroomSettings() {
   >(undefined);
   const [chatrooms, setChatrooms] = useState<Chatroom[]>([]);
   const [newChatroomName, setNewChatroomName] = useState("");
+  const [newChatroomActiveCount, setNewChatroomActiveCount] = useState(0);
   const [newStatus, setNewStatus] = useState<ChatroomStatus | undefined>(
     undefined
   );
@@ -104,7 +105,7 @@ export function ChatroomSettings() {
   const createChatroom = () => {
     axios.post(
       "/api/admin/chatroom",
-      { name: newChatroomName },
+      { name: newChatroomName, activeCount: newChatroomActiveCount },
       {
         withCredentials: true,
         headers: {
@@ -112,7 +113,9 @@ export function ChatroomSettings() {
         },
       }
     );
+
     setNewChatroomName("");
+    setNewChatroomActiveCount(0);
   };
 
   const updateMainChatroomStatus = () => {
@@ -232,7 +235,14 @@ export function ChatroomSettings() {
               value={newChatroomName}
               onChange={(e) => setNewChatroomName(e.target.value)}
               placeholder="새 채팅방 이름"
-              className="flex-grow"
+              className="grow"
+            />
+            <Input
+              type="number"
+              value={newChatroomActiveCount}
+              onChange={(e) => setNewChatroomActiveCount(parseInt(e.target.value))}
+              placeholder="새 채팅방 초기 참여자 수"
+              className="grow"
             />
             <Button onClick={createChatroom} className="whitespace-nowrap">
               생성

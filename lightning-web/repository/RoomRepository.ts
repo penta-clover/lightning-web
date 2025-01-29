@@ -8,6 +8,7 @@ export type MainRoomPolicy = {
 export type Room = {
     id: string;
     name: string;
+    active_count: number;
     createdAt: string;
 }
 
@@ -68,11 +69,12 @@ export async function changeMainRoomPolicy(roomId: string, status: string) {
     }
 }
 
-export async function createRoom(name: string) {
+export async function createRoom(name: string, activeCount: number) {
     try {
         const roomsRef = db.collection('chatrooms');
         return await roomsRef.add({
             name: name,
+            active_count: activeCount,
             created_at: new Date(),
         });
     } catch(error) {

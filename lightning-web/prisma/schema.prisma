@@ -79,3 +79,9 @@ model Lightning {
   receiver   Member      @relation("LightningsReceived", fields: [receiverId], references: [id]) // 관계: 받은 번개
   // message    ChatMessage @relation(fields: [messageId], references: [id]) // 관계: 번개에 대한 메시지
 }
+
+model NotificationClick {
+  id         String     @id @default(uuid()) // UUID 기본값
+  memberId    String     @db.VarChar(50)      // VARCHAR(50)
+  createdAt  DateTime    @default(now())      // TIMESTAMP
+}

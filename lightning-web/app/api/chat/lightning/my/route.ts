@@ -2,7 +2,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/auth-options';
 import { findLightningsBySender } from '@/repository/ChatRepository';
 
-async function postHandler() {
+export async function GET() {
     try {
         const session = await getServerSession(authOptions);
         const memberId = session!.id;
@@ -14,5 +14,3 @@ async function postHandler() {
         return new Response(JSON.stringify({ message: 'Internal server error' }), { status: 500 });  
     }
 }
-
-export { postHandler as POST };

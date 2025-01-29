@@ -2,7 +2,13 @@
 
 import Image from "next/image";
 import { useFirebaseApp } from "@/app/firebase-provider";
-import React, { useState, useEffect, use, MouseEventHandler, useRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  use,
+  MouseEventHandler,
+  useRef,
+} from "react";
 import {
   getFirestore,
   collection,
@@ -20,7 +26,7 @@ import { useSession } from "next-auth/react";
 import clsx from "clsx";
 import Sidebar from "./component/sidebar";
 import { useRouter } from "next/navigation";
-import * as ChannelService from '@channel.io/channel-web-sdk-loader';
+import * as ChannelService from "@channel.io/channel-web-sdk-loader";
 
 type Chat = {
   id: string;
@@ -52,6 +58,7 @@ export default function Page() {
     status: string;
   }>();
   const [chatRoomName, setChatRoomName] = useState("");
+  const [activeCount, setActiveCount] = useState<number | undefined>();
   const [chats, setChats] = useState<Chat[]>([]);
   const [inputMessage, setInputMessage] = useState("");
   const [lightnings, setLightnings] = useState<Lightning[]>([]);
@@ -59,6 +66,9 @@ export default function Page() {
   const [canSending, setCanSending] = useState(false);
   const [canInput, setCanInput] = useState(true);
   const [chatToLightning, setChatToLightning] = useState<string>();
+  const [notificationCount, setNotificationCount] = useState<
+    number | undefined
+  >();
 
   const sendChatMessage = async () => {
     setCanSending(false);
@@ -162,6 +172,16 @@ export default function Page() {
   };
 
   useEffect(() => {
+    axios.get("/api/notification/click").then((res) => {
+      if (res.status !== 200) {
+        console.error("Failed to get notification count");
+      }
+
+      setNotificationCount(res.data.content.count);
+    });
+  }, []);
+
+  useEffect(() => {
     if (session?.id === undefined) {
       router.push("/");
     } else {
@@ -175,10 +195,8 @@ export default function Page() {
           name: session.user?.name ?? "알 수 없음",
           email: session.user?.email ?? "알 수 없음",
         },
-      })
+      });
     }
-
-
   }, [session]);
 
   useEffect(() => {
@@ -197,12 +215,16 @@ export default function Page() {
     if (!chatRoom || !chatRoom.roomId) return;
 
     const docRef = doc(db, "chatrooms", chatRoom.roomId);
-    getDoc(docRef).then((docSnap) => {
+
+    const unsubscribe = onSnapshot(docRef, (docSnap) => {
       if (docSnap.exists()) {
         const data = docSnap.data();
+        setActiveCount(data!.active_count);
         setChatRoomName(data!.name);
       }
     });
+
+    return unsubscribe;
   }, [chatRoom]);
 
   useEffect(() => {
@@ -236,20 +258,15 @@ export default function Page() {
     }
 
     axios
-      .post(
-        "/api/chat/lightning/my",
-        {},
-        {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
+      .get("/api/chat/lightning/my", {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       .then((response) => {
         setLightnings(response.data.lightnings);
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session, status]);
 
   return (
@@ -273,7 +290,13 @@ export default function Page() {
             : "opacity-0 -z-50"
         }`}
       >
-        <ClosedDialog onClickAlarmBtn={ () => router.push("http://pf.kakao.com/_VxjiTn/friend") }>
+        <ClosedDialog
+          notificationCount={notificationCount}
+          onClickAlarmBtn={() => {
+            axios.post("/api/notification/click");
+            router.push("http://pf.kakao.com/_VxjiTn/friend");
+          }}
+        >
           <span>경기 방송 시작되면 오픈됩니다.</span>
           <span>잠시만 기다려주세요!</span>
         </ClosedDialog>
@@ -285,7 +308,13 @@ export default function Page() {
             : "opacity-0 -z-50"
         }`}
       >
-        <ClosedDialog onClickAlarmBtn={ () => router.push("http://pf.kakao.com/_VxjiTn/friend") }>
+        <ClosedDialog
+          notificationCount={notificationCount}
+          onClickAlarmBtn={() => {
+            axios.post("/api/notification/click");
+            router.push("http://pf.kakao.com/_VxjiTn/friend");
+          }}
+        >
           <span>채팅방은 다음 경기 전에 오픈됩니다.</span>
           <span>다음 경기에서 봬요!</span>
         </ClosedDialog>
@@ -298,6 +327,7 @@ export default function Page() {
       >
         <ActionBar
           title={chatRoomName}
+          activeCount={activeCount}
           onClickMenuBtn={() => setEnableSidebar(true)}
         />
         {/* 채팅 메시지 컨테이너 */}
@@ -364,14 +394,22 @@ export default function Page() {
 const ActionBar = (props: {
   title: string;
   onClickMenuBtn: MouseEventHandler<HTMLButtonElement>;
+  activeCount?: number;
 }) => {
   return (
     <div className="flex items-center justify-between w-full h-[72px] bg-white border-b-[1px] border-strokeblack">
-      {/* 뒤로가기 버튼 */}
+      {/* 빈 공간 */}
       <span className="py-[24px] px-[16px] w-[24px] h-[24px]" />
 
       {/* 제목 */}
-      <h1 className="text-body16 font-bold">{props.title}</h1>
+      <div className="flex flex-col items-center justify-center">
+        <h1 className="text-body16 font-bold">{props.title}</h1>
+        <span className="text-body14">
+          {props.activeCount === undefined
+            ? ""
+            : `${props.activeCount}명 참여 중`}
+        </span>
+      </div>
 
       {/* 닫기 버튼 */}
       <button onClick={props.onClickMenuBtn} className="py-[24px] px-[16px]">
@@ -485,19 +523,25 @@ const LightningDialog = (props: {
   );
 };
 
-const ClosedDialog = (props: {children: React.ReactNode, onClickAlarmBtn: () => void}) => {
+const ClosedDialog = (props: {
+  children: React.ReactNode;
+  notificationCount?: number;
+  onClickAlarmBtn: () => void;
+}) => {
   return (
     <div className="relative w-full h-full">
-      <div
-        className="w-full h-full bg-black opacity-40"
-      />
-      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white w-[343px] h-[340px] rounded-[10px] flex flex-col px-[16px] py-[24px]">
+      <div className="w-full h-full bg-black opacity-40" />
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white w-[343px] h-[340px] rounded-[10px] flex flex-col items-center px-[16px] py-[24px]">
         <div className="text-heading20 text-black font-bold grow flex flex-col justify-center items-center">
           {props.children}
         </div>
+        <div className="text-body14 mt-[11px] mb-[5px]">
+          {props.notificationCount !== undefined &&
+            `${props.notificationCount}명이 함께 기다리는 중이에요`}
+        </div>
         <button
           onClick={props.onClickAlarmBtn}
-          className={`w-full h-[48px] mt-[11px] bg-black text-body16 text-white font-bold rounded-[10px] active:bg-opacity-50`}
+          className={`w-full h-[48px] bg-black text-body16 text-white font-bold rounded-[10px] active:bg-opacity-50`}
         >
           채팅 시작할 때 알림 받기
         </button>

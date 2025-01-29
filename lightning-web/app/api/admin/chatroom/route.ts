@@ -2,13 +2,13 @@ import { createRoom } from "@/repository/RoomRepository";
 
 export async function POST(req: Request) {
   try {
-    const { name } = await req.json();
+    const { name, activeCount } = await req.json();
 
-    if (!name) {
+    if (!name || !activeCount) {
       return new Response(JSON.stringify({ message: "Missing required fields" }), { status: 400 });
     }
 
-    createRoom(name);
+    createRoom(name, activeCount);
 
     return new Response(JSON.stringify({ message: "Chatroom created" }), { status: 200 });
   } catch (error) {
