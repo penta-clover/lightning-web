@@ -25,7 +25,7 @@ export default function Home() {
 
         <div className="flex flex-col items-center mx-[17%] sm:mx-[30%] mb-[33px] mt-[26px]">
           <Image src="/icon/rightning_logo.svg" alt="lightning_logo" width={532} height={149}/>
-          <Image src="/icon/main_image.png" alt="main image" width={480} height={480}/>
+          <Image src="/icon/main_image.svg" alt="main image" width={480} height={480}/>
         </div>
 
         <div className="flex flex-col space-y-[12px] items-center">
