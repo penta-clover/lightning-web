@@ -3,7 +3,6 @@
 import { useSession, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { signOut } from "next-auth/react";
 import Image from "next/image";
 
 export default function Home() {
@@ -17,19 +16,8 @@ export default function Home() {
     }
   }, [status, session]);
 
-  if (status === "authenticated" && session.id) {
-    // 로그인되어 있다면, 세션에 사용자 정보가 들어있습니다
-
-    const user = session.user;
-    return (
-      <div>
-        <h1>Welcome, {user?.name}!</h1>
-        <p>Email: {user?.email}</p>
-        <LogoutButton />
-      </div>
-    );
-  } else if (status === "loading") {
-    return <div>Loading...</div>;
+  if (status === "authenticated" && session.id || status === "loading") {
+    return null;
   } else {
     return (
       <div className="flex h-full flex-col justify-center">
@@ -67,8 +55,4 @@ export default function Home() {
       </div>
     );
   }
-}
-
-function LogoutButton() {
-  return <button onClick={() => signOut()}>Logout</button>;
 }

@@ -49,11 +49,21 @@ export default function Sidebar(props: { onClickCloseBtn: () => void }) {
           className="block w-full flex flex-start p-[16px] border-b-[1px] border-darkgray text-darkgray h-[56px] active:bg-lightgray hover:bg-bggray"
           onClick={() =>
             router.push(
-              "https://cac.notion.site/2faf403cf9e14d1f94f5315af8256ac3?pvs=4"
+              "https://cac.notion.site/9ad4c98e96ab4c6d84bd522e54cee25f?pvs=4"
             )
           }
         >
           운영 정책
+        </button>
+        <button
+          className="block w-full flex flex-start p-[16px] border-b-[1px] border-darkgray text-darkgray h-[56px] active:bg-lightgray hover:bg-bggray"
+          onClick={() =>
+            router.push(
+              "https://docs.google.com/forms/d/e/1FAIpQLSfpNGEumVNGg8vcuu6lGc5LBBkwLzuevuvC51dxffkZT2sdbA/viewform"
+            )
+          }
+        >
+          의견 남기기
         </button>
         <button
           className="block w-full flex flex-start p-[16px] border-b-[1px] border-darkgray text-darkgray h-[56px] active:bg-lightgray hover:bg-bggray"

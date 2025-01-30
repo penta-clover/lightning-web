@@ -154,6 +154,9 @@ function Body() {
                 width={36}
                 height={48}
                 className="py-[12px] pl-[12px]"
+                onClick={() => {
+                  router.push("https://cac.notion.site/f328276a7632495ba6776e1eb1234245?pvs=4")
+                }}
               />
             </div>
             <div className="flex items-center h-[48px]">
@@ -188,7 +191,7 @@ function Body() {
         </div>
         <button
           className={clsx(
-            "px-4 py-2 my-[24px] h-[48px] bg-black text-white cursor-not-allowed rounded-[10px] text-body16 active:bg-lightgray",
+            "px-4 py-2 my-[24px] h-[48px] bg-black text-white rounded-[10px] text-body16 active:bg-lightgray",
             {
               "bg-lightgray": !(
                 checkedItems.terms &&
