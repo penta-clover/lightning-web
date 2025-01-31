@@ -138,22 +138,22 @@ export default function Page() {
 
   const onConfirmLightning = async () => {
     const chatId = chatToLightning;
+    let response;
 
-    const response = await axios.post(
-      `/api/chat/${chatId}/lightning`,
-      {},
-      {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    if (response.status === 200) {
-      console.log("Success to send lightning");
-    } else {
-      console.error("Failed to send lightning");
+    try {
+       response = await axios.post(
+        `/api/chat/${chatId}/lightning`,
+        {},
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    } catch (e) {
+      alert("탈퇴한 유저입니다.");
+      return;
     }
 
     setLightnings([...lightnings, response.data]);
