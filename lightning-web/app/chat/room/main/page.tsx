@@ -286,10 +286,21 @@ export default function Page() {
 
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const newChats: Chat[] = [];
+
       querySnapshot.forEach((doc) => {
+        // compare doc.id is in chats
+        const exist = chats.find((chat) => chat.id === doc.id);
+
+        if (exist) {
+          return;
+        }
+
         newChats.push({ ...doc.data(), id: doc.id } as Chat);
       });
-      setChats(applyBlock(newChats));
+
+      setChats((prevChats) => {
+        return applyBlock([...newChats, ...prevChats]);
+      });
     });
 
     return unsubscribe;
