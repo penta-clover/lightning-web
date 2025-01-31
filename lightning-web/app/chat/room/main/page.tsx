@@ -97,7 +97,7 @@ export default function Page() {
 
     if (response.status === 200) {
       setInputMessage("");
-      setCanSending(false);
+      setCanSending(true);
     } else {
       console.error("Failed to send chat message");
       setCanSending(true);
@@ -141,7 +141,7 @@ export default function Page() {
     let response;
 
     try {
-       response = await axios.post(
+      response = await axios.post(
         `/api/chat/${chatId}/lightning`,
         {},
         {
@@ -185,18 +185,22 @@ export default function Page() {
       if (e.shiftKey || isMobile) {
         return;
       }
-      
+
       e.preventDefault();
       sendChatMessage();
     }
-  }
+  };
 
   useEffect(() => {
     const checkIsMobile = () => {
-      if (typeof navigator === 'undefined') return;
+      if (typeof navigator === "undefined") return;
       const userAgent = navigator.userAgent || navigator.vendor;
       // 모바일 디바이스의 user agent 패턴을 검사
-      if (/android|iphone|ipad|iPod|blackberry|windows phone/i.test(userAgent.toLowerCase())) {
+      if (
+        /android|iphone|ipad|iPod|blackberry|windows phone/i.test(
+          userAgent.toLowerCase()
+        )
+      ) {
         setIsMobile(true);
       } else {
         setIsMobile(false);
@@ -204,8 +208,8 @@ export default function Page() {
     };
 
     checkIsMobile();
-    window.addEventListener('resize', checkIsMobile);
-    return () => window.removeEventListener('resize', checkIsMobile);
+    window.addEventListener("resize", checkIsMobile);
+    return () => window.removeEventListener("resize", checkIsMobile);
   }, []);
 
   useEffect(() => {
@@ -222,7 +226,7 @@ export default function Page() {
     if (status === "unauthenticated") {
       router.push("/");
     }
-    
+
     if (status === "authenticated") {
       ChannelService.shutdown();
       ChannelService.boot({
@@ -431,17 +435,26 @@ export default function Page() {
           <button
             onClick={sendChatMessage}
             className={clsx(
-              "flex ml-[8px] justify-center items-center w-[42px] h-[42px] text-white rounded hover:bg-blue-600",
+              "flex ml-[8px] justify-center items-center w-[42px] h-[42px] text-white rounded-[10.5px] hover:bg-blue-600",
               canSending ? "bg-black" : "bg-lightgray"
             )}
             disabled={!canSending}
           >
-            <Image
-              src="/icon/upload.svg"
-              alt="upload"
-              width={17}
-              height={17}
-            ></Image>
+            {canInput ? (
+              <Image
+                src="/icon/upload.svg"
+                alt="upload"
+                width={17}
+                height={17}
+              />
+            ) : (
+              <Image
+                src="/icon/white_rolling_spinner.gif"
+                alt="spinner"
+                width={24}
+                height={24}
+              />
+            )}
           </button>
         </div>
       </div>
@@ -505,13 +518,11 @@ const BlockedChat = (props: { chat: Chat }) => {
       <div className="flex items-end">
         <div className="flex flex-col">
           {/* 닉네임 */}
-          <div
-            className="text-caption12 text-darkgray mb-[7px]"
-          >
+          <div className="text-caption12 text-darkgray mb-[7px]">
             {chat.sender_nickname}
           </div>
           {/* 메시지 내용 */}
-          <div className="flex flex-row items-center text-black text-body14 font-medium px-[12px] py-[8px] bg-lightgray rounded-[4px] break-words max-w-xs">
+          <div className="flex flex-row items-center text-black text-body14 font-medium px-[12px] py-[8px] bg-lightgray rounded-[4px] break-all max-w-xs">
             <Image
               src="/icon/error_circle_black.svg"
               width={16}
@@ -548,18 +559,26 @@ const OthersChat = (props: {
             {chat.sender_nickname}
           </div>
           {/* 메시지 내용 */}
-          <div className="text-black text-body14 font-medium px-[12px] py-[8px] bg-bgblue rounded-[4px] break-words max-w-xs">
+          <div className="text-black text-body14 font-medium px-[12px] py-[8px] bg-bgblue rounded-[4px] break-all max-w-xs">
             {chat.content}
           </div>
         </div>
         {/* 번개 버튼 */}
         <Image
-          src={`/icon/${chat.block_type === "NONE" ? "active_lightning" : "inactive_lightning"}.svg`}
+          src={`/icon/${
+            chat.block_type === "NONE"
+              ? "active_lightning"
+              : "inactive_lightning"
+          }.svg`}
           className="pl-[6px] pr-[10px] pt-[10px] text-yellow-500"
           alt="lightning"
           width={36}
           height={30}
-          onClick={chat.block_type === "NONE" ? () => props.onClickLightning(chat.id) : undefined}
+          onClick={
+            chat.block_type === "NONE"
+              ? () => props.onClickLightning(chat.id)
+              : undefined
+          }
         />
       </div>
     </>
@@ -572,7 +591,7 @@ const MyChat = (props: { chat: Chat }) => {
   return (
     <div className="flex flex-col items-end">
       {/* 메시지 내용 */}
-      <div className="text-black text-body14 font-medium px-[12px] py-[8px] bg-yellow rounded-[4px] break-words max-w-xs">
+      <div className="text-black text-body14 font-medium px-[12px] py-[8px] bg-yellow rounded-[4px] break-all max-w-xs">
         {chat.content}
       </div>
     </div>
@@ -610,7 +629,8 @@ const LightningDialog = (props: {
         ></Image>
         <div className="text-body16 text-black text-center">
           라이트닝의 건전한 문화를 망치는
-          <br />유저의 채팅을 바로 가려보세요!
+          <br />
+          유저의 채팅을 바로 가려보세요!
         </div>
         <button
           onClick={onClickConfirmBtn}
