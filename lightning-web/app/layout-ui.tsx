@@ -41,7 +41,7 @@ export function LayoutUI({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex h-screen w-screen touch-pan-x touch-pan-y">
       {/* Left Hero Image Section */}
-      <div className="hidden grow lg:flex lg:w-full bg-gray-50 flex-col items-center justify-center bg-bggray">
+      <div className="hidden grow lg:flex lg:w-full bg-gray-50 flex-col items-center justify-center bg-whitegray">
         {/* Hero Image Placeholder */}
         <div className="flex flex-row justify-center font-semibold font-[Pretendard]">
           비난 조롱 없는 클린 스포츠챗

@@ -13,6 +13,7 @@ export default {
         // Neutral colors
         white: "#FFFFFF",
         bggray: "#F3F5F8",
+		whitegray: "#FCFCFC",
         lightgray: "#D1D6DB",
         gray: "#8B95A1",
         darkgray: "#4E5968",
