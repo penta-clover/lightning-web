@@ -70,6 +70,7 @@ export default function Page() {
   const [notificationCount, setNotificationCount] = useState<
     number | undefined
   >();
+  const [isMobile, setIsMobile] = useState(false);
 
   const sendChatMessage = async () => {
     if (!chatRoom || !inputMessage || inputMessage.trim() === "") {
@@ -181,7 +182,7 @@ export default function Page() {
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter") {
-      if (e.shiftKey) {
+      if (e.shiftKey || isMobile) {
         return;
       }
       
@@ -189,6 +190,23 @@ export default function Page() {
       sendChatMessage();
     }
   }
+
+  useEffect(() => {
+    const checkIsMobile = () => {
+      if (typeof navigator === 'undefined') return;
+      const userAgent = navigator.userAgent || navigator.vendor;
+      // 모바일 디바이스의 user agent 패턴을 검사
+      if (/android|iphone|ipad|iPod|blackberry|windows phone/i.test(userAgent.toLowerCase())) {
+        setIsMobile(true);
+      } else {
+        setIsMobile(false);
+      }
+    };
+
+    checkIsMobile();
+    window.addEventListener('resize', checkIsMobile);
+    return () => window.removeEventListener('resize', checkIsMobile);
+  }, []);
 
   useEffect(() => {
     axios.get("/api/notification/click").then((res) => {
