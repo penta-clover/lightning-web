@@ -432,7 +432,7 @@ export default function Page() {
             onChange={handleInput}
             onKeyDown={handleKeyDown}
             placeholder="메시지를 입력하세요..."
-            className="flex-1 p-2 border-[1px] border-lightgray text-body16 rounded resize-none overflow-hidden min-h-[42px] max-h-[6rem] h-auto focus:border-[1px] focus:border-lightgray"
+            className={`flex-1 p-2 border-[1px] border-lightgray text-body16 rounded resize-none overflow-hidden min-h-[42px] max-h-[6rem] h-auto focus:border-[1px] focus:border-lightgray ${canInput ? "" : "bg-bggray"}`}
             rows={1}
             maxLength={280}
             readOnly={!canInput}
