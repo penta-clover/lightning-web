@@ -65,26 +65,29 @@ export default function Page() {
   const [lightnings, setLightnings] = useState<Lightning[]>([]);
   const [enableSidebar, setEnableSidebar] = useState(false);
   const [canSending, setCanSending] = useState(false);
-  const [canInput, setCanInput] = useState(true);
+  const [isSending, setIsSending] = useState(false);
   const [chatToLightning, setChatToLightning] = useState<string>();
   const [notificationCount, setNotificationCount] = useState<
     number | undefined
   >();
   const [isMobile, setIsMobile] = useState(false);
+  const chatInputRef = useRef<HTMLTextAreaElement>(null);
 
   const sendChatMessage = async () => {
     if (!chatRoom || !inputMessage || inputMessage.trim() === "") {
       return;
     }
 
+    const message = inputMessage.trim();
+    setInputMessage("");
     setCanSending(false);
-    setCanInput(false);
+    setIsSending(true);
 
     // send chat message
     const response = await axios.post(
       `/api/chat/`,
       {
-        content: inputMessage,
+        content: message,
         roomId: chatRoom.roomId,
       },
       {
@@ -95,15 +98,8 @@ export default function Page() {
       }
     );
 
-    if (response.status === 200) {
-      setInputMessage("");
-      setCanSending(false);
-    } else {
-      console.error("Failed to send chat message");
-      setCanSending(true);
-    }
-
-    setCanInput(true);
+    setCanSending(chatInputRef.current?.value.trim() !== "");
+    setIsSending(false);
   };
 
   function applyBlock(chats: Chat[]) {
@@ -170,7 +166,7 @@ export default function Page() {
     if (textarea.value.trim().length === 0) {
       setCanSending(false);
     } else {
-      setCanSending(true);
+      setCanSending(!isSending);
     }
 
     // 높이를 자동으로 조정
@@ -428,14 +424,14 @@ export default function Page() {
         {/* 메시지 입력창 */}
         <div className="sticky w-full bottom-0 flex items-end px-[16px] py-[12px] bg-bggray">
           <textarea
+            ref={chatInputRef}
             value={inputMessage}
             onChange={handleInput}
             onKeyDown={handleKeyDown}
             placeholder="메시지를 입력하세요..."
-            className={`flex-1 p-2 border-[1px] border-lightgray text-body16 rounded resize-none overflow-hidden min-h-[42px] max-h-[6rem] h-auto focus:border-[1px] focus:border-lightgray ${canInput ? "" : "bg-bggray"}`}
+            className="flex-1 p-2 border-[1px] border-lightgray text-body16 rounded resize-none overflow-hidden min-h-[42px] max-h-[6rem] h-auto focus:border-[1px] focus:border-lightgray"
             rows={1}
             maxLength={280}
-            readOnly={!canInput}
             style={{
               lineHeight: "1.5rem",
             }}
@@ -448,19 +444,19 @@ export default function Page() {
             )}
             disabled={!canSending}
           >
-            {canInput ? (
-              <Image
-                src="/icon/upload.svg"
-                alt="upload"
-                width={17}
-                height={17}
-              />
-            ) : (
+            {isSending ? (
               <Image
                 src="/icon/white_rolling_spinner.gif"
                 alt="spinner"
                 width={24}
                 height={24}
+              />
+            ) : (
+              <Image
+                src="/icon/upload.svg"
+                alt="upload"
+                width={17}
+                height={17}
               />
             )}
           </button>
