@@ -18,6 +18,7 @@ export default function RootLayout({
           name="viewport"
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
         />
+        <link rel="icon" href="/favicon.svg" />
       </head>
       <body className={`antialiased overflow-hidden safe-area`}>
         <SpeedInsights />
