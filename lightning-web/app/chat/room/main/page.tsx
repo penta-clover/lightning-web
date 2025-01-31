@@ -106,7 +106,6 @@ export default function Page() {
   };
 
   function applyBlock(chats: Chat[]) {
-    // console.log(`lightnings: ${lightnings}`);
     const lightnedMembers = new Set(
       lightnings.map((lightning) => lightning.receiverId)
     );
@@ -500,7 +499,6 @@ const OthersChat = (props: {
   onClickLightning: (chatId: string) => void;
 }) => {
   const chat = props.chat;
-  console.log(JSON.stringify(chat));
 
   return (
     <>
