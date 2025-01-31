@@ -21,7 +21,7 @@ export default function Home() {
   } else {
     return (
       <div className="flex h-full flex-col justify-center">
-        <div className="flex flex-row justify-center font-semibold">비난 조롱 없는 클린 스포츠챗</div>
+        <div className="flex flex-row justify-center font-semibold font-[Pretendard]">비난 조롱 없는 클린 스포츠챗</div>
 
         <div className="flex flex-col items-center mx-[17%] sm:mx-[30%] mb-[33px] mt-[26px]">
           <Image src="/icon/rightning_logo.svg" alt="lightning_logo" width={532} height={149}/>

@@ -72,12 +72,12 @@ export default function Page() {
   >();
 
   const sendChatMessage = async () => {
-    setCanSending(false);
-    setCanInput(false);
-
     if (!chatRoom || !inputMessage || inputMessage.trim() === "") {
       return;
     }
+
+    setCanSending(false);
+    setCanInput(false);
 
     // send chat message
     const response = await axios.post(
@@ -178,6 +178,17 @@ export default function Page() {
       Math.min(Math.max(textarea.scrollHeight, 42), 96) + "px"; // 최대 높이 96px (4줄)
     setInputMessage(textarea.value);
   };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter") {
+      if (e.shiftKey) {
+        return;
+      }
+      
+      e.preventDefault();
+      sendChatMessage();
+    }
+  }
 
   useEffect(() => {
     axios.get("/api/notification/click").then((res) => {
@@ -387,6 +398,7 @@ export default function Page() {
           <textarea
             value={inputMessage}
             onChange={handleInput}
+            onKeyDown={handleKeyDown}
             placeholder="메시지를 입력하세요..."
             className="flex-1 p-2 border-[1px] border-lightgray text-body16 rounded resize-none overflow-hidden min-h-[42px] max-h-[6rem] h-auto focus:border-[1px] focus:border-lightgray"
             rows={1}
