@@ -22,11 +22,11 @@ export default function RootLayout({
       </head>
       <body className={`antialiased overflow-hidden safe-area`}>
         <SpeedInsights />
-        <LayoutUI>
-          <Analytics>
-            <Providers>{children}</Providers>
-          </Analytics>
-        </LayoutUI>
+        <Analytics>
+          <Providers>
+            <LayoutUI>{children}</LayoutUI>
+          </Providers>
+        </Analytics>
       </body>
     </html>
   );

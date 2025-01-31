@@ -67,10 +67,9 @@ export default function Sidebar(props: { onClickCloseBtn: () => void }) {
         </button>
         <button
           className="block w-full flex flex-start p-[16px] border-b-[1px] border-darkgray text-darkgray h-[56px] active:bg-lightgray hover:bg-bggray"
-          onClick={() => {
-            signOut();
+          onClick={async () => {
             ChannelService.shutdown();
-            router.push("/");
+            await signOut({ callbackUrl: "/" });
           }}
         >
           로그아웃

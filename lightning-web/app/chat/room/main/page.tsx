@@ -219,9 +219,11 @@ export default function Page() {
   }, []);
 
   useEffect(() => {
-    if (session?.id === undefined) {
+    if (status === "unauthenticated") {
       router.push("/");
-    } else {
+    }
+    
+    if (status === "authenticated") {
       ChannelService.shutdown();
       ChannelService.boot({
         pluginKey: "3ff291f4-ea2a-411a-9a1d-1d82c1870c54",
