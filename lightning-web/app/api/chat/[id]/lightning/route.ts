@@ -25,6 +25,11 @@ async function postHandler(req: Request, { params }: { params: Promise<{ id: str
         }
         
         const lightning = await saveLightning(memberId, authorId, chatId);
+
+        if (!lightning) {
+            return new Response(JSON.stringify({ message: 'Failed to send lightning' }), { status: 500 });
+        }
+
         return new Response(JSON.stringify(lightning), { status: 200 });
     } catch (error) {
         console.log(error);
