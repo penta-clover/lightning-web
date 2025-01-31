@@ -192,7 +192,7 @@ export function LiveChat({ className }: LiveChatProps) {
                 <DialogTrigger asChild>
                   <Button
                     variant="link"
-                    className="px-2 py-0 h-4 text-sm break-all"
+                    className="px-2 py-0 h-4 text-sm break-all max-w-[25vw]"
                   >
                     {msg.content}
                   </Button>

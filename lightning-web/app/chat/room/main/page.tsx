@@ -570,15 +570,15 @@ const LightningDialog = (props: {
           라이트닝 적용하기
         </h1>
         <Image
-          src="/icon/lightned_skeleton.svg"
+          src="/icon/main_image.svg"
           alt="라이트닝 당하는 해골"
           width={133}
           height={137}
           className="my-[16px]"
         ></Image>
         <div className="text-body16 text-black text-center">
-          라이트닝을 적용하면
-          <br />이 유저의 채팅을 가릴 수 있어요
+          라이트닝의 건전한 문화를 망치는
+          <br />유저의 채팅을 바로 가려보세요!
         </div>
         <button
           onClick={onClickConfirmBtn}
