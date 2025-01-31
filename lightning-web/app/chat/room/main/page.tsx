@@ -97,7 +97,7 @@ export default function Page() {
 
     if (response.status === 200) {
       setInputMessage("");
-      setCanSending(true);
+      setCanSending(false);
     } else {
       console.error("Failed to send chat message");
       setCanSending(true);
@@ -181,6 +181,14 @@ export default function Page() {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.nativeEvent.isComposing) {
+      return;
+    }
+
+    if (canSending === false) {
+      return;
+    }
+
     if (e.key === "Enter") {
       if (e.shiftKey || isMobile) {
         return;
@@ -427,7 +435,7 @@ export default function Page() {
             className="flex-1 p-2 border-[1px] border-lightgray text-body16 rounded resize-none overflow-hidden min-h-[42px] max-h-[6rem] h-auto focus:border-[1px] focus:border-lightgray"
             rows={1}
             maxLength={280}
-            disabled={!canInput}
+            readOnly={!canInput}
             style={{
               lineHeight: "1.5rem",
             }}
