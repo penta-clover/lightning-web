@@ -116,7 +116,8 @@ export default function Page() {
     for (const chat of newChats) {
       if (lightnedMembers.has(chat.sender_id)) {
         chat.transparency = 85;
-        chat.profile_image_url = "/profile/lightned.svg";
+        chat.block_type = "TRANSPARENT";
+        chat.profile_image_url = "/profile/lightned_profile.svg";
       }
 
       if (chat.sender_id === session?.id) {
@@ -299,7 +300,6 @@ export default function Page() {
         }`}
       >
         <ClosedDialog
-          notificationCount={notificationCount}
           onClickAlarmBtn={() => {
             axios.post("/api/notification/click");
             router.push("http://pf.kakao.com/_VxjiTn/friend");
@@ -307,6 +307,10 @@ export default function Page() {
         >
           <span>경기 방송 시작되면 오픈됩니다.</span>
           <span>잠시만 기다려주세요!</span>
+          <div className="text-body16 font-normal text-gray mt-[24px]">
+            {notificationCount !== undefined &&
+              `${notificationCount}명 함께하는 중`}
+          </div>
         </ClosedDialog>
       </div>
       <div
@@ -317,7 +321,6 @@ export default function Page() {
         }`}
       >
         <ClosedDialog
-          notificationCount={notificationCount}
           onClickAlarmBtn={() => {
             axios.post("/api/notification/click");
             router.push("http://pf.kakao.com/_VxjiTn/friend");
@@ -325,6 +328,10 @@ export default function Page() {
         >
           <span>채팅방은 다음 경기 전에 오픈됩니다.</span>
           <span>다음 경기에서 봬요!</span>
+          <div className="text-body16 font-normal text-gray mt-[24px]">
+            {notificationCount !== undefined &&
+              `${notificationCount}명 함께하는 중`}
+          </div>
         </ClosedDialog>
       </div>
       <div
@@ -426,17 +433,22 @@ const ActionBar = (props: {
 }) => {
   return (
     <div className="flex items-center justify-between w-full h-[72px] bg-white border-b-[1px] border-strokeblack">
-      {/* 빈 공간 */}
-      <span className="py-[24px] px-[16px] w-[24px] h-[24px]" />
-
       {/* 제목 */}
-      <div className="flex flex-col items-center justify-center">
+      <div className="flex flex-col items-left justify-center ml-[16px]">
         <h1 className="text-body16 font-bold">{props.title}</h1>
-        <span className="text-body14">
-          {props.activeCount === undefined
-            ? ""
-            : `${props.activeCount}명 참여 중`}
-        </span>
+        <div className="flex flex-row items-center text-caption12 space-x-[5px]">
+          <Image
+            src="/icon/red_circle.svg"
+            alt="red circle"
+            width={6}
+            height={6}
+          />
+          <span>
+            {props.activeCount === undefined
+              ? ""
+              : `${props.activeCount}명 참여 중`}
+          </span>
+        </div>
       </div>
 
       {/* 닫기 버튼 */}
@@ -488,6 +500,7 @@ const OthersChat = (props: {
   onClickLightning: (chatId: string) => void;
 }) => {
   const chat = props.chat;
+  console.log(JSON.stringify(chat));
 
   return (
     <>
@@ -510,12 +523,14 @@ const OthersChat = (props: {
           </div>
         </div>
         {/* 번개 버튼 */}
-        <button
-          className="p-2 text-yellow-500"
-          onClick={() => props.onClickLightning(chat.id)}
-        >
-          ⚡
-        </button>
+        <Image
+          src={`/icon/${chat.block_type === "NONE" ? "active_lightning" : "inactive_lightning"}.svg`}
+          className="pl-[6px] pr-[10px] pt-[10px] text-yellow-500"
+          alt="lightning"
+          width={36}
+          height={30}
+          onClick={chat.block_type === "NONE" ? () => props.onClickLightning(chat.id) : undefined}
+        />
       </div>
     </>
   );
@@ -589,19 +604,14 @@ const LightningDialog = (props: {
 
 const ClosedDialog = (props: {
   children: React.ReactNode;
-  notificationCount?: number;
   onClickAlarmBtn: () => void;
 }) => {
   return (
     <div className="relative w-full h-full">
       <div className="w-full h-full bg-black opacity-40" />
-      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white w-[343px] h-[340px] rounded-[10px] flex flex-col items-center px-[16px] py-[24px]">
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white w-[343px] h-[300px] rounded-[10px] flex flex-col items-center px-[16px] py-[24px]">
         <div className="text-heading20 text-black font-bold grow flex flex-col justify-center items-center">
           {props.children}
-        </div>
-        <div className="text-body14 mt-[11px] mb-[5px]">
-          {props.notificationCount !== undefined &&
-            `${props.notificationCount}명이 함께 기다리는 중이에요`}
         </div>
         <button
           onClick={props.onClickAlarmBtn}

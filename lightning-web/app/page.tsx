@@ -48,7 +48,7 @@ export default function Home() {
               className="flex flex-row grow space-x-[8px] items-center justify-center border-[1px] border-lightgray rounded-[10px] text-black text-body16 h-[48px] max-w-[447px] active:bg-bggray"
             >
               <Image src="/icon/google_logo.svg" alt="google logo" width={24} height={24}/>
-              <span>구글 계정으로 계속하기</span>
+              <span>Google 계정으로 계속하기</span>
             </button>
           </div>
         </div>
