@@ -678,7 +678,7 @@ const ClosedDialog = (props: {
         </div>
         <div className="text-caption14 font-normal text-gray mb-[6px]">
           {notificationCount !== undefined &&
-            `누적 신청자 ${notificationCount}명`}
+            `${notificationCount}명이 알림 기다리는 중`}
         </div>
         <button
           onClick={onClickAlarmBtn}

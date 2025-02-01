@@ -34,9 +34,15 @@ export function ChatControls({
 }: ChatControlsProps) {
   const [shortcuts, setShortcuts] = useState([
     "대 상 혁",
-    "Siuuuuuuuuuuuu",
     "와",
     "화이팅🔥🔥🔥",
+    "레전드",
+    "미쳤다ㅋㅋㅋㅋㅋ",
+    "아 이게 이렇게 되네..ㅠ",
+    "오창섭이~~",
+    "쵸오오오오비이이이이이이이",
+    "71인분 가즈아",
+    "룰러 더 클래식 제 1악장",
   ]);
   const [newShortcut, setNewShortcut] = useState("");
   const [recommendations, setRecommendations] = useState<string[]>([]);
