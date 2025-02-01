@@ -349,6 +349,7 @@ export default function Page() {
         }`}
       >
         <ClosedDialog
+          notificationCount={notificationCount}
           onClickAlarmBtn={() => {
             axios.post("/api/notification/click");
             router.push("http://pf.kakao.com/_VxjiTn/friend");
@@ -356,10 +357,6 @@ export default function Page() {
         >
           <span>경기 방송 시작되면 오픈됩니다.</span>
           <span>잠시만 기다려주세요!</span>
-          <div className="text-body16 font-normal text-gray mt-[24px]">
-            {notificationCount !== undefined &&
-              `${notificationCount}명 함께하는 중`}
-          </div>
         </ClosedDialog>
       </div>
       <div
@@ -370,6 +367,7 @@ export default function Page() {
         }`}
       >
         <ClosedDialog
+          notificationCount={notificationCount}
           onClickAlarmBtn={() => {
             axios.post("/api/notification/click");
             router.push("http://pf.kakao.com/_VxjiTn/friend");
@@ -377,10 +375,6 @@ export default function Page() {
         >
           <span>채팅방은 다음 경기 전에 오픈됩니다.</span>
           <span>다음 경기에서 봬요!</span>
-          <div className="text-body16 font-normal text-gray mt-[24px]">
-            {notificationCount !== undefined &&
-              `${notificationCount}명 함께하는 중`}
-          </div>
         </ClosedDialog>
       </div>
       <div
@@ -448,6 +442,7 @@ export default function Page() {
             }}
           />
           <button
+            onMouseDown={(e) => e.preventDefault()}
             onClick={sendChatMessage}
             className={clsx(
               "flex ml-[8px] justify-center items-center w-[42px] h-[42px] text-white rounded-[10.5px] hover:bg-blue-600",
@@ -669,17 +664,24 @@ const LightningDialog = (props: {
 
 const ClosedDialog = (props: {
   children: React.ReactNode;
+  notificationCount?: number;
   onClickAlarmBtn: () => void;
 }) => {
+  const { children, notificationCount, onClickAlarmBtn } = props;
+
   return (
     <div className="relative w-full h-full">
       <div className="w-full h-full bg-black opacity-40" />
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white w-[343px] h-[300px] rounded-[10px] flex flex-col items-center px-[16px] py-[24px]">
-        <div className="text-heading20 text-black font-bold grow flex flex-col justify-center items-center">
-          {props.children}
+        <div className="relative text-heading20 text-black font-bold grow flex flex-col justify-center items-center">
+          {children}
+        </div>
+        <div className="text-caption14 font-normal text-gray mb-[6px]">
+          {notificationCount !== undefined &&
+            `누적 신청자 ${notificationCount}명`}
         </div>
         <button
-          onClick={props.onClickAlarmBtn}
+          onClick={onClickAlarmBtn}
           className={`w-full h-[48px] bg-black text-body16 text-white font-bold rounded-[10px] active:bg-opacity-50`}
         >
           채팅 시작할 때 알림 받기
