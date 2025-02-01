@@ -281,7 +281,7 @@ export default function Page() {
       collection(db, "chatmessages"),
       where("room_id", "==", chatRoom.roomId),
       orderBy("created_at", "desc"),
-      limit(50)
+      limit(100)
     );
 
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
