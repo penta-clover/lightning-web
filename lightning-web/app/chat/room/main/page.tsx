@@ -289,17 +289,21 @@ export default function Page() {
 
       querySnapshot.forEach((doc) => {
         // compare doc.id is in chats
-        const exist = chats.find((chat) => chat.id === doc.id);
+        // const exist = chats.find((chat) => chat.id === doc.id);
 
-        if (exist) {
-          return;
-        }
+        // if (exist) {
+        //   return;
+        // }
 
+        // newChats.push({ ...doc.data(), id: doc.id } as Chat);
+
+        // hot fix
         newChats.push({ ...doc.data(), id: doc.id } as Chat);
       });
 
       setChats((prevChats) => {
-        return applyBlock([...newChats, ...prevChats]);
+        // return applyBlock([...newChats, ...prevChats]);
+        return applyBlock(newChats);
       });
     });
 
