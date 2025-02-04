@@ -88,7 +88,7 @@ function Body() {
   return (
     <div className="h-full">
       <ActionBar />
-      <div className="flex flex-col justify-between h-[calc(100%-72px)] px-[16px]">
+      <div className="relative flex flex-col h-[calc(100dvh-72px)] px-[16px]">
         <div className="flex flex-col grow">
           <h1 className="text-xl font-bold mb-[32px]">
             서비스 이용을 위해 약관에 동의해주세요
@@ -191,7 +191,7 @@ function Body() {
         </div>
         <button
           className={clsx(
-            "px-4 py-2 my-[24px] h-[48px] bg-black text-white rounded-[10px] text-body16 active:bg-lightgray",
+            "sticky bottom-0 px-4 py-2 my-[24px] h-[48px] bg-black text-white rounded-[10px] text-body16 active:bg-lightgray",
             {
               "bg-lightgray": !(
                 checkedItems.terms &&

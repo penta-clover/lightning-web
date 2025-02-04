@@ -66,7 +66,7 @@ function Body() {
   return (
     <div className="h-full">
       <ActionBar />
-      <div className="flex flex-col justify-between h-[calc(100%-72px)] px-[16px]">
+      <div className="relative flex flex-col h-[calc(100dvh-72px)] px-[16px]">
         <div className="flex flex-col grow">
           <label
             htmlFor="nickname"
@@ -131,7 +131,7 @@ function Body() {
         </div>
 
         <button
-          className={clsx("px-4 py-2 my-[24px] h-[48px] bg-black text-white rounded-[10px]",
+          className={clsx("sticky bottom-0 px-4 py-2 my-[24px] h-[48px] bg-black text-white rounded-[10px]",
             {"bg-lightgray text-body16": !(isNicknameValid && isNicknameUnique)},
           )}
           disabled={!(isNicknameValid && isNicknameUnique)}
