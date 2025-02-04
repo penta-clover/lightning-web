@@ -356,7 +356,7 @@ export default function Page() {
           notificationCount={notificationCount}
           onClickAlarmBtn={() => {
             axios.post("/api/notification/click");
-            router.push("http://pf.kakao.com/_VxjiTn/friend");
+            router.push("https://open.kakao.com/o/gn2wNRdh");
           }}
         >
           <span>경기 방송 시작되면 오픈됩니다.</span>
@@ -374,7 +374,7 @@ export default function Page() {
           notificationCount={notificationCount}
           onClickAlarmBtn={() => {
             axios.post("/api/notification/click");
-            router.push("http://pf.kakao.com/_VxjiTn/friend");
+            router.push("https://open.kakao.com/o/gn2wNRdh");
           }}
         >
           <span>채팅방은 다음 경기 전에 오픈됩니다.</span>
