@@ -1,19 +1,19 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import clsx from "clsx"
-import axios from "axios"
-import { onSnapshot, doc, getFirestore } from "firebase/firestore"
-import { useFirebaseApp } from "../firebase-provider"
+import { useState, useEffect } from "react";
+import clsx from "clsx";
+import axios from "axios";
+import { onSnapshot, doc, getFirestore } from "firebase/firestore";
+import { useFirebaseApp } from "../firebase-provider";
 
-import { Button } from "@/components/ui/button"
-import { ChatroomSettings } from "./components/ChatroomSettings"
-import { DummyUserManagement } from "./components/DummyUserManagement"
-import { LiveChat } from "./components/LiveChat"
-import { ChatControls } from "./components/ChatControls"
-import { ExternalLiveChat } from "./components/ExternalLiveChat"
+import { Button } from "@/components/ui/button";
+import { ChatroomSettings } from "./components/ChatroomSettings";
+import { DummyUserManagement } from "./components/DummyUserManagement";
+import { LiveChat } from "./components/LiveChat";
+import { ChatControls } from "./components/ChatControls";
+import { ExternalLiveChat } from "./components/ExternalLiveChat";
 
-type Page = "chatroom" | "dummyUser" | "liveChat"
+type Page = "chatroom" | "dummyUser" | "liveChat";
 
 export default function Page() {
   const app = useFirebaseApp();
@@ -49,11 +49,11 @@ export default function Page() {
         },
       }
     );
-  }
+  };
 
   const onUpdateMessage = (newMessages: string[]) => {
     messages = newMessages;
-  }
+  };
 
   const loadRecommendations = async (references: string[]) => {
     const response = await axios.post(
@@ -65,11 +65,11 @@ export default function Page() {
           "Content-Type": "application/json",
         },
       }
-    )
+    );
 
     console.log(response);
     return response.data;
-  }
+  };
 
   return (
     <div className="flex flex-col h-screen">
@@ -80,21 +80,30 @@ export default function Page() {
             <Button
               variant={currentPage === "chatroom" ? "secondary" : "ghost"}
               onClick={() => setCurrentPage("chatroom")}
-              className={clsx("text-white-foreground h-full rounded-none hover:bg-lightgray transition-all", currentPage === "chatroom" && "bg-lightgray")}
+              className={clsx(
+                "text-white-foreground h-full rounded-none hover:bg-lightgray transition-all",
+                currentPage === "chatroom" && "bg-lightgray"
+              )}
             >
               채팅방 설정
             </Button>
             <Button
               variant={currentPage === "dummyUser" ? "secondary" : "ghost"}
               onClick={() => setCurrentPage("dummyUser")}
-              className={clsx("text-white-foreground h-full rounded-none hover:bg-lightgray transition-all", currentPage === "dummyUser" && "bg-lightgray")}
+              className={clsx(
+                "text-white-foreground h-full rounded-none hover:bg-lightgray transition-all",
+                currentPage === "dummyUser" && "bg-lightgray"
+              )}
             >
               더미 유저 관리
             </Button>
             <Button
               variant={currentPage === "liveChat" ? "secondary" : "ghost"}
               onClick={() => setCurrentPage("liveChat")}
-              className={clsx("text-white-foreground h-full rounded-none hover:bg-lightgray transition-all", currentPage === "liveChat" && "bg-lightgray")}
+              className={clsx(
+                "text-white-foreground h-full rounded-none hover:bg-lightgray transition-all",
+                currentPage === "liveChat" && "bg-lightgray"
+              )}
             >
               실시간 채팅창
             </Button>
@@ -107,13 +116,20 @@ export default function Page() {
           {currentPage === "chatroom" && <ChatroomSettings />}
           {currentPage === "dummyUser" && <DummyUserManagement />}
           {currentPage === "liveChat" && (
-            <div className="flex space-x-4">
-              <LiveChat className="flex-1 min-width: 0" onSendMessage={onSendMessage} />
-              <ChatControls
-                className="flex-1 min-width: 0"
-                onSendMessage={onSendMessage}
-                getRecommendations={async () => { return await loadRecommendations(messages); }}
-              />
+            <div className="flex flex-col space-y-4">
+              <div className="flex space-x-4">
+                <LiveChat
+                  className="flex-1 min-width: 0"
+                  onSendMessage={onSendMessage}
+                />
+                <ChatControls
+                  className="flex-1 min-width: 0"
+                  onSendMessage={onSendMessage}
+                  getRecommendations={async () => {
+                    return await loadRecommendations(messages);
+                  }}
+                />
+              </div>
               <ExternalLiveChat
                 className="flex-1 min-width: 0"
                 onSendMessage={onSendMessage}
@@ -124,6 +140,5 @@ export default function Page() {
         </div>
       </div>
     </div>
-  )
+  );
 }
-

@@ -8,6 +8,13 @@ import { X } from "lucide-react";
 import axios from "axios";
 import clsx from "clsx";
 import AutoResizeTextarea from "@/components/ui/auto-resize-textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 type ChatControlsProps = {
   onSendMessage?: (message: string, user: string) => void;
@@ -25,6 +32,8 @@ type User = {
   createdAt: string;
   alarmAllowed: boolean;
   role: string;
+  phoneNumber: string | null;
+  favoriteTeam: string | null;
 };
 
 export function ChatControls({
@@ -32,21 +41,24 @@ export function ChatControls({
   getRecommendations,
   className,
 }: ChatControlsProps) {
-  const [shortcuts, setShortcuts] = useState([
-    "대 상 혁",
-    "와",
-    "화이팅🔥🔥🔥",
-    "레전드",
-    "미쳤다ㅋㅋㅋㅋㅋ",
-    "아 이게 이렇게 되네..ㅠ",
-    "오창섭이~~",
-    "쵸오오오오비이이이이이이이",
-    "71인분 가즈아",
-    "룰러 더 클래식 제 1악장",
+  const [shortcuts, setShortcuts] = useState<{content: string, team: string | null}[]>([
+    { content: "대 상 혁", team: "T1" },
+    { content: "와", team: "NONE" },
+    { content: "화이팅🔥🔥🔥", team: "NONE" },
+    { content: "레전드", team: "NONE" },
+    { content: "미쳤다ㅋㅋㅋㅋㅋ", team: "NONE" },
+    { content: "아 이게 이렇게 되네..ㅠ", team: "NONE" },
+    { content: "오창섭이~~", team: "T1" },
+    { content: "쵸오오오오비이이이이이이이", team: "GEN" },
+    { content: "71인분 가즈아", team: "GEN" },
+    { content: "룰러 더 클래식 제 1악장", team: "GEN" },
   ]);
   const [newShortcut, setNewShortcut] = useState("");
+  const [newShortcutTeam, setNewShortcutTeam] = useState<string | null>(null);
   const [recommendations, setRecommendations] = useState<string[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [team1, setHandleChangeTeam1] = useState<string | null>(null);
+  const [team2, setHandleChangeTeam2] = useState<string | null>(null);
 
   const [dummyUsers, setDummyUsers] = useState<User[]>();
 
@@ -56,14 +68,27 @@ export function ChatControls({
     });
   }, []);
 
-  const sendMessage = (message: string) => {
+  const sendMessage = (message: string, favoriteTeam: string | null) => {
+    if (favoriteTeam === "NONE") {
+      favoriteTeam = null;
+    }
+    
     if (!dummyUsers) {
       alert("더미 유저를 불러오지 못했습니다.");
       return;
     }
 
+    const dummyForTeam = dummyUsers.filter(
+      (dummy) => dummy.favoriteTeam === favoriteTeam
+    );
+
+    if (dummyForTeam.length === 0) {
+      alert("해당 팀의 더미 유저가 없습니다.");
+      return;
+    }
+
     const selectedDummy =
-      dummyUsers[Math.floor(Math.random() * dummyUsers.length)];
+      dummyForTeam[Math.floor(Math.random() * dummyForTeam.length)];
 
     if (message.trim() && onSendMessage) {
       onSendMessage(message, selectedDummy.id);
@@ -71,14 +96,14 @@ export function ChatControls({
   };
 
   const addShortcut = () => {
-    if (newShortcut.trim() && !shortcuts.includes(newShortcut)) {
-      setShortcuts([...shortcuts, newShortcut]);
+    if (newShortcut.trim()) {
+      setShortcuts([...shortcuts, { content: newShortcut, team: newShortcutTeam }]);
       setNewShortcut("");
     }
   };
 
   const removeShortcut = (shortcut: string) => {
-    setShortcuts(shortcuts.filter((s) => s !== shortcut));
+    setShortcuts(shortcuts.filter((s) => s.content !== shortcut));
   };
 
   const loadRecommendations = async () => {
@@ -103,9 +128,86 @@ export function ChatControls({
         <CardTitle className="text-xl">컨트롤 패널</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4 px-4 py-2">
-        <div className="space-y-2">
-          <h3 className="font-semibold">일반 채팅</h3>
-          <Inputter placeholder="메시지 입력" onSend={sendMessage} />
+        <div className="space-y-1">
+          <h3 className="font-semibold">채팅</h3>
+          <div className="flex flex-row space-x-1">
+            <div className="w-[90px]">
+              <Select onValueChange={setHandleChangeTeam1} defaultValue="NONE">
+                <SelectTrigger className="flex-grow">
+                  <SelectValue placeholder="없음" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="NONE">없음</SelectItem>
+                  <SelectItem value="GEN">GEN</SelectItem>
+                  <SelectItem value="HLE">HLE</SelectItem>
+                  <SelectItem value="T1">T1</SelectItem>
+                  <SelectItem value="DK">DK</SelectItem>
+                  <SelectItem value="KT">KT</SelectItem>
+                  <SelectItem value="BRO">BRO</SelectItem>
+                  <SelectItem value="DRX">DRX</SelectItem>
+                  <SelectItem value="DNF">DNF</SelectItem>
+                  <SelectItem value="NS">NS</SelectItem>
+                  <SelectItem value="BFX">BFX</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <Inputter
+              placeholder="메시지 입력"
+              onSend={(input) => sendMessage(input, team1)}
+            />
+          </div>
+          <div className="flex flex-row space-x-1">
+            <div className="w-[90px]">
+              <Select onValueChange={setHandleChangeTeam2} defaultValue="NONE">
+                <SelectTrigger className="flex-grow">
+                  <SelectValue placeholder="없음" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="NONE">없음</SelectItem>
+                  <SelectItem value="GEN">GEN</SelectItem>
+                  <SelectItem value="HLE">HLE</SelectItem>
+                  <SelectItem value="T1">T1</SelectItem>
+                  <SelectItem value="DK">DK</SelectItem>
+                  <SelectItem value="KT">KT</SelectItem>
+                  <SelectItem value="BRO">BRO</SelectItem>
+                  <SelectItem value="DRX">DRX</SelectItem>
+                  <SelectItem value="DNF">DNF</SelectItem>
+                  <SelectItem value="NS">NS</SelectItem>
+                  <SelectItem value="BFX">BFX</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <Inputter
+              placeholder="메시지 입력"
+              onSend={(input) => sendMessage(input, team2)}
+            />
+          </div>
+          <div className="flex flex-row space-x-1">
+            <div className="w-[90px]">
+              <Select onValueChange={setHandleChangeTeam1} defaultValue="NONE">
+                <SelectTrigger className="flex-grow">
+                  <SelectValue placeholder="없음" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="NONE">없음</SelectItem>
+                  <SelectItem value="GEN">GEN</SelectItem>
+                  <SelectItem value="HLE">HLE</SelectItem>
+                  <SelectItem value="T1">T1</SelectItem>
+                  <SelectItem value="DK">DK</SelectItem>
+                  <SelectItem value="KT">KT</SelectItem>
+                  <SelectItem value="BRO">BRO</SelectItem>
+                  <SelectItem value="DRX">DRX</SelectItem>
+                  <SelectItem value="DNF">DNF</SelectItem>
+                  <SelectItem value="NS">NS</SelectItem>
+                  <SelectItem value="BFX">BFX</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <Inputter
+              placeholder="메시지 입력"
+              onSend={(input) => sendMessage(input, team1)}
+            />
+          </div>
         </div>
         <div className="space-y-2">
           <h3 className="font-semibold">추천 채팅</h3>
@@ -137,7 +239,7 @@ export function ChatControls({
               />
               <Button
                 onClick={() => {
-                  sendMessage(recommendation);
+                  sendMessage(recommendation, null);
                 }}
                 className="whitespace-nowrap"
               >
@@ -148,15 +250,35 @@ export function ChatControls({
         </div>
         <div className="space-y-2">
           <h3 className="font-semibold">단축어</h3>
-          <div className="flex space-x-2">
+          <div className="flex space-x-1">
+            <div className="w-[90px]">
+              <Select onValueChange={setNewShortcutTeam} defaultValue="NONE">
+                <SelectTrigger className="flex-grow">
+                  <SelectValue placeholder="없음" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="NONE">없음</SelectItem>
+                  <SelectItem value="GEN">GEN</SelectItem>
+                  <SelectItem value="HLE">HLE</SelectItem>
+                  <SelectItem value="T1">T1</SelectItem>
+                  <SelectItem value="DK">DK</SelectItem>
+                  <SelectItem value="KT">KT</SelectItem>
+                  <SelectItem value="BRO">BRO</SelectItem>
+                  <SelectItem value="DRX">DRX</SelectItem>
+                  <SelectItem value="DNF">DNF</SelectItem>
+                  <SelectItem value="NS">NS</SelectItem>
+                  <SelectItem value="BFX">BFX</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
             <Input
               value={newShortcut}
               onChange={(e) => setNewShortcut(e.target.value)}
               placeholder="새 단축어 입력"
-              className="flex-grow"
+              className="grow"
             />
             <Button onClick={addShortcut} className="whitespace-nowrap">
-              단축어 추가
+              추가
             </Button>
           </div>
           <div className="space-y-0">
@@ -169,17 +291,18 @@ export function ChatControls({
                   className="shadow-sm"
                   size="sm"
                   onClick={() => {
-                    sendMessage(shortcut);
+                    sendMessage(shortcut.content, shortcut.team);
                   }}
                 >
                   전송
                 </Button>
-                <span className="w-full px-2 break-all">{shortcut}</span>
+                <span className="w-full px-2 break-all">{shortcut.content}</span>
+                <span className="w-[80px] px-2 break-all">{shortcut.team}</span>
                 <div className="flex space-x-2 items-center">
                   <Button
                     variant="ghost"
                     size="icon"
-                    onClick={() => removeShortcut(shortcut)}
+                    onClick={() => removeShortcut(shortcut.content)}
                   >
                     <X className="h-4 w-4" />
                   </Button>
@@ -213,7 +336,7 @@ function Inputter(props: {
   };
 
   return (
-    <div className="flex space-x-2">
+    <div className="flex w-full space-x-2">
       <Input
         value={inputMessage}
         onChange={(e) => setInputMessage(e.target.value)}

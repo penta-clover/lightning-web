@@ -19,6 +19,8 @@ model Member {
   alarmAllowed     Boolean        @default(false)      // BOOLEAN
   role             Role                                // Enum 타입
   blockLevel       BlockLevel     @default(NONE)       // Enum 타입
+  phoneNumber      String?        @db.VarChar(20)      // VARCHAR(20)
+  favoriteTeam     String?        @db.VarChar(50)      // VARCHAR(50)
 
   // chatMessages     ChatMessage[]   // 관계: 보낸 메시지
   lightningsSent   Lightning[]    @relation("LightningsSent")   // 관계: 보낸 번개

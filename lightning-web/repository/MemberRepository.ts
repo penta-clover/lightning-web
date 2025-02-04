@@ -101,3 +101,12 @@ export async function updateBlockLevel(memberId: string, blockLevel: BlockLevel)
     },
   });
 }
+
+export async function updateMember(memberId: string, data: object) {
+  return await client.member.update({
+    where: {
+      id: memberId,
+    },
+    data: data,
+  });
+}

@@ -155,7 +155,7 @@ export function LiveChat({ className }: LiveChatProps) {
       <CardContent className="px-4 py-2">
         <div
           ref={containerRef}
-          className="h-[calc(100vh-12rem)] overflow-y-auto flex flex-col-reverse border p-2 scroll-smooth"
+          className="h-[calc(100vh-10rem)] overflow-y-auto flex flex-col-reverse border p-2 scroll-smooth"
         >
           {chats.map((msg) => (
             <div key={msg.id} className="flex flex-col items-start mb-2 shadow-md p-2 rounded">
