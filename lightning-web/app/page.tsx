@@ -44,7 +44,7 @@ export default function Home() {
   } else {
     return (
       <div className="flex h-full flex-col justify-center">
-        <div className="flex flex-col justify-center items-center font-semibold font-[Pretendard]">
+        <div className="flex flex-col justify-center items-center font-semibold">
           <span>스트레스 없는</span><span>새로운 LCK의 시작</span>
         </div>
 
