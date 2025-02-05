@@ -359,8 +359,8 @@ export default function Page() {
             router.push("https://open.kakao.com/o/gn2wNRdh");
           }}
         >
-          <span>경기 방송 시작되면 오픈됩니다.</span>
-          <span>잠시만 기다려주세요!</span>
+          <span className="text-heading20 font-bold">경기 방송 시작되면 오픈됩니다.</span>
+          <span className="text-heading20 font-bold">잠시만 기다려주세요!</span>
         </ClosedDialog>
       </div>
       <div
@@ -377,8 +377,8 @@ export default function Page() {
             router.push("https://open.kakao.com/o/gn2wNRdh");
           }}
         >
-          <span>채팅방은 다음 경기 전에 오픈됩니다.</span>
-          <span>다음 경기에서 봬요!</span>
+          <span className="text-heading20 font-bold">채팅방은 다음 경기 전에 오픈됩니다.</span>
+          <span className="text-heading20 font-bold">다음 경기에서 봬요!</span>
         </ClosedDialog>
       </div>
       <div
