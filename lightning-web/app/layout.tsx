@@ -3,6 +3,14 @@ import { Providers } from "@/app/providers";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { LayoutUI } from "./layout-ui";
 import Analytics from "./analytics";
+import localFont from "next/font/local";
+
+const pretendard = localFont({
+  src: "./static/PretendardVariable.woff2",
+  display: "swap",
+  weight: "45 920",
+  variable: "--font-pretendard",
+});
 
 export default function RootLayout({
   children,
@@ -10,7 +18,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${pretendard.variable}`}>
       <head>
         <title>라이트닝 - 클린한 LCK 팬 채팅</title>
         <meta name="description" content="클린한 LCK 팬 채팅" />
