@@ -2,13 +2,13 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import ActionBar from "./ActionBar";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import clsx from "clsx";
 import { useSession } from "next-auth/react";
 import { condTrack } from "@/app/amplitude";
 import axios from "axios";
 
-export default function Page() {
+function Body() {
   const { status, update } = useSession();
 const searchParams = useSearchParams();
   
@@ -156,5 +156,12 @@ const searchParams = useSearchParams();
         </button>
       </div>
     </div>
+  );
+}
+export default function Page() {
+  return (
+    <Suspense>
+      <Body />
+    </Suspense>
   );
 }
