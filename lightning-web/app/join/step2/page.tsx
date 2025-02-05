@@ -32,6 +32,8 @@ function Body() {
     }
 
     try {
+      const nullIfEmpty = (value: string | null) => value === "" ? null : value;
+
       const response = await axios.post(
         "/api/member/join",
         {
@@ -40,6 +42,10 @@ function Body() {
           socialId: searchParams.get("socialId"),
           email: searchParams.get("email"),
           alarmAllowed: checkedItems.marketing,
+          name: searchParams.get("name"), // 이름 추가
+          gender: nullIfEmpty(searchParams.get("gender")),
+          birthYear: searchParams.get("birthYear"),
+          phoneNumber: nullIfEmpty(searchParams.get("phoneNumber")),
         },
         {
           withCredentials: true,

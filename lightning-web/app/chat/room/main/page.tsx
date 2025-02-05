@@ -37,6 +37,15 @@ type Chat = {
   created_at: string;
   transparency: number;
   block_type: string;
+  chat_type: string | undefined;
+  optional:
+    | {
+        channel_name?: string;
+        channel_url?: string;
+        introduction_on_chat?: string;
+        cta_on_chat?: string;
+      }
+    | undefined;
 };
 
 type Lightning = {
@@ -247,13 +256,20 @@ export default function Page() {
   }, [session]);
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(doc(db, "policy", "main_room"), (doc) => {
-      const data = doc.data();
-      const roomId = data!.room_id;
-      const status = data!.status;
+    const unsubscribe = onSnapshot(
+      doc(
+        db,
+        process.env.NEXT_PUBLIC_FIRESTORE_POLICY_COLLECTION as string,
+        "main_room"
+      ),
+      (doc) => {
+        const data = doc.data();
+        const roomId = data!.room_id;
+        const status = data!.status;
 
-      setChatRoom({ roomId: roomId, status: status });
-    });
+        setChatRoom({ roomId: roomId, status: status });
+      }
+    );
 
     return unsubscribe;
   }, [db]);
@@ -408,14 +424,24 @@ export default function Page() {
                     }`}
                     style={{ opacity: (100 - chat.transparency) / 100 }}
                   >
-                    {chat.sender_id === session?.id ? (
-                      <MyChat chat={chat} />
-                    ) : (
-                      <OthersChat
-                        chat={chat}
-                        onClickLightning={onClickLightning}
-                      />
-                    )}
+                    {(() => {
+                      if (chat.sender_id === session?.id) {
+                        return <MyChat chat={chat} />;
+                      } else if (chat.chat_type === "INFLUENCER") {
+                        return (
+                          <InfluencerChat
+                            chat={chat}
+                            onClickLightning={onClickLightning}
+                            onClickLink={() => {chat.optional?.channel_url ? window.open(chat.optional.channel_url, '_blank', 'noopener,noreferrer') : null}}
+                          />
+                        );
+                      } else {
+                        return <OthersChat
+                          chat={chat}
+                          onClickLightning={onClickLightning}
+                        />;
+                      }
+                    })()}
                   </div>
                 );
               case "BLOCKED":
@@ -594,6 +620,61 @@ const OthersChat = (props: {
               : undefined
           }
         />
+      </div>
+    </>
+  );
+};
+
+const InfluencerChat = (props: {
+  chat: Chat;
+  onClickLightning: (chatId: string) => void;
+  onClickLink: () => void;
+}) => {
+  const {chat, onClickLightning, onClickLink} = props;
+
+  return (
+    <>
+      <Image
+        width={36}
+        height={36}
+        src={chat.profile_image_url}
+        alt={`${chat.sender_nickname} 프로필`}
+        className="w-10 h-10 rounded-[12] mr-[16px]"
+      />
+      <div className="flex flex-col">
+        <div className="flex items-end">
+          <div className="flex flex-col">
+            {/* 닉네임 */}
+            <div className="text-caption12 text-darkgray mb-[7px]">
+              {chat.sender_nickname}
+            </div>
+            {/* 메시지 내용 */}
+            <div className="text-black text-body14 font-medium px-[12px] py-[8px] bg-bgblue rounded-[4px] break-all max-w-xs">
+              {chat.content}
+            </div>
+          </div>
+          {/* 번개 버튼 */}
+          <Image
+            src={`/icon/${
+              chat.block_type === "NONE"
+                ? "active_lightning"
+                : "inactive_lightning"
+            }.svg`}
+            className="pl-[6px] pr-[10px] pt-[10px] text-yellow-500"
+            alt="lightning"
+            width={36}
+            height={30}
+            onClick={
+              chat.block_type === "NONE"
+                ? () => onClickLightning(chat.id)
+                : undefined
+            }
+          />
+        </div>
+        <div className="m-[3px] text-caption12 text-darkgray" onClick={onClickLink}>
+          <div>{chat.optional!.introduction_on_chat ?? ""}</div>
+          <div className="underline">{chat.optional!.cta_on_chat ?? ""}</div>
+        </div>
       </div>
     </>
   );

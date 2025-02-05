@@ -21,6 +21,9 @@ model Member {
   blockLevel       BlockLevel     @default(NONE)       // Enum 타입
   phoneNumber      String?        @db.VarChar(20)      // VARCHAR(20)
   favoriteTeam     String?        @db.VarChar(50)      // VARCHAR(50)
+  name             String?        @db.VarChar(50)      // VARCHAR
+  gender           String?        @db.VarChar(10)      // VARCHAR(10)
+  birthYear        Int?           @db.Integer          // INTEGER
 
   // chatMessages     ChatMessage[]   // 관계: 보낸 메시지
   lightningsSent   Lightning[]    @relation("LightningsSent")   // 관계: 보낸 번개
@@ -48,6 +51,7 @@ enum SocialType {
 enum Role {
   ADMIN
   USER
+  INFLUENCER
   DUMMY
   DISABLED_DUMMY
 }
@@ -94,4 +98,13 @@ model NotificationClick {
   id         String     @id @default(uuid()) // UUID 기본값
   memberId    String     @db.VarChar(50)      // VARCHAR(50)
   createdAt  DateTime    @default(now())      // TIMESTAMP
+}
+
+model InfluencerSetting {
+  id                  String     @id @default(uuid()) // UUID 기본값
+  memberId            String     @db.VarChar(50)
+  channelName         String     @db.VarChar(150)
+  channelUrl          String     @db.VarChar(200)
+  ctaOnChat           String     @db.VarChar(150)
+  introductionOnChat  String     @db.VarChar(150)
 }

@@ -27,7 +27,7 @@ export default function Page() {
   let messages: string[] = [];
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(doc(db, "policy", "main_room"), (doc) => {
+    const unsubscribe = onSnapshot(doc(db, process.env.NEXT_PUBLIC_FIRESTORE_POLICY_COLLECTION as string, "main_room"), (doc) => {
       const data = doc.data();
       const roomId = data!.room_id;
       const status = data!.status;
