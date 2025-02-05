@@ -5,6 +5,7 @@ import clsx from "clsx";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
+import ActionBar from "./ActionBar";
 
 function Body() {
   const searchParams = useSearchParams();
@@ -69,7 +70,7 @@ function Body() {
 
   return (
     <div className="h-full">
-      <ActionBar />
+      <ActionBar onClickBack={() => router.push("/")} onClickClose={() => router.push("/")} />
       <div className="relative flex flex-col h-[calc(100dvh-72px)] px-[16px]">
         <div className="flex flex-col grow">
           <label
@@ -155,20 +156,3 @@ export default function Page() {
     </Suspense>
   );
 }
-
-const ActionBar = () => {
-  const router = useRouter();
-
-  return (
-    <div className="flex items-center justify-between w-full h-[72px] bg-white">
-      {/* 뒤로가기 버튼 */}
-      <Image src="/icon/arrow_back.svg" alt="Back" width={56} height={72} onClick={() => router.push("/")} className="px-[16px] py-[24px]"/>
-
-      {/* 제목 */}
-      <h1 className="text-lg font-semibold"></h1>
-
-      {/* 닫기 버튼 */}
-      <Image src="/icon/close.svg" alt="Close" width={56} height={72} onClick={() => router.push("/")} className="px-[16px] py-[24px]"/>
-    </div>
-  );
-};
