@@ -78,7 +78,7 @@ function Body() {
                 id="all"
                 checked={isAllChecked}
                 onChange={() => handleCheckboxChange("all")}
-                className="w-[24px] h-[24px] m-[12px] border-0 bg-bggray rounded-[4px] bg-[url('/icon/gray_checkbox.svg')] checked:bg-[url('/icon/black_checkbox.svg')] checked:border-blue-500 appearance-none transition-all"
+                className="w-[24px] h-[24px] m-[12px] border-0 bg-bggray rounded-[4px] bg-[url('/icon/gray_checkbox.svg')] checked:bg-[url('/icon/black_checkbox.svg')] checked:border-blue-500 appearance-none transition-all duration-50"
               />
               <label
                 htmlFor="all"
@@ -95,7 +95,7 @@ function Body() {
                   id="terms"
                   checked={checkedItems.terms}
                   onChange={() => handleCheckboxChange("terms")}
-                  className="w-[24px] h-[24px] m-[12px] border-0 bg-bggray rounded-[4px] bg-[url('/icon/gray_checkbox.svg')] checked:bg-[url('/icon/black_checkbox.svg')] checked:border-blue-500 appearance-none transition-all"
+                  className="w-[24px] h-[24px] m-[12px] border-0 bg-bggray rounded-[4px] bg-[url('/icon/gray_checkbox.svg')] checked:bg-[url('/icon/black_checkbox.svg')] checked:border-blue-500 appearance-none transition-all duration-50"
                 />
                 <label htmlFor="terms" className="text-body16 font-medium">
                   <span className="text-blue">[필수] </span>
@@ -121,7 +121,7 @@ function Body() {
                   id="privacy"
                   checked={checkedItems.privacy}
                   onChange={() => handleCheckboxChange("privacy")}
-                  className="w-[24px] h-[24px] m-[12px] border-0 bg-bggray rounded-[4px] bg-[url('/icon/gray_checkbox.svg')] checked:bg-[url('/icon/black_checkbox.svg')] checked:border-blue-500 appearance-none transition-all"
+                  className="w-[24px] h-[24px] m-[12px] border-0 bg-bggray rounded-[4px] bg-[url('/icon/gray_checkbox.svg')] checked:bg-[url('/icon/black_checkbox.svg')] checked:border-blue-500 appearance-none transition-all duration-50"
                 />
                 <label htmlFor="privacy" className="text-body16 font-medium">
                   <span className="text-blue">[필수] </span>
@@ -151,7 +151,7 @@ function Body() {
                 id="age"
                 checked={checkedItems.age}
                 onChange={() => handleCheckboxChange("age")}
-                className="w-[24px] h-[24px] m-[12px] border-0 bg-bggray rounded-[4px] bg-[url('/icon/gray_checkbox.svg')] checked:bg-[url('/icon/black_checkbox.svg')] checked:border-blue-500 appearance-none transition-all"
+                className="w-[24px] h-[24px] m-[12px] border-0 bg-bggray rounded-[4px] bg-[url('/icon/gray_checkbox.svg')] checked:bg-[url('/icon/black_checkbox.svg')] checked:border-blue-500 appearance-none transition-all duration-50"
               />
               <label htmlFor="age" className="text-body16 font-medium">
                 <span className="text-blue">[필수] </span>
@@ -167,7 +167,7 @@ function Body() {
                 id="marketing"
                 checked={checkedItems.marketing}
                 onChange={() => handleCheckboxChange("marketing")}
-                className="w-[24px] h-[24px] m-[12px] border-0 bg-bggray rounded-[4px] bg-[url('/icon/gray_checkbox.svg')] checked:bg-[url('/icon/black_checkbox.svg')] checked:border-blue-500 appearance-none transition-all"
+                className="w-[24px] h-[24px] m-[12px] border-0 bg-bggray rounded-[4px] bg-[url('/icon/gray_checkbox.svg')] checked:bg-[url('/icon/black_checkbox.svg')] checked:border-blue-500 appearance-none transition-all duration-50"
               />
               <label htmlFor="marketing" className="text-body16 font-medium">
                 <span className="text-brightblack">
