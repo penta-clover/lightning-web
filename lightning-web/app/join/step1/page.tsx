@@ -136,7 +136,7 @@ function Body() {
         </div>
 
         <button
-          className={clsx("sticky bottom-0 px-4 py-2 my-[24px] h-[48px] bg-black text-white rounded-[10px] font-bold",
+          className={clsx("sticky bottom-0 px-4 py-2 my-[24px] h-[48px] bg-black text-white rounded-[10px] active:bg-lightgray font-bold",
             {"bg-lightgray text-body16": !(isNicknameValid && isNicknameUnique)},
           )}
           disabled={!(isNicknameValid && isNicknameUnique)}
