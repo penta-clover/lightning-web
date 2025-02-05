@@ -43,8 +43,8 @@ export function LayoutUI({ children }: { children: React.ReactNode }) {
       {/* Left Hero Image Section */}
       <div className="hidden grow lg:flex lg:w-full bg-gray-50 flex-col items-center justify-center bg-whitegray">
         {/* Hero Image Placeholder */}
-        <div className="flex flex-row justify-center font-semibold font-[Pretendard]">
-          스트레스 없는 새로운 LCK의 시작
+        <div className="flex flex-col justify-center items-center font-semibold font-[Pretendard]">
+          <span>스트레스 없는</span><span>새로운 LCK의 시작</span>
         </div>
 
         <div className="flex flex-col items-center mx-[17%] sm:mx-[30%] mb-[33px] mt-[26px]">
