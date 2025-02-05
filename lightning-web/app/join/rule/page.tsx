@@ -10,8 +10,8 @@ import axios from "axios";
 
 function Body() {
   const { status, update } = useSession();
-const searchParams = useSearchParams();
-  
+  const searchParams = useSearchParams();
+
   const router = useRouter();
 
   const [isJoining, setIsJoining] = useState<boolean>(false);
@@ -39,7 +39,8 @@ const searchParams = useSearchParams();
     }
 
     try {
-      const nullIfEmpty = (value: string | null) => value === "" ? null : value;
+      const nullIfEmpty = (value: string | null) =>
+        value === "" ? null : value;
 
       const response = await axios.post(
         "/api/member/join",
@@ -77,6 +78,8 @@ const searchParams = useSearchParams();
     }
   };
 
+  const isAllChecked = checkedItems.rule1 && checkedItems.rule2 && checkedItems.rule3;
+
   return (
     <div className="h-full">
       <ActionBar
@@ -89,10 +92,7 @@ const searchParams = useSearchParams();
             라이트닝 회원이라면 지켜야 할 수칙!
           </h1>
           <div className="flex flex-col space-y-[16px]">
-            <label
-              htmlFor="rule1"
-              className="flex items-center h-[48px]"
-            >
+            <label htmlFor="rule1" className="flex items-center h-[48px]">
               <input
                 type="checkbox"
                 id="rule1"
@@ -101,13 +101,13 @@ const searchParams = useSearchParams();
                 className="w-[24px] min-w-[24px] h-[24px] m-[12px] border-0 bg-bggray rounded-[4px] bg-[url('/icon/gray_checkbox.svg')] checked:bg-[url('/icon/black_checkbox.svg')] checked:border-blue-500 appearance-none"
               />
               <div className="text-body16 font-medium grow mr-[4px]">
-                <div className="text-brightblack break-all">데스크탑, 노트북에서 라이트닝을 사용해주세요! 모바일에서는 사용하기 어려워요.</div>
+                <div className="text-brightblack break-all">
+                  데스크탑, 노트북에서 라이트닝을 사용해주세요! 모바일에서는
+                  사용하기 어려워요.
+                </div>
               </div>
             </label>
-            <label
-              htmlFor="rule2"
-              className="flex items-center h-[48px]"
-            >
+            <label htmlFor="rule2" className="flex items-center h-[48px]">
               <input
                 type="checkbox"
                 id="rule2"
@@ -116,13 +116,13 @@ const searchParams = useSearchParams();
                 className="w-[24px] min-w-[24px] h-[24px] m-[12px] border-0 bg-bggray rounded-[4px] bg-[url('/icon/gray_checkbox.svg')] checked:bg-[url('/icon/black_checkbox.svg')] checked:border-blue-500 appearance-none"
               />
               <div className="text-body16 font-medium grow mr-[4px]">
-                <div className="text-brightblack break-all">LCK 경기에서 방송 송출 후, 밴픽 시작부터 경기 종료까지에만 채팅창이 운영돼요</div>
+                <div className="text-brightblack break-all">
+                  LCK 경기에서 방송 송출 후, 밴픽 시작부터 경기 종료까지에만
+                  채팅창이 운영돼요
+                </div>
               </div>
             </label>
-            <label
-              htmlFor="rule3"
-              className="flex items-start"
-            >
+            <label htmlFor="rule3" className="flex items-start">
               <input
                 type="checkbox"
                 id="rule3"
@@ -131,7 +131,11 @@ const searchParams = useSearchParams();
                 className="w-[24px] min-w-[24px] h-[24px] m-[12px] border-0 bg-bggray rounded-[4px] bg-[url('/icon/gray_checkbox.svg')] checked:bg-[url('/icon/black_checkbox.svg')] checked:border-blue-500 appearance-none"
               />
               <div className="text-body16 font-medium grow mr-[4px]">
-                <div className="text-brightblack break-all">마지막으로 가장 중요한 점! 라이트닝은 기존 LCK 채팅에서 과한 비난과 조롱, 쓸데없는 채팅을 지양하고 있어요. 편하면서도 유쾌한 환경을 위해 함께 노력해주세요</div>
+                <div className="text-brightblack break-all">
+                  마지막으로 가장 중요한 점! 라이트닝은 기존 LCK 채팅에서 과한
+                  비난과 조롱, 쓸데없는 채팅을 지양하고 있어요. 편하면서도
+                  유쾌한 환경을 위해 함께 노력해주세요
+                </div>
               </div>
             </label>
           </div>
@@ -140,15 +144,12 @@ const searchParams = useSearchParams();
           className={clsx(
             "sticky bottom-0 px-4 py-2 my-[24px] h-[48px] bg-black text-white rounded-[10px] text-body16 active:bg-lightgray font-bold",
             {
-              "bg-lightgray": !(
-                checkedItems.rule1 &&
-                checkedItems.rule2 &&
-                checkedItems.rule3
-              ),
+              "bg-lightgray": !isAllChecked || isJoining,
             }
           )}
           disabled={
-            !(checkedItems.rule1 && checkedItems.rule2 && checkedItems.rule3) || isJoining
+            !(checkedItems.rule1 && checkedItems.rule2 && checkedItems.rule3) ||
+            isJoining
           }
           onClick={handleComplete}
         >
@@ -158,6 +159,7 @@ const searchParams = useSearchParams();
     </div>
   );
 }
+
 export default function Page() {
   return (
     <Suspense>
