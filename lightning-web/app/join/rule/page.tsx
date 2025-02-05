@@ -98,7 +98,7 @@ const searchParams = useSearchParams();
                 id="rule1"
                 checked={checkedItems.rule1}
                 onChange={() => handleCheckboxChange("rule1")}
-                className="w-[24px] min-w-[24px] h-[24px] m-[12px] border-0 bg-bggray rounded-[4px] bg-[url('/icon/gray_checkbox.svg')] checked:bg-[url('/icon/black_checkbox.svg')] checked:border-blue-500 appearance-none transition-all duration-50"
+                className="w-[24px] min-w-[24px] h-[24px] m-[12px] border-0 bg-bggray rounded-[4px] bg-[url('/icon/gray_checkbox.svg')] checked:bg-[url('/icon/black_checkbox.svg')] checked:border-blue-500 appearance-none"
               />
               <div className="text-body16 font-medium grow mr-[4px]">
                 <div className="text-brightblack break-all">데스크탑, 노트북에서 라이트닝을 사용해주세요! 모바일에서는 사용하기 어려워요.</div>
@@ -113,7 +113,7 @@ const searchParams = useSearchParams();
                 id="rule2"
                 checked={checkedItems.rule2}
                 onChange={() => handleCheckboxChange("rule2")}
-                className="w-[24px] min-w-[24px] h-[24px] m-[12px] border-0 bg-bggray rounded-[4px] bg-[url('/icon/gray_checkbox.svg')] checked:bg-[url('/icon/black_checkbox.svg')] checked:border-blue-500 appearance-none transition-all duration-50"
+                className="w-[24px] min-w-[24px] h-[24px] m-[12px] border-0 bg-bggray rounded-[4px] bg-[url('/icon/gray_checkbox.svg')] checked:bg-[url('/icon/black_checkbox.svg')] checked:border-blue-500 appearance-none"
               />
               <div className="text-body16 font-medium grow mr-[4px]">
                 <div className="text-brightblack break-all">LCK 경기에서 방송 송출 후, 밴픽 시작부터 경기 종료까지에만 채팅창이 운영돼요</div>
@@ -128,7 +128,7 @@ const searchParams = useSearchParams();
                 id="rule3"
                 checked={checkedItems.rule3}
                 onChange={() => handleCheckboxChange("rule3")}
-                className="w-[24px] min-w-[24px] h-[24px] m-[12px] border-0 bg-bggray rounded-[4px] bg-[url('/icon/gray_checkbox.svg')] checked:bg-[url('/icon/black_checkbox.svg')] checked:border-blue-500 appearance-none transition-all duration-50"
+                className="w-[24px] min-w-[24px] h-[24px] m-[12px] border-0 bg-bggray rounded-[4px] bg-[url('/icon/gray_checkbox.svg')] checked:bg-[url('/icon/black_checkbox.svg')] checked:border-blue-500 appearance-none"
               />
               <div className="text-body16 font-medium grow mr-[4px]">
                 <div className="text-brightblack break-all">마지막으로 가장 중요한 점! 라이트닝은 기존 LCK 채팅에서 과한 비난과 조롱, 쓸데없는 채팅을 지양하고 있어요. 편하면서도 유쾌한 환경을 위해 함께 노력해주세요</div>
