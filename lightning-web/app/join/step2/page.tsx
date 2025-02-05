@@ -6,6 +6,8 @@ import { Suspense, useState } from "react";
 import Image from "next/image";
 import axios from "axios";
 import clsx from "clsx";
+import { condTrack } from "@/app/amplitude";
+
 
 function Body() {
   const { status, update } = useSession();
@@ -23,6 +25,7 @@ function Body() {
   const isAllChecked = Object.values(checkedItems).every(Boolean);
 
   const handleComplete = async () => {
+    condTrack("click_next_tnc_signup2");
     setIsJoining(true);
 
     // 토큰이 없는 경우: 비정상적인 접근

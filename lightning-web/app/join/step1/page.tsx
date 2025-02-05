@@ -1,5 +1,6 @@
 "use client";
 
+import { condTrack } from "@/app/amplitude";
 import clsx from "clsx";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -17,6 +18,7 @@ function Body() {
   const [isChecking, setIsChecking] = useState<boolean>(false);
 
   const handleComplete = () => {
+    condTrack("click_next_profile_signup1");
     const newParams = new URLSearchParams(searchParams);
     newParams.append("nickname", nickname);
 
@@ -39,9 +41,11 @@ function Body() {
   };
 
   const checkNicknameUnique = async (nickname: string) => {
+    condTrack("click_dcheck_profile_signup0");
     setIsChecking(true);
 
     const response = await fetch(`/api/member/nickname/${nickname}`);
+
     if (response.status == 200) {
       setIsNicknameUnique(false);
     } else {

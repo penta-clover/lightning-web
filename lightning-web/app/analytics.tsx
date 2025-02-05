@@ -1,12 +1,22 @@
 "use client";
 
+import * as amplitude from '@amplitude/analytics-browser';
 import Script from "next/script";
+import { useEffect } from 'react';
 
 export default function Analytics({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  useEffect(() => {
+    amplitude.init('d404b8faa22b74a7fbeeb140dd0d258b', {
+      autocapture: {
+        elementInteractions: true
+      }
+    });
+  }, []);
+
   return (
     <>
       {/* Google Analytics */}
@@ -20,18 +30,6 @@ export default function Analytics({
             function gtag(){ dataLayer.push(arguments); }
             gtag('js', new Date());
             gtag('config', 'G-F8TMB30295');
-        `}
-      </Script>
-
-      {/* Amplitude */}
-      <Script
-        src="https://cdn.amplitude.com/script/d404b8faa22b74a7fbeeb140dd0d258b.js"
-        strategy="beforeInteractive"
-      />
-      <Script id="amplitude-init" strategy="afterInteractive">
-        {`
-            window.amplitude.add(window.sessionReplay.plugin({ sampleRate: 1 }));
-            window.amplitude.init('d404b8faa22b74a7fbeeb140dd0d258b', {"fetchRemoteConfig":true,"autocapture":true});
         `}
       </Script>
 

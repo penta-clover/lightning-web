@@ -12,6 +12,8 @@
     "postinstall": "prisma generate"
   },
   "dependencies": {
+    "@amplitude/analytics-browser": "^2.11.11",
+    "@amplitude/analytics-types": "^2.8.4",
     "@channel.io/channel-web-sdk-loader": "^2.0.0",
     "@prisma/client": "^6.2.1",
     "@radix-ui/react-accordion": "^1.2.2",

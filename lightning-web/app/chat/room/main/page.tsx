@@ -27,6 +27,7 @@ import clsx from "clsx";
 import Sidebar from "./component/sidebar";
 import { useRouter } from "next/navigation";
 import * as ChannelService from "@channel.io/channel-web-sdk-loader";
+import { condTrack } from "@/app/amplitude";
 
 type Chat = {
   id: string;
@@ -371,6 +372,7 @@ export default function Page() {
         <ClosedDialog
           notificationCount={notificationCount}
           onClickAlarmBtn={() => {
+            condTrack("click_join_alarm");
             axios.post("/api/notification/click");
             router.push("https://open.kakao.com/o/gn2wNRdh");
           }}
@@ -389,6 +391,7 @@ export default function Page() {
         <ClosedDialog
           notificationCount={notificationCount}
           onClickAlarmBtn={() => {
+            condTrack("click_join_alarm");
             axios.post("/api/notification/click");
             router.push("https://open.kakao.com/o/gn2wNRdh");
           }}
