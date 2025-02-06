@@ -4,13 +4,27 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/auth-options";
 import { stringToSocialType } from "@/repository/dto/SocialType";
 import { cookies } from "next/headers";
 import { decode, encode } from "next-auth/jwt";
-import { findReferrerIdByCode, saveReferralLog } from "@/repository/RefererRepository";
+import {
+  findReferrerIdByCode,
+  notifyReferralJoin,
+  saveReferralLog,
+} from "@/repository/RefererRepository";
 
 async function handler(req: Request) {
   try {
     const session = await getServerSession(authOptions);
     const body = await req.json();
-    const { nickname, socialType, socialId, email, alarmAllowed, name, gender, birthYear, phoneNumber } = body;
+    const {
+      nickname,
+      socialType,
+      socialId,
+      email,
+      alarmAllowed,
+      name,
+      gender,
+      birthYear,
+      phoneNumber,
+    } = body;
 
     if (
       !nickname ||
@@ -43,7 +57,7 @@ async function handler(req: Request) {
       name,
       gender,
       birthYear,
-      phoneNumber
+      phoneNumber,
     });
 
     // return 400 if join failed
@@ -57,8 +71,9 @@ async function handler(req: Request) {
     const secret = process.env.JWT_SECRET!;
 
     const cookieStore = await cookies();
-    const existingToken = cookieStore.get("next-auth.session-token")?.value 
-      || cookieStore.get("__Secure-next-auth.session-token")?.value;
+    const existingToken =
+      cookieStore.get("next-auth.session-token")?.value ||
+      cookieStore.get("__Secure-next-auth.session-token")?.value;
 
     if (existingToken) {
       // decode
@@ -70,25 +85,37 @@ async function handler(req: Request) {
       const newToken = await encode({ token: decoded!, secret });
 
       // (재서명된 JWT를 Set-Cookie로 실어 보내기
-      const cookieName = process.env.NODE_ENV === "production"
-        ? "__Secure-next-auth.session-token"
-        : "next-auth.session-token";
+      const cookieName =
+        process.env.NODE_ENV === "production"
+          ? "__Secure-next-auth.session-token"
+          : "next-auth.session-token";
       cookieStore.set(cookieName, newToken, {
         path: "/",
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: "lax"
+        sameSite: "lax",
       });
     }
 
-    // 레퍼럴 등록
+    // 레퍼럴 관련 로직
     const referralCode = cookieStore.get("referralCode")?.value;
 
     if (referralCode) {
       const referrerId = await findReferrerIdByCode(referralCode);
 
       if (referrerId) {
-        saveReferralLog(referrerId, result.id, "join");
+        const [logResult, notificationResult] = await Promise.all([
+          saveReferralLog(referrerId, result.id, "join"), // 레퍼럴 로그 저장
+          notifyReferralJoin(referrerId, result.id),    // 레퍼럴 알림
+        ]);
+
+        if (!logResult) {
+          console.warn("Referral log failed");
+        }
+    
+        if (!notificationResult) {
+          console.warn("Referral notification failed");
+        }
       }
     }
 
