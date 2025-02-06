@@ -50,7 +50,7 @@ export async function notifyReferralJoin(referrerId: string, inviteeId: string) 
         }
 
         // 메시지 추가
-        await ref.add({
+        return await ref.add({
             referrer_id: referrerId,
             referrer_profile_image_url: referrer.profileImageUrl,
             channel_name: setting!.channelName,

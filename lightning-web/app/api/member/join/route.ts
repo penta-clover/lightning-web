@@ -105,9 +105,17 @@ async function handler(req: Request) {
 
       if (referrerId) {
         // 레퍼럴 등록
-        saveReferralLog(referrerId, result.id, "join");
+        const logResult = saveReferralLog(referrerId, result.id, "join");
         // 레퍼럴 알림
-        notifyReferralJoin(referrerId, result.id);
+        const notificationResult = notifyReferralJoin(referrerId, result.id);
+
+        if (!logResult) {
+          console.warn("Referral log failed");
+        }
+    
+        if (!notificationResult) {
+          console.warn("Referral notification failed");
+        }
       }
     }
 

@@ -94,19 +94,23 @@ export default function Page() {
     setIsSending(true);
 
     // send chat message
-    const response = await axios.post(
-      `/api/chat/`,
-      {
-        content: message,
-        roomId: chatRoom.roomId,
-      },
-      {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "application/json",
+    try {
+      const response = await axios.post(
+        `/api/chat/`,
+        {
+          content: message,
+          roomId: chatRoom.roomId,
         },
-      }
-    );
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    } catch (error) {
+      alert("메시지 전송에 실패했습니다. 잠시 후 다시 시도해주세요.");
+    }
 
     setCanSending(chatInputRef.current?.value.trim() !== "");
     setIsSending(false);
@@ -459,7 +463,10 @@ export default function Page() {
               <div>채팅방에 접속했습니다!</div>
             </div>
           </div>
-          <div className="flex flex-col justify-center items-center text-caption12 w-[80px] h-[50px] my-[5px] mr-[5px] bg-black active:bg-lightgray rounded-[8px] text-white">
+          <div className="flex flex-col justify-center items-center text-caption12 w-[80px] h-[50px] my-[5px] mr-[5px] bg-black active:bg-lightgray rounded-[8px] text-white" onClick={() => {
+            // open channel url on new tab
+            window.open(currentNoti.channelUrl, "_blank", "noopener,noreferrer");
+          }}>
             <div>{currentNoti.channelName}</div>
             <div>보러 가기</div>
           </div>
