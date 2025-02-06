@@ -153,7 +153,7 @@ function Body() {
           }
           onClick={handleComplete}
         >
-          다음
+          채팅 시작하기
         </button>
       </div>
     </div>
