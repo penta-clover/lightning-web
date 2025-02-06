@@ -4,6 +4,7 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/auth-options";
 import { stringToSocialType } from "@/repository/dto/SocialType";
 import { cookies } from "next/headers";
 import { decode, encode } from "next-auth/jwt";
+import { findReferrerIdByCode, saveReferralLog } from "@/repository/RefererRepository";
 
 async function handler(req: Request) {
   try {
@@ -78,6 +79,17 @@ async function handler(req: Request) {
         secure: process.env.NODE_ENV === "production",
         sameSite: "lax"
       });
+    }
+
+    // 레퍼럴 등록
+    const referralCode = cookieStore.get("referralCode")?.value;
+
+    if (referralCode) {
+      const referrerId = await findReferrerIdByCode(referralCode);
+
+      if (referrerId) {
+        saveReferralLog(referrerId, result.id, "join");
+      }
     }
 
     return new Response(JSON.stringify(result), { status: 201 });
