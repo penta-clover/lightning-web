@@ -8,4 +8,9 @@ export type JoinForm = {
     profileImageUrl: string;
     alarmAllowed: boolean;
     role: 'ADMIN' | 'USER' | 'DUMMY' | 'DISABLED_DUMMY';
+
+    name?: string;
+    gender?: string;
+    birthYear?: string;
+    phoneNumber?: string;
 };

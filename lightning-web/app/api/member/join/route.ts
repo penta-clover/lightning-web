@@ -2,15 +2,15 @@ import { join } from "@/repository/MemberRepository";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/auth-options";
 import { stringToSocialType } from "@/repository/dto/SocialType";
-import { findMemberBySocial } from "@/repository/MemberRepository";
 import { cookies } from "next/headers";
 import { decode, encode } from "next-auth/jwt";
+import { findReferrerIdByCode, saveReferralLog } from "@/repository/RefererRepository";
 
 async function handler(req: Request) {
   try {
     const session = await getServerSession(authOptions);
     const body = await req.json();
-    const { nickname, socialType, socialId, email, alarmAllowed } = body;
+    const { nickname, socialType, socialId, email, alarmAllowed, name, gender, birthYear, phoneNumber } = body;
 
     if (
       !nickname ||
@@ -40,6 +40,10 @@ async function handler(req: Request) {
       profileImageUrl: "/profile/default.svg",
       alarmAllowed: alarmAllowed,
       role: "USER",
+      name,
+      gender,
+      birthYear,
+      phoneNumber
     });
 
     // return 400 if join failed
@@ -55,8 +59,6 @@ async function handler(req: Request) {
     const cookieStore = await cookies();
     const existingToken = cookieStore.get("next-auth.session-token")?.value 
       || cookieStore.get("__Secure-next-auth.session-token")?.value;
-
-    let cause = "token not found";
 
     if (existingToken) {
       // decode
@@ -77,6 +79,17 @@ async function handler(req: Request) {
         secure: process.env.NODE_ENV === "production",
         sameSite: "lax"
       });
+    }
+
+    // 레퍼럴 등록
+    const referralCode = cookieStore.get("referralCode")?.value;
+
+    if (referralCode) {
+      const referrerId = await findReferrerIdByCode(referralCode);
+
+      if (referrerId) {
+        saveReferralLog(referrerId, result.id, "join");
+      }
     }
 
     return new Response(JSON.stringify(result), { status: 201 });

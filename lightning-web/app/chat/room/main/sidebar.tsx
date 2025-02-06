@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import * as ChannelService from '@channel.io/channel-web-sdk-loader';
+import { condTrack } from "@/app/amplitude";
 
 export default function Sidebar(props: { onClickCloseBtn: () => void }) {
   const router = useRouter();
@@ -22,6 +23,7 @@ export default function Sidebar(props: { onClickCloseBtn: () => void }) {
         <button
           className="block w-full flex flex-start p-[16px] border-b-[1px] border-darkgray text-darkgray h-[56px] active:bg-lightgray hover:bg-bggray"
           onClick={() => {
+            condTrack("click_invitelink");
             copyInvitation();
             setIsInvitationCopied(true);
             setTimeout(() => setIsInvitationCopied(false), 3000);

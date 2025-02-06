@@ -1,9 +1,11 @@
 "use client";
 
+import { condTrack } from "@/app/amplitude";
 import clsx from "clsx";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
+import ActionBar from "./ActionBar";
 
 function Body() {
   const searchParams = useSearchParams();
@@ -17,6 +19,7 @@ function Body() {
   const [isChecking, setIsChecking] = useState<boolean>(false);
 
   const handleComplete = () => {
+    condTrack("click_next_profile_signup1");
     const newParams = new URLSearchParams(searchParams);
     newParams.append("nickname", nickname);
 
@@ -39,9 +42,11 @@ function Body() {
   };
 
   const checkNicknameUnique = async (nickname: string) => {
+    condTrack("click_dcheck_profile_signup0");
     setIsChecking(true);
 
     const response = await fetch(`/api/member/nickname/${nickname}`);
+
     if (response.status == 200) {
       setIsNicknameUnique(false);
     } else {
@@ -65,7 +70,7 @@ function Body() {
 
   return (
     <div className="h-full">
-      <ActionBar />
+      <ActionBar onClickBack={() => router.push("/")} onClickClose={() => router.push("/")} />
       <div className="relative flex flex-col h-[calc(100dvh-72px)] px-[16px]">
         <div className="flex flex-col grow">
           <label
@@ -131,7 +136,7 @@ function Body() {
         </div>
 
         <button
-          className={clsx("sticky bottom-0 px-4 py-2 my-[24px] h-[48px] bg-black text-white rounded-[10px]",
+          className={clsx("sticky bottom-0 px-4 py-2 my-[24px] h-[48px] bg-black text-white rounded-[10px] active:bg-lightgray font-bold",
             {"bg-lightgray text-body16": !(isNicknameValid && isNicknameUnique)},
           )}
           disabled={!(isNicknameValid && isNicknameUnique)}
@@ -151,20 +156,3 @@ export default function Page() {
     </Suspense>
   );
 }
-
-const ActionBar = () => {
-  const router = useRouter();
-
-  return (
-    <div className="flex items-center justify-between w-full h-[72px] bg-white">
-      {/* 뒤로가기 버튼 */}
-      <Image src="/icon/arrow_back.svg" alt="Back" width={56} height={72} onClick={() => router.push("/")} className="px-[16px] py-[24px]"/>
-
-      {/* 제목 */}
-      <h1 className="text-lg font-semibold"></h1>
-
-      {/* 닫기 버튼 */}
-      <Image src="/icon/close.svg" alt="Close" width={56} height={72} onClick={() => router.push("/")} className="px-[16px] py-[24px]"/>
-    </div>
-  );
-};

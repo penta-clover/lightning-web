@@ -8,23 +8,26 @@ datasource db {
 }
 
 model Member {
-  id               String         @id @default(uuid()) // UUID 기본값
-  nickname         String         @db.VarChar(50)      // VARCHAR(50)
-  socialType       SocialType                         // Enum 타입
-  socialId         String         @db.VarChar(50)     // VARCHAR(50)
-  email            String         @db.VarChar(100)    // VARCHAR(100)
-  profileImageUrl  String         @default("profile/default.svg") @db.VarChar(200)
-  createdAt        DateTime       @default(now())      // TIMESTAMP
-  lastLoginAt      DateTime       @default(now())      // TIMESTAMP
-  alarmAllowed     Boolean        @default(false)      // BOOLEAN
-  role             Role                                // Enum 타입
-  blockLevel       BlockLevel     @default(NONE)       // Enum 타입
-  phoneNumber      String?        @db.VarChar(20)      // VARCHAR(20)
-  favoriteTeam     String?        @db.VarChar(50)      // VARCHAR(50)
+  id              String     @id @default(uuid()) // UUID 기본값
+  nickname        String     @db.VarChar(50) // VARCHAR(50)
+  socialType      SocialType // Enum 타입
+  socialId        String     @db.VarChar(50) // VARCHAR(50)
+  email           String     @db.VarChar(100) // VARCHAR(100)
+  profileImageUrl String     @default("profile/default.svg") @db.VarChar(200)
+  createdAt       DateTime   @default(now()) // TIMESTAMP
+  lastLoginAt     DateTime   @default(now()) // TIMESTAMP
+  alarmAllowed    Boolean    @default(false) // BOOLEAN
+  role            Role // Enum 타입
+  blockLevel      BlockLevel @default(NONE) // Enum 타입
+  phoneNumber     String?    @db.VarChar(20) // VARCHAR(20)
+  favoriteTeam    String?    @db.VarChar(50) // VARCHAR(50)
+  name            String?    @db.VarChar(50) // VARCHAR
+  gender          String?    @db.VarChar(10) // VARCHAR(10)
+  birthYear       Int?       @db.Integer // INTEGER
 
   // chatMessages     ChatMessage[]   // 관계: 보낸 메시지
-  lightningsSent   Lightning[]    @relation("LightningsSent")   // 관계: 보낸 번개
-  lightningsReceived Lightning[]  @relation("LightningsReceived") // 관계: 받은 번개
+  lightningsSent     Lightning[] @relation("LightningsSent") // 관계: 보낸 번개
+  lightningsReceived Lightning[] @relation("LightningsReceived") // 관계: 받은 번개
 
   @@unique([socialType, socialId])
 }
@@ -48,6 +51,7 @@ enum SocialType {
 enum Role {
   ADMIN
   USER
+  INFLUENCER
   DUMMY
   DISABLED_DUMMY
 }
@@ -79,19 +83,42 @@ enum RoomStatus {
 // }
 
 model Lightning {
-  id          String     @id @default(uuid()) // UUID 기본값
-  senderId    String     @db.VarChar(50)      // VARCHAR(50)
-  receiverId  String     @db.VarChar(50)      // VARCHAR(50)
-  messageId   String     @db.VarChar(50)      // VARCHAR(50)
-  createdAt  DateTime    @default(now())      // TIMESTAMP
+  id         String   @id @default(uuid()) // UUID 기본값
+  senderId   String   @db.VarChar(50) // VARCHAR(50)
+  receiverId String   @db.VarChar(50) // VARCHAR(50)
+  messageId  String   @db.VarChar(50) // VARCHAR(50)
+  createdAt  DateTime @default(now()) // TIMESTAMP
 
-  sender     Member      @relation("LightningsSent", fields: [senderId], references: [id]) // 관계: 보낸 번개
-  receiver   Member      @relation("LightningsReceived", fields: [receiverId], references: [id]) // 관계: 받은 번개
+  sender   Member @relation("LightningsSent", fields: [senderId], references: [id]) // 관계: 보낸 번개
+  receiver Member @relation("LightningsReceived", fields: [receiverId], references: [id]) // 관계: 받은 번개
   // message    ChatMessage @relation(fields: [messageId], references: [id]) // 관계: 번개에 대한 메시지
 }
 
 model NotificationClick {
-  id         String     @id @default(uuid()) // UUID 기본값
-  memberId    String     @db.VarChar(50)      // VARCHAR(50)
-  createdAt  DateTime    @default(now())      // TIMESTAMP
+  id        String   @id @default(uuid()) // UUID 기본값
+  memberId  String   @db.VarChar(50) // VARCHAR(50)
+  createdAt DateTime @default(now()) // TIMESTAMP
+}
+
+model InfluencerSetting {
+  id                 String @id @default(uuid()) // UUID 기본값
+  memberId           String @db.VarChar(50)
+  channelName        String @db.VarChar(150)
+  channelUrl         String @db.VarChar(200)
+  ctaOnChat          String @db.VarChar(150)
+  introductionOnChat String @db.VarChar(150)
+}
+
+model ReferralLog {
+  id         String   @id @default(uuid()) // UUID 기본값
+  referrerId String   @db.VarChar(50) // VARCHAR(50)
+  inviteeId  String?  @db.VarChar(50) // VARCHAR(50)
+  event      String   @db.VarChar(50) // VARCHAR(50)
+  createdAt  DateTime @default(now()) // TIMESTAMP
+}
+
+model ReferralCode {
+  id           String @id @default(uuid())
+  referrerId   String @db.VarChar(50)
+  referralCode String @unique @db.VarChar(50)
 }

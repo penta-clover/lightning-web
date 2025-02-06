@@ -23,6 +23,10 @@ export default function Page() {
       params.append("socialType", session!.socialType!);
       params.append("socialId", session!.socialId!);
       params.append("email", session!.user?.email ?? "");
+      params.append("name", session!.user?.name ?? "");         // 이름 추가
+      params.append("gender", session!.user?.gender ?? "");
+      params.append("birthYear", session!.user?.birthYear ?? "");
+      params.append("phoneNumber", session!.user?.phoneNumber ?? "");
 
       router.push(`/join/step1?${params.toString()}`);
     }

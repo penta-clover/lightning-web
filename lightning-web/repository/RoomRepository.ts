@@ -14,7 +14,7 @@ export type Room = {
 
 export async function getMainRoomPolicy() {
     try {
-        const mainRoomRef = db.collection('policy').doc('main_room');
+        const mainRoomRef = db.collection(process.env.NEXT_PUBLIC_FIRESTORE_POLICY_COLLECTION as string).doc('main_room');
         const mainRoomDoc = await mainRoomRef.get();
         const data = mainRoomDoc.data();
 
@@ -58,7 +58,7 @@ export async function findRoomById(roomId: string) {
 
 export async function changeMainRoomPolicy(roomId: string, status: string) {
     try {
-        const mainRoomRef = db.collection('policy').doc('main_room');
+        const mainRoomRef = db.collection(process.env.NEXT_PUBLIC_FIRESTORE_POLICY_COLLECTION as string).doc('main_room');
         return await mainRoomRef.update({
             room_id: roomId,
             status: status,

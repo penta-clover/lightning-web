@@ -44,8 +44,8 @@ export default function Home() {
   } else {
     return (
       <div className="flex h-full flex-col justify-center">
-        <div className="flex flex-row justify-center font-semibold font-[Pretendard]">
-          비난 조롱 없는 클린 스포츠챗
+        <div className="flex flex-col justify-center items-center font-semibold">
+          <span>스트레스 없는</span><span>새로운 LCK의 시작</span>
         </div>
 
         <div className="flex flex-col items-center mx-[17%] sm:mx-[30%] mb-[33px] mt-[26px]">

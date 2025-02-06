@@ -19,6 +19,7 @@ export default {
         darkgray: "#4E5968",
         black: "#191F28",
         strokeblack: "rgba(25, 31, 40, 0.08)",
+		    brightblack: "#0E0E0E",
 
         // Rainbow colors
         red: "#F04452",

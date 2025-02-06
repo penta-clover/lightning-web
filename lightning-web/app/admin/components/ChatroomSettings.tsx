@@ -55,7 +55,7 @@ export function ChatroomSettings() {
   // load realtime data
   useEffect(() => {
     const unsubscribe = onSnapshot(
-      doc(db, "policy", "main_room"),
+      doc(db, process.env.NEXT_PUBLIC_FIRESTORE_POLICY_COLLECTION as string, "main_room"),
       (mainRoomDoc) => {
         const data = mainRoomDoc.data();
         const roomId = data!.room_id;

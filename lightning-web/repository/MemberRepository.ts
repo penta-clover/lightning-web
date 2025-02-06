@@ -40,6 +40,10 @@ export async function join(joinForm: JoinForm) {
             profileImageUrl: joinForm.profileImageUrl,
             alarmAllowed: joinForm.alarmAllowed,
             role: Role[joinForm.role],
+            name: joinForm.name,
+            gender: joinForm.gender,
+            birthYear: joinForm.birthYear ? parseInt(joinForm.birthYear) : null,
+            phoneNumber: joinForm.phoneNumber,
         },
     });
   } catch (error) {

@@ -36,6 +36,8 @@ type Chat = {
   created_at: string;
   transparency: number;
   block_type: string;
+  chat_type: string | undefined;
+  optional: object | undefined;
 };
 
 type LiveChatProps = {
@@ -56,7 +58,7 @@ export function LiveChat({ className }: LiveChatProps) {
   const [isBottom, setIsBottom] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(doc(db, "policy", "main_room"), (doc) => {
+    const unsubscribe = onSnapshot(doc(db, process.env.NEXT_PUBLIC_FIRESTORE_POLICY_COLLECTION as string, "main_room"), (doc) => {
       const data = doc.data();
       const roomId = data!.room_id;
       const status = data!.status;
