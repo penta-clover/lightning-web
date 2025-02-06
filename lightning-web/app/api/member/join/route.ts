@@ -104,10 +104,10 @@ async function handler(req: Request) {
       const referrerId = await findReferrerIdByCode(referralCode);
 
       if (referrerId) {
-        // 레퍼럴 등록
-        const logResult = await saveReferralLog(referrerId, result.id, "join");
-        // 레퍼럴 알림
-        const notificationResult = await notifyReferralJoin(referrerId, result.id);
+        const [logResult, notificationResult] = await Promise.all([
+          saveReferralLog(referrerId, result.id, "join"), // 레퍼럴 로그 저장
+          notifyReferralJoin(referrerId, result.id),    // 레퍼럴 알림
+        ]);
 
         if (!logResult) {
           console.warn("Referral log failed");
