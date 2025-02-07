@@ -8,6 +8,13 @@ export default {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    screens: {
+      // 기본 width 기반 스크린이 있다면 그대로 두고...
+      "h730": { raw: "(max-height: 730px)" }, // 커스텀 미디어 쿼리
+      "h700": { raw: "(max-height: 700px)" }, // 커스텀 미디어 쿼리
+      "h670": { raw: "(max-height: 670px)" }, // 커스텀 미디어 쿼리
+      "h650": { raw: "(max-height: 650px)" }, // 커스텀 미디어 쿼리
+    },
     extend: {
       colors: {
         // Neutral colors
@@ -19,7 +26,7 @@ export default {
         darkgray: "#4E5968",
         black: "#191F28",
         strokeblack: "rgba(25, 31, 40, 0.08)",
-		    brightblack: "#0E0E0E",
+        brightblack: "#0E0E0E",
 
         // Rainbow colors
         red: "#F04452",
