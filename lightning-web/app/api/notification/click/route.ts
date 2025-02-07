@@ -9,8 +9,7 @@ export async function GET() {
         if (count === null) {
             return new Response(JSON.stringify({ message: "Server Error" }), { status: 500 });
         }
-
-        count += 116;
+        
         return new Response(JSON.stringify({ message: "Success", content: { count: count } }), { status: 200 });
     } catch (error) {
         console.log(error);

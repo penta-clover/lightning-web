@@ -98,6 +98,9 @@ export default {
         body14: ["14px", { lineHeight: "18px", letterSpacing: "-0.6px" }],
         caption12: ["12px", { lineHeight: "16px", letterSpacing: "-0.6px" }],
       },
+      fontFamily: {
+        sans: ['var(--font-pretendard)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+      },
     },
   },
   plugins: [scrollbarHide],
