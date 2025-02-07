@@ -75,13 +75,13 @@ export default function Home() {
 
   useEffect(() => {
     if (!emblaApi) return;
-  
+
     const handlePointerDown = () => setIsInteracting(true);
     const handlePointerUp = () => setIsInteracting(false);
-  
+
     emblaApi.on("pointerDown", handlePointerDown);
     emblaApi.on("pointerUp", handlePointerUp);
-  
+
     return () => {
       emblaApi.off("pointerDown", handlePointerDown);
       emblaApi.off("pointerUp", handlePointerUp);
@@ -90,14 +90,21 @@ export default function Home() {
 
   useEffect(() => {
     if (!emblaApi) return;
-  
+
+    const firstSlide = setTimeout(() => {
+      emblaApi.scrollTo(1);
+    }, 500);
+
     const autoplay = setInterval(() => {
       if (!isInteracting) {
         emblaApi.scrollNext();
       }
     }, 3000);
-  
-    return () => clearInterval(autoplay);
+
+    return () => {
+      clearInterval(autoplay);
+      clearInterval(firstSlide);
+    };
   }, [emblaApi, isInteracting]);
 
   return (
@@ -107,13 +114,15 @@ export default function Home() {
           orientation="horizontal"
           opts={{ loop: true }}
           setApi={setEmblaApi}
-          className="max-w-[450px] mt-[60px] h730:mt-[40px] h700:mt-[30px]"
+          className="max-w-[450px] mt-[60px] h730:mt-[40px] h700:mt-[30px] h620:mb-[20px]"
         >
           <CarouselContent>
             <CarouselItem>
-              <div className="flex flex-col justify-center items-center font-bold text-heading20 text-gray mb-[36px] h700:mb-[12px]">
-                <span className="h-[24px]">스트레스 없는</span>
-                <span className="h-[24px]">새로운 LCK 채팅의 시작</span>
+              <div className="flex flex-col justify-center items-center font-bold text-heading20 text-gray mb-[36px] h700:mb-[12px] h620:text-body16">
+                <span className="h-[24px] h620:h-[20px]">스트레스 없는</span>
+                <span className="h-[24px] h620:h-[20px]">
+                  새로운 LCK 채팅의 시작
+                </span>
               </div>
 
               <div className="flex flex-col items-center">
@@ -134,26 +143,23 @@ export default function Home() {
             </CarouselItem>
 
             <CarouselItem>
-              <div className="flex flex-col justify-center items-center font-bold text-heading20 text-gray mb-[36px] h700:mb-[12px]">
-                <span className="h-[24px]">스트레스 없는</span>
-                <span className="h-[24px]">새로운 LCK 채팅의 시작</span>
-              </div>
-              <div className="flex flex-col items-center">
-                <Image
-                  src="/icon/rightning_signboard.svg"
-                  alt="lightning_logo"
-                  width={300}
-                  height={149}
-                  className="mb-[41px] h670:mb-[20px]"
-                />
+              <div className="flex flex-col justify-center items-center font-bold text-heading24 text-black mb-[36px] h700:mb-[12px] h620:mb-[6px] h600:hidden h620:text-heading20">
+                <span className="h-[36px] h620:h-[24px]">10년차 LCK팬이</span>
+                <span className="h-[36px] h620:h-[24px]">
+                  유튜브 채팅에 지쳐 만들었어요
+                </span>
               </div>
               <UserVoices />
             </CarouselItem>
 
             <CarouselItem>
-              <div className="flex flex-col justify-center items-center font-bold text-heading24 text-black mb-[36px] h700:mb-[12px]">
-                <span className="h-[36px]">분탕이나 조롱하는 사람들을</span>
-                <span className="h-[36px]">즉각적으로 안볼 수 있어요</span>
+              <div className="flex flex-col justify-center items-center font-bold text-heading24 text-black mb-[36px] h700:mb-[12px] h620:mb-[6px] h600:hidden h620:text-heading20">
+                <span className="h-[36px] h620:h-[24px]">
+                  분탕이나 조롱하는 사람들을
+                </span>
+                <span className="h-[36px] h620:h-[24px]">
+                  즉각적으로 안볼 수 있어요
+                </span>
               </div>
               <div className="flex flex-col items-center">
                 <Image
@@ -222,7 +228,7 @@ function UserVoices(): JSX.Element {
   return (
     <div className="flex flex-col">
       <div className="relative self-end mr-[-15px] rounded-[24px] w-[343px] bg-bggray mb-[30px]">
-        <div className="flex flex-col justify-center h-[78px] ml-[24px] text-darkgray text-body16 font-medium">
+        <div className="flex flex-col justify-center h-[78px] ml-[24px] text-black text-body16 font-medium">
           <div>매일 상대팀 선수를 욕 하기만 하고</div>
           <div>일방적인 비하만 오가니... 너무 지쳐요.</div>
         </div>
@@ -237,7 +243,7 @@ function UserVoices(): JSX.Element {
       </div>
 
       <div className="relative self-start ml-[-15px] rounded-[24px] w-[318px] bg-bggray mb-[30px]">
-        <div className="flex flex-col justify-center items-end h-[78px] mr-[24px] text-darkgray text-body16 font-medium">
+        <div className="flex flex-col justify-center items-end h-[78px] mr-[24px] text-black text-body16 font-medium">
           <div>갈라치기, 갈드컵을 지켜보는게</div>
           <div>너무 스트레스에요.</div>
         </div>
@@ -252,7 +258,7 @@ function UserVoices(): JSX.Element {
       </div>
 
       <div className="relative self-end mr-[-15px] rounded-[24px] w-[343px] bg-bggray mb-[30px]">
-        <div className="flex flex-col justify-center h-[78px] ml-[24px] text-darkgray text-body16 font-medium">
+        <div className="flex flex-col justify-center h-[78px] ml-[24px] text-black text-body16 font-medium">
           <div>e-스포츠에도 클린한 팬 문화가</div>
           <div>정착했으면 좋겠어요.</div>
         </div>
