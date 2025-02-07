@@ -143,7 +143,7 @@ export default function Home() {
             </CarouselItem>
 
             <CarouselItem>
-              <div className="flex flex-col justify-center items-center font-bold text-heading24 text-black mb-[36px] h700:mb-[12px] h620:mb-[6px] h600:hidden h620:text-heading20">
+              <div className="flex flex-col justify-center items-center font-bold text-heading24 text-black mb-[36px] h700:mb-[12px] h620:mb-[6px] h620:text-heading20">
                 <span className="h-[36px] h620:h-[24px]">10년차 LCK팬이</span>
                 <span className="h-[36px] h620:h-[24px]">
                   유튜브 채팅에 지쳐 만들었어요
@@ -153,7 +153,7 @@ export default function Home() {
             </CarouselItem>
 
             <CarouselItem>
-              <div className="flex flex-col justify-center items-center font-bold text-heading24 text-black mb-[36px] h700:mb-[12px] h620:mb-[6px] h600:hidden h620:text-heading20">
+              <div className="flex flex-col justify-center items-center font-bold text-heading24 text-black mb-[36px] h700:mb-[12px] h620:mb-[6px] h620:text-heading20 h600:hidden">
                 <span className="h-[36px] h620:h-[24px]">
                   분탕이나 조롱하는 사람들을
                 </span>

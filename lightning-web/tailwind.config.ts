@@ -16,6 +16,7 @@ export default {
       "h650": { raw: "(max-height: 650px)" }, // 커스텀 미디어 쿼리
       "h620": { raw: "(max-height: 620px)" }, // 커스텀 미디어 쿼리
       "h600": { raw: "(max-height: 600px)" }, // 커스텀 미디어 쿼리
+      "h550": { raw: "(max-height: 550px)" }, // 커스텀 미디어 쿼리
     },
     extend: {
       colors: {
