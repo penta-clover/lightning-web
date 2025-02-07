@@ -59,6 +59,7 @@ export function ChatControls({
   const [isGenerating, setIsGenerating] = useState(false);
   const [team1, setHandleChangeTeam1] = useState<string | null>(null);
   const [team2, setHandleChangeTeam2] = useState<string | null>(null);
+  const [team3, setHandleChangeTeam3] = useState<string | null>(null);
 
   const [dummyUsers, setDummyUsers] = useState<User[]>();
 
@@ -184,7 +185,7 @@ export function ChatControls({
           </div>
           <div className="flex flex-row space-x-1">
             <div className="w-[90px]">
-              <Select onValueChange={setHandleChangeTeam1} defaultValue="NONE">
+              <Select onValueChange={setHandleChangeTeam3} defaultValue="NONE">
                 <SelectTrigger className="flex-grow">
                   <SelectValue placeholder="없음" />
                 </SelectTrigger>
@@ -205,7 +206,7 @@ export function ChatControls({
             </div>
             <Inputter
               placeholder="메시지 입력"
-              onSend={(input) => sendMessage(input, team1)}
+              onSend={(input) => sendMessage(input, team3)}
             />
           </div>
         </div>
