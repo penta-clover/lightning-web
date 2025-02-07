@@ -7,12 +7,12 @@
   --foreground: #171717;
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
+} */
 
 body {
   color: var(--foreground);
@@ -40,4 +40,15 @@ textarea:focus {
   padding-top: env(safe-area-inset-top);
   padding-left: env(safe-area-inset-left);
   padding-right: env(safe-area-inset-right);
+}
+
+.embla__container {
+  /* GPU 가속을 위해 브라우저에 미리 알림 */
+  will-change: transform;
+  /* 3D 변환을 적용하여 하드웨어 가속을 유도 */
+  transform: translate3d(0, 0, 0);
+}
+
+.carousel-slide {
+  transition: transform 0.5s ease-in-out;
 }
