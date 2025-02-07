@@ -91,21 +91,24 @@ export default function Home() {
   useEffect(() => {
     if (!emblaApi) return;
 
-    const firstSlide = setTimeout(() => {
-      emblaApi.scrollTo(1);
-    }, 500);
-
     const autoplay = setInterval(() => {
       if (!isInteracting) {
         emblaApi.scrollNext();
       }
     }, 3000);
 
-    return () => {
-      clearInterval(autoplay);
-      clearInterval(firstSlide);
-    };
+    return () => clearInterval(autoplay);
   }, [emblaApi, isInteracting]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+
+    const firstSlide = setTimeout(() => {
+      emblaApi.scrollTo(1);
+    }, 500);
+
+    return () => clearInterval(firstSlide);
+  }, [emblaApi]);
 
   return (
     <div className="relative h-[calc(100dvh)] w-full">
