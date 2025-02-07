@@ -90,14 +90,23 @@ export default function Home() {
 
   useEffect(() => {
     if (!emblaApi) return;
-
-    const autoplay = setInterval(() => {
-      if (!isInteracting) {
+  
+    let animationFrameId: number;
+    let startTime: number | null = null;
+  
+    const animate = (time: number) => {
+      if (!startTime) { startTime = time; }
+      const elapsed = time - startTime;
+      if (elapsed > 3000 && !isInteracting) {
         emblaApi.scrollNext();
+        startTime = time; // 슬라이드 전환 후 타이머 리셋
       }
-    }, 3000);
-
-    return () => clearInterval(autoplay);
+      animationFrameId = requestAnimationFrame(animate);
+    };
+  
+    animationFrameId = requestAnimationFrame(animate);
+  
+    return () => cancelAnimationFrame(animationFrameId);
   }, [emblaApi, isInteracting]);
 
   useEffect(() => {
@@ -111,13 +120,13 @@ export default function Home() {
   }, [emblaApi]);
 
   return (
-    <div className="relative h-[calc(100dvh)] w-full">
-      <div className="h-full flex flex-col items-center">
+    <div className="h-[calc(100dvh)] w-full">
+      <div className="h-[calc(100dvh-156px)] flex flex-col justify-center items-center ">
         <Carousel
           orientation="horizontal"
           opts={{ loop: true }}
           setApi={setEmblaApi}
-          className="max-w-[450px] mt-[60px] h730:mt-[40px] h700:mt-[30px] h620:mb-[20px]"
+          className="max-w-[450px] mt-[30px] h730:mt-[40px] h700:mt-[30px] h620:mb-[20px]"
         >
           <CarouselContent>
             <CarouselItem>
@@ -167,9 +176,10 @@ export default function Home() {
               <div className="flex flex-col items-center">
                 <Image
                   src="/main_black_magic.svg"
-                  alt="lightning_logo"
+                  alt="do lightning"
                   width={321}
                   height={378}
+                  priority
                   className="mb-[41px] h670:mb-[20px]"
                 />
               </div>
@@ -189,7 +199,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="sticky bottom-[24px] flex flex-col space-y-[12px] items-center bg-white">
+      <div className="flex flex-col space-y-[12px] items-center bg-white h-[156px] my-[24px]">
         <div className="flex flex-row w-full justify-center px-[24px]">
           <button
             onClick={() => {
@@ -227,7 +237,7 @@ export default function Home() {
   );
 }
 
-function UserVoices(): JSX.Element {
+const UserVoices = React.memo(function UserVoices(): JSX.Element {
   return (
     <div className="flex flex-col">
       <div className="relative self-end mr-[-15px] rounded-[24px] w-[343px] bg-bggray mb-[30px]">
@@ -278,4 +288,4 @@ function UserVoices(): JSX.Element {
       <div className="h-[24px]"></div>
     </div>
   );
-}
+});
