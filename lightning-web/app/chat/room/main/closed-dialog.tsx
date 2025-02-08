@@ -20,7 +20,7 @@ export default function ClosedDialog(props: {
           onClick={onClickAlarmBtn}
           className={`w-full h-[48px] bg-black text-body16 text-white font-bold rounded-[10px] active:bg-opacity-50`}
         >
-          채팅 시작할 때 알림 받기
+          채팅 열리면 바로 알려드려요!
         </button>
       </div>
     </div>

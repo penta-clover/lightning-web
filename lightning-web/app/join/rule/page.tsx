@@ -21,7 +21,30 @@ function Body() {
     rule3: false,
   });
 
+  const [bluredItems, setBluredItems] = useState({
+    rule1: false,
+    rule2: true,
+    rule3: true,
+  });
+
   const handleCheckboxChange = (key: "rule1" | "rule2" | "rule3") => {
+    if (bluredItems[key]) {
+      return;
+    }
+
+    const isChecked = !checkedItems[key];
+
+    if (isChecked) {
+      const nextRule = { rule1: "rule2", rule2: "rule3", rule3: null }[key];
+
+      if (nextRule) {
+        setBluredItems((prev) => ({
+          ...prev,
+          [nextRule]: false,
+        }));
+      }
+    }
+
     setCheckedItems((prev) => ({
       ...prev,
       [key]: !prev[key],
@@ -92,7 +115,7 @@ function Body() {
             라이트닝 회원이라면 지켜야 할 수칙!
           </h1>
           <div className="flex flex-col space-y-[16px]">
-            <label htmlFor="rule1" className="flex items-center h-[48px]">
+            <label htmlFor="rule1" className={`flex items-center h-[48px] ${bluredItems.rule1 ? "blur-[6px]" : ""}`}>
               <input
                 type="checkbox"
                 id="rule1"
@@ -107,7 +130,7 @@ function Body() {
                 </div>
               </div>
             </label>
-            <label htmlFor="rule2" className="flex items-center h-[48px]">
+            <label htmlFor="rule2" className={`flex items-center h-[48px] ${bluredItems.rule2 ? "blur-[6px]" : ""}`}>
               <input
                 type="checkbox"
                 id="rule2"
@@ -122,7 +145,7 @@ function Body() {
                 </div>
               </div>
             </label>
-            <label htmlFor="rule3" className="flex items-start">
+            <label htmlFor="rule3" className={`flex items-start h-[48px] ${bluredItems.rule3 ? "blur-[6px]" : ""}`}>
               <input
                 type="checkbox"
                 id="rule3"

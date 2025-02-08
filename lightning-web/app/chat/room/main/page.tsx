@@ -457,7 +457,7 @@ export default function Page() {
       {currentNoti && (
         <div className="absolute flex flex-between top-[72px] left-0 w-[calc(100%-16px)] h-[60px] m-[8px] shadow-md bg-white rounded-[8px] z-50">
           <div className="flex flex-row grow justify-start items-center">
-            <Image src={currentNoti.referrerProfileImageUrl} width={50} height={50} className="m-[5px]" alt="profile image" />
+            <Image src={currentNoti.referrerProfileImageUrl} width={50} height={50} className="m-[5px] rounded-[12px] " alt="profile image" objectFit="cover"/>
             <div className="flex flex-col justify-center items-start text-caption12 text-darkgray">
               <div><span className="text-medium text-black">{currentNoti.inviteeNickname}</span>님이 <span className="text-medium text-blue">{currentNoti.channelName}</span>님의 초대로</div>
               <div>채팅방에 접속했습니다!</div>
