@@ -454,24 +454,6 @@ export default function Page() {
           onClickCancel={onCancelLightning}
         />
       </div>
-      {currentNoti && (
-        <div className="absolute flex flex-between top-[72px] left-0 w-[calc(100%-16px)] h-[60px] m-[8px] shadow-md bg-white rounded-[8px] z-30">
-          <div className="flex flex-row grow justify-start items-center">
-            <Image src={currentNoti.referrerProfileImageUrl} width={50} height={50} className="m-[5px] rounded-[12px] " alt="profile image" objectFit="cover"/>
-            <div className="flex flex-col justify-center items-start text-caption12 text-darkgray">
-              <div><span className="text-medium text-black">{currentNoti.inviteeNickname}</span>님이 <span className="text-medium text-blue">{currentNoti.channelName}</span>님의 초대로</div>
-              <div>채팅방에 접속했습니다!</div>
-            </div>
-          </div>
-          <div className="flex flex-col justify-center items-center text-caption12 w-[80px] h-[50px] my-[5px] mr-[5px] bg-black active:bg-lightgray rounded-[8px] text-white" onClick={() => {
-            // open channel url on new tab
-            window.open(currentNoti.channelUrl, "_blank", "noopener,noreferrer");
-          }}>
-            <div>{currentNoti.channelName}</div>
-            <div>보러 가기</div>
-          </div>
-        </div>
-      )}
       <div
         className={`absolute top-0 right-0 w-full h-full ${
           chatRoom?.status === "RESERVED"
@@ -521,6 +503,24 @@ export default function Page() {
           activeCount={activeCount}
           onClickMenuBtn={() => setEnableSidebar(true)}
         />
+        {currentNoti && (
+          <div className="absolute flex flex-between top-[72px] left-0 w-[calc(100%-16px)] h-[60px] m-[8px] shadow-md bg-white rounded-[8px] z-30">
+            <div className="flex flex-row grow justify-start items-center">
+              <Image src={currentNoti.referrerProfileImageUrl} width={50} height={50} className="m-[5px] rounded-[12px] " alt="profile image" objectFit="cover"/>
+              <div className="flex flex-col justify-center items-start text-caption12 text-darkgray">
+                <div><span className="text-medium text-black">{currentNoti.inviteeNickname}</span>님이 <span className="text-medium text-blue">{currentNoti.channelName}</span>님의 초대로</div>
+                <div>채팅방에 접속했습니다!</div>
+              </div>
+            </div>
+            <div className="flex flex-col justify-center items-center text-caption12 w-[80px] h-[50px] my-[5px] mr-[5px] bg-black active:bg-lightgray rounded-[8px] text-white" onClick={() => {
+              // open channel url on new tab
+              window.open(currentNoti.channelUrl, "_blank", "noopener,noreferrer");
+            }}>
+              <div>{currentNoti.channelName}</div>
+              <div>보러 가기</div>
+            </div>
+          </div>
+        )}
         {/* 채팅 메시지 컨테이너 */}
         <div className="flex-1 w-full overflow-y-auto scrollbar-hide bg-gray-100 p-4 grow flex flex-col-reverse transition-all">
           {chats.map((chat, index) => {
