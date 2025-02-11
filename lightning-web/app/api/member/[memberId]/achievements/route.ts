@@ -6,11 +6,12 @@ import { NextResponse } from "next/server";
 
 export async function GET(
   request: Request,
-  { params }: { params: { memberId: string } }
+  context: { params: Promise<{ memberId: string }> }
 ) {
   try {
     const { searchParams } = new URL(request.url);
     const achievementName = searchParams.get("name");
+    const { params } = context;
 
     if (!achievementName) {
       return NextResponse.json({ error: "name is required" }, { status: 400 });
@@ -33,11 +34,12 @@ export async function GET(
 
 export async function POST(
   request: Request,
-  { params }: { params: { memberId: string } }
+  context: { params: Promise<{ memberId: string }> }
 ) {
   try {
     const body = await request.json();
     const achievementName = body.name;
+    const { params } = context;
 
     if (!achievementName) {
       return NextResponse.json({ error: "name is required" }, { status: 400 });
