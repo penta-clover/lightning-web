@@ -12,13 +12,13 @@ export default {
     extend: {
       screens: {
         // 기본 width 기반 스크린이 있다면 그대로 두고...
-        "h730": { raw: "(max-height: 730px)" }, // 커스텀 미디어 쿼리
-        "h700": { raw: "(max-height: 700px)" }, // 커스텀 미디어 쿼리
-        "h670": { raw: "(max-height: 670px)" }, // 커스텀 미디어 쿼리
-        "h650": { raw: "(max-height: 650px)" }, // 커스텀 미디어 쿼리
-        "h620": { raw: "(max-height: 620px)" }, // 커스텀 미디어 쿼리
-        "h600": { raw: "(max-height: 600px)" }, // 커스텀 미디어 쿼리
-        "h550": { raw: "(max-height: 550px)" }, // 커스텀 미디어 쿼리
+        h730: { raw: "(max-height: 730px)" }, // 커스텀 미디어 쿼리
+        h700: { raw: "(max-height: 700px)" }, // 커스텀 미디어 쿼리
+        h670: { raw: "(max-height: 670px)" }, // 커스텀 미디어 쿼리
+        h650: { raw: "(max-height: 650px)" }, // 커스텀 미디어 쿼리
+        h620: { raw: "(max-height: 620px)" }, // 커스텀 미디어 쿼리
+        h600: { raw: "(max-height: 600px)" }, // 커스텀 미디어 쿼리
+        h550: { raw: "(max-height: 550px)" }, // 커스텀 미디어 쿼리
       },
       colors: {
         // Neutral colors
@@ -99,7 +99,12 @@ export default {
         caption12: ["12px", { lineHeight: "16px", letterSpacing: "-0.6px" }],
       },
       fontFamily: {
-        sans: ['var(--font-pretendard)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        sans: [
+          "var(--font-pretendard)",
+          "ui-sans-serif",
+          "system-ui",
+          "sans-serif",
+        ],
       },
     },
   },

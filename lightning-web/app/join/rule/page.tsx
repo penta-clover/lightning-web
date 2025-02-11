@@ -115,7 +115,7 @@ function Body() {
             라이트닝 회원이라면 지켜야 할 수칙!
           </h1>
           <div className="flex flex-col space-y-[16px]">
-            <label htmlFor="rule1" className={`flex items-center h-[48px] ${bluredItems.rule1 ? "blur-[6px]" : ""}`}>
+            <label key={`rule1-${bluredItems.rule1}`} htmlFor="rule1" className={`flex items-center h-[48px] ${bluredItems.rule1 ? "blur-[6px]" : "blur-none"}`}>
               <input
                 type="checkbox"
                 id="rule1"
@@ -130,7 +130,7 @@ function Body() {
                 </div>
               </div>
             </label>
-            <label htmlFor="rule2" className={`flex items-center h-[48px] ${bluredItems.rule2 ? "blur-[6px]" : ""}`}>
+            <label key={`rule2-${bluredItems.rule2}`} htmlFor="rule2" className={`flex items-center h-[48px] ${bluredItems.rule2 ? "blur-[6px]" : "blur-none"}`}>
               <input
                 type="checkbox"
                 id="rule2"
@@ -139,13 +139,13 @@ function Body() {
                 className="w-[24px] min-w-[24px] h-[24px] m-[12px] border-0 bg-bggray rounded-[4px] bg-[url('/icon/gray_checkbox.svg')] checked:bg-[url('/icon/black_checkbox.svg')] checked:border-blue-500 appearance-none"
               />
               <div className="text-body16 font-medium grow mr-[4px]">
-                <div className="text-brightblack break-all">
+                <div className="text-brightblack break-all shadown:none">
                   LCK 경기에서 방송 송출 후, 밴픽 시작부터 경기 종료까지에만
                   채팅창이 운영돼요
                 </div>
               </div>
             </label>
-            <label htmlFor="rule3" className={`flex items-start h-[48px] ${bluredItems.rule3 ? "blur-[6px]" : ""}`}>
+            <label key={`rule3-${bluredItems.rule3}`} htmlFor="rule3" className={`flex items-start h-[48px] ${bluredItems.rule3 ? "blur-[6px]" : "blur-none"}`}>
               <input
                 type="checkbox"
                 id="rule3"
