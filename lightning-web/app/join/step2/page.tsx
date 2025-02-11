@@ -170,6 +170,7 @@ function Body() {
                 className="w-[24px] h-[24px] m-[12px] border-0 bg-bggray rounded-[4px] bg-[url('/icon/gray_checkbox.svg')] checked:bg-[url('/icon/black_checkbox.svg')] checked:border-blue-500 appearance-none"
               />
               <label htmlFor="marketing" className="text-body16 font-medium">
+                <span className="text-blue">[선택] </span>
                 <span className="text-brightblack">
                   마케팅 활용 · 광고성 정보 수신 동의
                 </span>
