@@ -122,3 +122,20 @@ model ReferralCode {
   referrerId   String @db.VarChar(50)
   referralCode String @unique @db.VarChar(50)
 }
+
+model Achievement {
+  id        String   @id @default(uuid())
+  name      String   @db.VarChar(50)
+  createdAt DateTime @default(now())
+  
+  logs      AchievementLog[] // 역참조 (관계 필드)
+}
+
+model AchievementLog {
+  id            String      @id @default(uuid())
+  memberId      String      @db.VarChar(50)
+  achievementId String      @db.VarChar(50)
+  createdAt     DateTime    @default(now())
+  
+  achievement Achievement @relation(fields: [achievementId], references: [id])
+}
