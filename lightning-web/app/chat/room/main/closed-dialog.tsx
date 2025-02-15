@@ -62,11 +62,15 @@ export default function ClosedDialog(props: {
           <CarouselContent className="h-full">
             <CarouselItem className="flex flex-col items-center h-full">
               <div className="relative text-heading20 text-black font-bold grow flex flex-col justify-center items-center">
-                <span className="text-heading20 font-bold">
-                  LCK 경기가 시작하고 채팅창이 열리면
+                <span className="text-heading0 font-bold">
+                  베타 테스트 기간이 종료되었어요.
                 </span>
-                <span className="text-heading20 font-bold">
-                  깜빡하지 않게 알려드려요!
+                <span className="text-heading0 font-bold">
+                  LCK 정규 시즌에 재개할 예정입니다.
+                </span>
+                <span className="h-[4px]" />
+                <span className="text-body16 font-normal text-darkgray">
+                  채팅창이 열리면 깜빡하지 않게 알려드려요!
                 </span>
               </div>
               <div className="text-caption14 font-normal text-gray h-[24px] mb-[6px]">
